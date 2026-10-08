@@ -1,2 +1,1 @@
 # small-games
-for learning
