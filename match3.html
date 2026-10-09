@@ -319,6 +319,8 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .pm-btn.danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;
   box-shadow:0 6px 16px rgba(239,68,68,.3);}
 .pm-btn.danger:hover{transform:translateY(-2px);}
+.pm-tip{text-align:center;font-size:11px;color:var(--muted);font-weight:700;
+  margin-top:10px;line-height:1.5;}
 
 .notebook-modal .modal{max-width:660px;text-align:left;}
 .nb-title{font-size:20px;font-weight:900;color:var(--ink);margin:0 0 4px;
@@ -567,9 +569,10 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
     <div class="pm-section-title" data-t="主题掌握度">主题掌握度</div>
     <div class="pm-mastery" id="pmMastery"></div>
     <div class="pm-actions">
-      <button class="pm-btn danger" id="pmClear">🗑️ <span data-t="清空所有进度">清空所有进度</span></button>
+      <button class="pm-btn danger" id="pmClear">🔄 <span data-t="重新开始">重新开始</span></button>
       <button class="pm-btn close" id="pmClose"><span data-t="关闭">关闭</span> Close</button>
     </div>
+    <div class="pm-tip" data-t="重新开始会重置关卡、游戏次数和累计用时；单词本和错题本会保留。">重新开始会重置关卡、游戏次数和累计用时；单词本和错题本会保留。</div>
   </div>
 </div>
 
@@ -603,11 +606,19 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
       <button class="nb-tab wrong-tab" id="nbTabWrong">📕 <span data-t="错题">错题</span> <span id="nbCountWrong">0</span></button>
     </div>
     <div class="nb-list" id="nbList"></div>
-    <div class="nb-actions">
+
+    <!-- 已学 tab 的按钮 -->
+    <div class="nb-actions" id="nbActionsLearned">
       <button class="nb-action-btn practice" id="nbPracticeLearned">🎯 <span data-t="练习已学">练习已学</span></button>
+      <button class="nb-action-btn clear" id="nbClearLearned">🗑️ <span data-t="清空单词本">清空单词本</span></button>
+    </div>
+
+    <!-- 错题 tab 的按钮 -->
+    <div class="nb-actions" id="nbActionsWrong" style="display:none;">
       <button class="nb-action-btn practice-wrong" id="nbPracticeWrong">📕 <span data-t="练习错题">练习错题</span></button>
       <button class="nb-action-btn clear" id="nbClearWrong">🗑️ <span data-t="清空错题">清空错题</span></button>
     </div>
+
     <button class="dt-close-btn" id="nbClose"><span data-t="关闭">关闭</span> Close</button>
   </div>
 </div>
@@ -647,7 +658,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 
 <script>
 /* ============================================================
-   简繁映射表（约 900 字，覆盖 UI 和词库所有用字）
+   简繁映射表
    ============================================================ */
 const S2T = {
   '爱':'愛','碍':'礙','袄':'襖','坝':'壩','办':'辦','帮':'幫','宝':'寶','报':'報','备':'備','币':'幣','毕':'畢','边':'邊','变':'變','标':'標','表':'錶','别':'別','宾':'賓','饼':'餅','拨':'撥','补':'補','布':'佈',
@@ -671,11 +682,10 @@ const S2T = {
   '压':'壓','鸦':'鴉','鸭':'鴨','亚':'亞','讶':'訝','烟':'煙','严':'嚴','盐':'鹽','颜':'顏','厌':'厭','验':'驗','阳':'陽','杨':'楊','养':'養','样':'樣','摇':'搖','遥':'遙','药':'藥','钥':'鑰','爷':'爺','业':'業','叶':'葉','页':'頁','医':'醫','仪':'儀','遗':'遺','蚁':'蟻','义':'義','议':'議','忆':'憶','艺':'藝','异':'異','译':'譯','谊':'誼','阴':'陰','银':'銀','饮':'飲','隐':'隱','应':'應','婴':'嬰','营':'營','蝇':'蠅','赢':'贏','哟':'喲','拥':'擁','涌':'湧','优':'優','忧':'憂','邮':'郵','犹':'猶','游':'遊','诱':'誘','于':'於','余':'餘','鱼':'魚','渔':'漁','娱':'娛','与':'與','语':'語','郁':'鬱','誉':'譽','员':'員','园':'園','圆':'圓','缘':'緣','远':'遠','愿':'願','约':'約','阅':'閱','悦':'悅','云':'雲','匀':'勻','运':'運','韵':'韻',
   '杂':'雜','灾':'災','攒':'攢','暂':'暫','赞':'讚','脏':'髒','枣':'棗','责':'責','择':'擇','则':'則','泽':'澤','贼':'賊','赠':'贈','扎':'紮','债':'債','张':'張','涨':'漲','帐':'帳','账':'賬','胀':'脹','这':'這','针':'針','侦':'偵','诊':'診','阵':'陣','镇':'鎮','争':'爭','征':'徵','挣':'掙','睁':'睜','证':'證','只':'隻','织':'織','执':'執','职':'職','纸':'紙','制':'製','质':'質','钟':'鐘','终':'終','种':'種','众':'眾','轴':'軸','昼':'晝','皱':'皺','猪':'豬','嘱':'囑','驻':'駐','筑':'築','铸':'鑄','专':'專','砖':'磚','转':'轉','赚':'賺','庄':'莊','装':'裝','壮':'壯','状':'狀','准':'準','资':'資','综':'綜','踪':'蹤','总':'總','纵':'縱','组':'組','钻':'鑽',
   '罢':'罷','摆':'擺','败':'敗','颁':'頒','绊':'絆','绑':'綁','镑':'鎊','剥':'剝','饱':'飽','鲍':'鮑','辈':'輩','钡':'鋇','狈':'狽','惫':'憊','绷':'繃','笔':'筆','闭':'閉','毙':'斃','编':'編','贬':'貶','辩':'辯','辫':'辮','镖':'鏢','飙':'飆','鳖':'鱉','濒':'瀕','摈':'擯','钵':'缽','铂':'鉑','驳':'駁','钹':'鈸','卜':'蔔',
-  '厕':'廁','侧':'側','测':'測','恻':'惻','搀':'攙','谗':'讒','馋':'饞','缠':'纏','铲':'鏟','阐':'闡','颤':'顫','场':'場','厂':'廠','畅':'暢','钞':'鈔','掣':'掣','撑':'撐','诚':'誠','惩':'懲','驰':'馳','齿':'齒','耻':'恥','炽':'熾','宠':'寵','绸':'綢','橱':'櫥','厨':'廚','锄':'鋤','雏':'雛','储':'儲','疮':'瘡','闯':'闖','创':'創','锤':'錘','纯':'純','绰':'綽','词':'詞','赐':'賜','从':'從','窜':'竄','错':'錯',
+  '厕':'廁','侧':'側','测':'測','恻':'惻','搀':'攙','谗':'讒','馋':'饞','缠':'纏','铲':'鏟','阐':'闡','颤':'顫','场':'場','厂':'廠','畅':'暢','钞':'鈔','掣':'掣','撑':'撐','诚':'誠','驰':'馳','齿':'齒','耻':'恥','炽':'熾','宠':'寵','绸':'綢','橱':'櫥','厨':'廚','锄':'鋤','雏':'雛','储':'儲','疮':'瘡','闯':'闖','创':'創','锤':'錘','纯':'純','绰':'綽','词':'詞','赐':'賜','从':'從','窜':'竄','错':'錯',
   '贷':'貸','殚':'殫','挡':'擋','荡':'蕩','颠':'顛','垫':'墊','雕':'雕','鲷':'鯛','钓':'釣','调':'調','栋':'棟','赌':'賭','贰':'貳',
-  '钙':'鈣','赶':'趕','钩':'鉤','刽':'劊','辊':'輥','滚':'滾','锅':'鍋','铪':'鉿','辉':'輝','辉':'輝',
-  /* 补充界面用字 */
-  '万':'萬','请':'請','关':'關','键':'鍵','错':'錯','误':'誤','单':'單','词':'詞','汇':'彙','览':'覽','习':'習','练':'練','复':'複','读':'讀','题':'題','体':'體','简':'簡','历':'歷','览':'覽','览':'覽','览':'覽'
+  '钙':'鈣','赶':'趕','钩':'鉤','刽':'劊','辊':'輥','滚':'滾','锅':'鍋','铪':'鉿','辉':'輝',
+  '万':'萬','键':'鍵','误':'誤','汇':'彙','览':'覽'
 };
 
 const T2S = {};
@@ -1524,12 +1534,6 @@ function clearSession(){
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
   } catch(e){}
 }
-function clearAllProgress(){
-  try {
-    localStorage.removeItem(PROGRESS_KEY);
-    localStorage.removeItem('yue_match_progress_v3');
-  } catch(e){}
-}
 
 (function initProgress(){
   const p = loadProgress();
@@ -1654,50 +1658,41 @@ function sfx(type){
   }
 }
 
-/* ============================================================
-   语音系统（修复版）
-   ============================================================ */
+/* 语音系统 */
 let yueVoice = null;
 let hasYue = false;
-let voiceChecked = false;   // 是否已完成检测
-let voiceRetries = 0;       // 已重试次数
+let voiceRetries = 0;
 
 function loadVoices(){
   if (!window.speechSynthesis) {
-    voiceChecked = true;
     voiceWarn.classList.add('show');
     return;
   }
   let voices = [];
   try { voices = speechSynthesis.getVoices() || []; } catch(e){ voices = []; }
 
-  // 语音列表还没准备好，等一下再试（最多 8 次）
   if (!voices.length && voiceRetries < 8) {
     voiceRetries++;
     setTimeout(loadVoices, 500);
     return;
   }
 
-  voiceChecked = true;
   yueVoice = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) ||
              voices.find(v => /zh[-_]HK|yue/i.test(v.name)) ||
              null;
   hasYue = !!yueVoice;
 
-  if (hasYue) {
-    voiceWarn.classList.remove('show');
-  } else {
-    voiceWarn.classList.add('show');
-  }
+  if (hasYue) voiceWarn.classList.remove('show');
+  else voiceWarn.classList.add('show');
 }
 
 function speakCantonese(text){
   if (!state.speechOn || !window.speechSynthesis || !text) return;
-  if (!hasYue) return;   // 没有粤语 → 不读，绝不读普通话
+  if (!hasYue) return;
   try {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.voice = yueVoice;   // 明确指定 voice
+    u.voice = yueVoice;
     u.lang = yueVoice.lang || 'zh-HK';
     u.rate = state.speechRate;
     u.pitch = 1.0;
@@ -1706,21 +1701,17 @@ function speakCantonese(text){
   } catch(e){}
 }
 
-/* 手动重新检测 */
 voiceWarnBtn.addEventListener('click', () => {
   voiceRetries = 0;
-  voiceChecked = false;
   if (window.speechSynthesis) {
     try { speechSynthesis.cancel(); } catch(e){}
   }
   loadVoices();
 });
 
-/* 初始检测 */
 loadVoices();
 if (window.speechSynthesis) {
   speechSynthesis.onvoiceschanged = loadVoices;
-  // 保险：多试几次（iOS Safari 的 onvoiceschanged 不一定触发）
   setTimeout(loadVoices, 500);
   setTimeout(loadVoices, 1500);
   setTimeout(loadVoices, 3000);
@@ -1761,7 +1752,6 @@ function pickWords(topic, count, levelFilter){
   return picked;
 }
 
-/* 刷新所有静态 UI 文字 */
 function refreshStaticText(){
   document.querySelectorAll('[data-t]').forEach(el => {
     el.textContent = displayHanzi(el.dataset.t);
@@ -2160,6 +2150,9 @@ function openNotebook(tab){
   document.getElementById('nbCountWrong').textContent = String(state.wrongbook.length);
   document.getElementById('nbTabLearned').classList.toggle('on', nbCurrentTab === 'learned');
   document.getElementById('nbTabWrong').classList.toggle('on', nbCurrentTab === 'wrong');
+  // 根据当前 tab 显示对应按钮
+  document.getElementById('nbActionsLearned').style.display = (nbCurrentTab === 'learned') ? 'flex' : 'none';
+  document.getElementById('nbActionsWrong').style.display   = (nbCurrentTab === 'wrong')   ? 'flex' : 'none';
   renderNotebookList();
   notebookModal.classList.add('show');
 }
@@ -2440,31 +2433,55 @@ document.getElementById('dtSpeak').addEventListener('click', () => {
   if (state.currentDetailWord) speakCantonese(state.currentDetailWord.hanzi);
 });
 
-document.getElementById('pmClear').addEventListener('click', () => {
-  if (!confirm(displayHanzi('确定清空所有进度吗？此操作不可恢复。'))) return;
-  clearAllProgress();
-  state.bestLevel = 1;
-  state.notebook = [];
-  state.wrongbook = [];
-  state.topicMastery = {};
-  state.stats = { games:0, totalTime:0 };
-  bestLevelEl.textContent = '1';
+/* ===== 我的进度 → 点击已学单词 / 错题 → 打开对应列表 ===== */
+document.getElementById('pmNotebookItem').addEventListener('click', () => {
   progressModal.classList.remove('show');
-  alert(displayHanzi('✅ 所有进度已清空'));
+  openNotebook('learned');
+});
+document.getElementById('pmWrongItem').addEventListener('click', () => {
+  progressModal.classList.remove('show');
+  openNotebook('wrong');
 });
 
+/* ===== 重新开始：只清游戏进度，保留学习记录 ===== */
+document.getElementById('pmClear').addEventListener('click', () => {
+  if (!confirm(displayHanzi('确定重新开始吗？\n\n会清空：当前关卡、游戏次数、累计用时\n会保留：单词本、错题本、主题掌握度'))) return;
+
+  state.bestLevel = 1;
+  state.stats = { games:0, totalTime:0 };
+  state.level = 1;
+  state.score = 0;
+  state.gameOver = true;
+  bestLevelEl.textContent = '1';
+
+  clearSession();
+  saveProgress();
+
+  progressModal.classList.remove('show');
+  alert(displayHanzi('✅ 已回到第 1 关\n单词本、错题本、掌握度已保留'));
+
+  startLevel();
+});
+
+/* ===== 单词本 tab 切换（切换按钮 + 列表） ===== */
 document.getElementById('nbTabLearned').onclick = () => {
   nbCurrentTab = 'learned';
   document.getElementById('nbTabLearned').classList.add('on');
   document.getElementById('nbTabWrong').classList.remove('on');
+  document.getElementById('nbActionsLearned').style.display = 'flex';
+  document.getElementById('nbActionsWrong').style.display = 'none';
   renderNotebookList();
 };
 document.getElementById('nbTabWrong').onclick = () => {
   nbCurrentTab = 'wrong';
   document.getElementById('nbTabWrong').classList.add('on');
   document.getElementById('nbTabLearned').classList.remove('on');
+  document.getElementById('nbActionsLearned').style.display = 'none';
+  document.getElementById('nbActionsWrong').style.display = 'flex';
   renderNotebookList();
 };
+
+/* ===== 练习已学 / 练习错题 ===== */
 document.getElementById('nbPracticeLearned').onclick = () => {
   if (!state.notebook.length) { alert(displayHanzi('还没有学过的单词')); return; }
   notebookModal.classList.remove('show');
@@ -2475,6 +2492,18 @@ document.getElementById('nbPracticeWrong').onclick = () => {
   notebookModal.classList.remove('show');
   startPractice(state.wrongbook, '复习错题');
 };
+
+/* ===== 清空单词本 ===== */
+document.getElementById('nbClearLearned').addEventListener('click', () => {
+  if (!state.notebook.length) { alert(displayHanzi('单词本已经是空的')); return; }
+  if (!confirm(displayHanzi('清空单词本？\n错题本和主题掌握度会保留。'))) return;
+  state.notebook = [];
+  saveProgress();
+  renderNotebookList();
+  document.getElementById('nbCountLearned').textContent = '0';
+});
+
+/* ===== 清空错题本 ===== */
 document.getElementById('nbClearWrong').onclick = () => {
   if (!state.wrongbook.length) { alert(displayHanzi('错题本已经是空的')); return; }
   if (!confirm(displayHanzi('清空错题本？'))) return;
