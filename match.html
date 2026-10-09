@@ -62,6 +62,45 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   font-weight:700;letter-spacing:.5px;
 }
 
+/* 字体切换行 */
+.font-row{
+  max-width:720px;margin:10px auto 0;padding:0 20px;
+  display:flex;justify-content:center;gap:8px;
+}
+.font-btn{
+  padding:7px 18px;border-radius:12px;
+  background:#fff;border:3px solid var(--line);
+  font-size:13px;font-weight:900;color:var(--muted);
+  box-shadow:var(--shadow-soft);transition:.18s;
+}
+.font-btn:hover{transform:translateY(-2px);}
+.font-btn:active{transform:translateY(0) scale(.96);}
+.font-btn.on{
+  background:linear-gradient(150deg,#B89CFF,#8B6BFF);
+  border-color:#B89CFF;color:#fff;
+  box-shadow:0 6px 16px rgba(139,107,255,.4);
+}
+
+/* 语音警告条 */
+.voice-warn{max-width:720px;margin:12px auto 0;padding:0 20px;display:none;}
+.voice-warn.show{display:block;animation:fadeIn .3s;}
+.voice-warn .inner{
+  background:linear-gradient(135deg,#FFF3C4,#FFD86B);
+  border:3px solid #F5B700;border-radius:18px;
+  padding:12px 16px;display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;
+  box-shadow:0 6px 18px rgba(245,183,0,.25);
+}
+.voice-warn .vw-icon{font-size:22px;flex-shrink:0;line-height:1.2;}
+.voice-warn .vw-text{flex:1;min-width:200px;font-size:13px;font-weight:800;color:#7A4B00;line-height:1.6;}
+.voice-warn .vw-text b{color:#B45309;}
+.voice-warn .vm-note{font-size:11.5px;font-weight:700;color:#92400E;margin-top:4px;line-height:1.7;opacity:.9;}
+.voice-warn .vw-btn{
+  background:#fff;border:3px solid #F5B700;border-radius:12px;
+  padding:8px 14px;font-size:12px;font-weight:900;color:#92400E;
+  transition:.18s;white-space:nowrap;align-self:center;
+}
+.voice-warn .vw-btn:hover{background:#FFFBEB;transform:translateY(-1px);}
+
 /* 主题选择 */
 .topic-row{
   max-width:720px;margin:14px auto 0;padding:0 20px;
@@ -546,9 +585,31 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
      顶部标题
      ============================================================ -->
 <header class="header">
-  <h1>🌈 粤语宝宝消消乐</h1>
-  <div class="sub">Baby Cantonese Match · 看图配对，学讲粤语</div>
+  <h1>🌈 <span data-t="粤语宝宝消消乐">粤语宝宝消消乐</span></h1>
+  <div class="sub">Baby Cantonese Match · <span data-t="看图配对，学讲粤语">看图配对，学讲粤语</span></div>
 </header>
+
+<!-- ============================================================
+     字体切换
+     ============================================================ -->
+<div class="font-row">
+  <button class="font-btn on" data-char="trad">繁</button>
+  <button class="font-btn" data-char="simp">简</button>
+</div>
+
+<!-- ============================================================
+     语音警告条
+     ============================================================ -->
+<div class="voice-warn" id="voiceWarn">
+  <div class="inner">
+    <span class="vw-icon">🔇</span>
+    <div class="vw-text">
+      <b>还没有粤语语音，暂时不能读粤语～</b>
+      <div class="vm-note">请家长帮忙装一下：<br>Windows：设置 → 时间和语言 → 语言；<br>iPhone：设置 → 辅助功能 → 朗读内容 → 声音 → 中文 → 粤语（香港）；<br>装好后回来点右边按钮即可。</div>
+    </div>
+    <button class="vw-btn" id="voiceWarnBtn">🔄 已装好</button>
+  </div>
+</div>
 
 <!-- ============================================================
      主题选择
@@ -563,7 +624,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
     <div class="progress-fill" id="progressFill"></div>
   </div>
   <div class="progress-text" id="progressText">
-    找到 <b id="pMatched">0</b> / <span id="pTotal">6</span> 对
+    <span data-t="找到">找到</span> <b id="pMatched">0</b> / <span id="pTotal">6</span> <span data-t="对">对</span>
   </div>
 </div>
 
@@ -579,13 +640,13 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
      ============================================================ -->
 <div class="controls">
   <button class="ctrl on" id="btnSpeech">
-    <span class="ico">🗣️</span> 读粤语
+    <span class="ico">🗣️</span> <span data-t="读粤语">读粤语</span>
   </button>
   <button class="ctrl on" id="btnSound">
-    <span class="ico">🔊</span> 声音
+    <span class="ico">🔊</span> <span data-t="声音">声音</span>
   </button>
   <button class="ctrl" id="btnShuffle">
-    <span class="ico">🔄</span> 重新开始
+    <span class="ico">🔄</span> <span data-t="重新开始">重新开始</span>
   </button>
 </div>
 
@@ -594,7 +655,7 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
      ============================================================ -->
 <div class="teacher-wrap">
   <details class="teacher" id="teacherPanel">
-    <summary>老师 / 家长面板 Teacher Panel</summary>
+    <summary><span data-t="老师 / 家长面板">老师 / 家长面板</span> Teacher Panel</summary>
     <div class="teacher-body">
 
       <!-- 保存状态提示 -->
@@ -608,11 +669,11 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
       <div class="word-list" id="wordList"></div>
 
       <div class="teacher-tools">
-        <button class="primary" id="saveBtn">💾 立即保存</button>
-        <button id="addWord">＋ 加一个词</button>
-        <button id="exportBtn">⬇️ 导出备份</button>
-        <button id="importBtn">⬆️ 导入词库</button>
-        <button class="danger" id="resetBtn">♻️ 恢复默认</button>
+        <button class="primary" id="saveBtn">💾 <span data-t="立即保存">立即保存</span></button>
+        <button id="addWord">＋ <span data-t="加一个词">加一个词</span></button>
+        <button id="exportBtn">⬇️ <span data-t="导出备份">导出备份</span></button>
+        <button id="importBtn">⬆️ <span data-t="导入词库">导入词库</span></button>
+        <button class="danger" id="resetBtn">♻️ <span data-t="恢复默认">恢复默认</span></button>
       </div>
 
       <textarea id="ioArea" style="width:100%;height:90px;padding:10px;border-radius:10px;border:2px solid var(--line);font-size:11px;font-family:ui-monospace,monospace;resize:vertical;background:#FFF9F2;" placeholder="词库 JSON 会显示在这里 / 粘贴后点「导入词库」"></textarea>
@@ -638,8 +699,8 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
       <span>⭐</span><span>⭐</span><span>⭐</span>
     </div>
     <div class="btn-row">
-      <button class="btn-big btn-pink" id="btnAgain">🔄 再玩</button>
-      <button class="btn-big btn-green" id="btnNextTopic">🎯 换主题</button>
+      <button class="btn-big btn-pink" id="btnAgain">🔄 <span data-t="再玩">再玩</span></button>
+      <button class="btn-big btn-green" id="btnNextTopic">🎯 <span data-t="换主题">换主题</span></button>
     </div>
   </div>
 </div>
@@ -648,6 +709,47 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
      脚本
      ============================================================ -->
 <script>
+/* ============================================================
+   简繁映射表
+   ============================================================ */
+const S2T = {
+  '爱':'愛','碍':'礙','袄':'襖','坝':'壩','办':'辦','帮':'幫','宝':'寶','报':'報','备':'備','币':'幣','毕':'畢','边':'邊','变':'變','标':'標','表':'錶','别':'別','宾':'賓','饼':'餅','拨':'撥','补':'補','布':'佈',
+  '才':'才','参':'參','蚕':'蠶','惭':'慚','灿':'燦','仓':'倉','苍':'蒼','舱':'艙','层':'層','产':'產','长':'長','偿':'償','肠':'腸','尝':'嘗','车':'車','彻':'徹','尘':'塵','陈':'陳','衬':'襯','称':'稱','惩':'懲','迟':'遲','冲':'衝','虫':'蟲','筹':'籌','丑':'醜','出':'齣','础':'礎','处':'處','触':'觸','辞':'辭','聪':'聰','丛':'叢','凑':'湊',
+  '达':'達','带':'帶','贷':'貸','担':'擔','单':'單','胆':'膽','弹':'彈','当':'當','党':'黨','档':'檔','导':'導','岛':'島','捣':'搗','祷':'禱','盗':'盜','灯':'燈','邓':'鄧','敌':'敵','涤':'滌','递':'遞','缔':'締','点':'點','电':'電','淀':'澱','谍':'諜','叠':'疊','钉':'釘','顶':'頂','订':'訂','东':'東','动':'動','冻':'凍','斗':'鬥','独':'獨','读':'讀','镀':'鍍','锻':'鍛','断':'斷','缎':'緞','队':'隊','对':'對','吨':'噸','顿':'頓','夺':'奪','堕':'墮',
+  '鹅':'鵝','额':'額','讹':'訛','恶':'惡','儿':'兒','尔':'爾','饵':'餌','发':'發','罚':'罰','阀':'閥','烦':'煩','范':'範','贩':'販','饭':'飯','纺':'紡','访':'訪','飞':'飛','废':'廢','费':'費','纷':'紛','坟':'墳','奋':'奮','愤':'憤','丰':'豐','风':'風','疯':'瘋','冯':'馮','缝':'縫','讽':'諷','凤':'鳳','妇':'婦','复':'複','负':'負','赋':'賦','缚':'縛','讣':'訃',
+  '该':'該','盖':'蓋','干':'乾','杆':'桿','冈':'岡','刚':'剛','钢':'鋼','纲':'綱','岗':'崗','镐':'鎬','搁':'擱','阁':'閣','铬':'鉻','个':'個','给':'給','巩':'鞏','贡':'貢','沟':'溝','构':'構','购':'購','谷':'穀','顾':'顧','刮':'颳','挂':'掛','关':'關','观':'觀','馆':'館','惯':'慣','广':'廣','归':'歸','规':'規','龟':'龜','轨':'軌','诡':'詭','柜':'櫃','贵':'貴','国':'國','过':'過',
+  '韩':'韓','汉':'漢','号':'號','贺':'賀','轰':'轟','红':'紅','鸿':'鴻','后':'後','壶':'壺','护':'護','户':'戶','华':'華','划':'劃','画':'畫','话':'話','怀':'懷','坏':'壞','欢':'歡','还':'還','环':'環','缓':'緩','换':'換','唤':'喚','黄':'黃','挥':'揮','回':'迴','汇':'彙','会':'會','讳':'諱','绘':'繪','贿':'賄','秽':'穢','毁':'毀','浑':'渾','伙':'夥','货':'貨','获':'獲','祸':'禍',
+  '击':'擊','机':'機','积':'積','绩':'績','极':'極','级':'級','挤':'擠','几':'幾','计':'計','记':'記','纪':'紀','际':'際','剂':'劑','济':'濟','继':'繼','夹':'夾','价':'價','驾':'駕','歼':'殲','间':'間','监':'監','艰':'艱','拣':'揀','检':'檢','减':'減','简':'簡','见':'見','剑':'劍','舰':'艦','渐':'漸','践':'踐','鉴':'鑒','键':'鍵','将':'將','姜':'薑','讲':'講','奖':'獎','桨':'槳','酱':'醬','胶':'膠','娇':'嬌','骄':'驕','搅':'攪','铰':'鉸','脚':'腳','矫':'矯','缴':'繳','轿':'轎','较':'較','阶':'階','节':'節','洁':'潔','结':'結','届':'屆','诫':'誡','紧':'緊','谨':'謹','进':'進','尽':'盡','劲':'勁','晋':'晉','经':'經','茎':'莖','荆':'荊','惊':'驚','颈':'頸','净':'淨','径':'徑','竞':'競','静':'靜','镜':'鏡','纠':'糾','旧':'舊','举':'舉','剧':'劇','惧':'懼','据':'據','锯':'鋸','卷':'卷','绢':'絹','决':'決','绝':'絕','军':'軍','钧':'鈞','骏':'駿',
+  '开':'開','凯':'凱','颗':'顆','壳':'殼','课':'課','库':'庫','裤':'褲','夸':'誇','块':'塊','宽':'寬','况':'況','矿':'礦','亏':'虧','困':'困','扩':'擴','阔':'闊',
+  '腊':'臘','蜡':'蠟','来':'來','莱':'萊','赖':'賴','兰':'蘭','拦':'攔','栏':'欄','篮':'籃','览':'覽','懒':'懶','烂':'爛','捞':'撈','劳':'勞','乐':'樂','泪':'淚','类':'類','厘':'釐','离':'離','礼':'禮','里':'裡','历':'歷','厉':'厲','隶':'隸','连':'連','帘':'簾','怜':'憐','联':'聯','莲':'蓮','脸':'臉','练':'練','炼':'煉','恋':'戀','链':'鏈','凉':'涼','粮':'糧','两':'兩','谅':'諒','辆':'輛','疗':'療','辽':'遼','猎':'獵','邻':'鄰','临':'臨','铃':'鈴','灵':'靈','岭':'嶺','领':'領','刘':'劉','龙':'龍','咙':'嚨','笼':'籠','聋':'聾','垄':'壟','陇':'隴','楼':'樓','卢':'盧','芦':'蘆','炉':'爐','鲁':'魯','陆':'陸','录':'錄','驴':'驢','吕':'呂','铝':'鋁','屡':'屢','缕':'縷','滤':'濾','绿':'綠','峦':'巒','挛':'攣','孪':'孿','乱':'亂','抡':'掄','轮':'輪','论':'論','罗':'羅','萝':'蘿','逻':'邏','锣':'鑼','箩':'籮','骡':'騾','骆':'駱','络':'絡',
+  '妈':'媽','马':'馬','玛':'瑪','码':'碼','蚂':'螞','骂':'罵','吗':'嗎','买':'買','麦':'麥','卖':'賣','迈':'邁','脉':'脈','蛮':'蠻','馒':'饅','满':'滿','谩':'謾','猫':'貓','铆':'鉚','么':'麼','没':'沒','镁':'鎂','门':'門','闷':'悶','们':'們','锰':'錳','梦':'夢','弥':'彌','谜':'謎','觅':'覓','绵':'綿','缅':'緬','面':'麵','庙':'廟','灭':'滅','悯':'憫','鸣':'鳴','铭':'銘','谬':'謬','亩':'畝',
+  '纳':'納','钠':'鈉','难':'難','挠':'撓','恼':'惱','脑':'腦','闹':'鬧','拟':'擬','腻':'膩','酿':'釀','鸟':'鳥','宁':'寧','纽':'紐','农':'農','浓':'濃',
+  '欧':'歐','殴':'毆','呕':'嘔','盘':'盤','庞':'龐','抛':'拋','赔':'賠','喷':'噴','骗':'騙','飘':'飄','贫':'貧','频':'頻','评':'評','凭':'憑','泼':'潑','颇':'頗','扑':'撲','铺':'鋪','仆':'僕','朴':'樸','谱':'譜',
+  '齐':'齊','骑':'騎','岂':'豈','启':'啟','气':'氣','弃':'棄','迁':'遷','牵':'牽','铅':'鉛','谦':'謙','签':'簽','钱':'錢','钳':'鉗','浅':'淺','谴':'譴','枪':'槍','呛':'嗆','强':'強','墙':'牆','抢':'搶','桥':'橋','侨':'僑','翘':'翹','窍':'竅','窃':'竊','亲':'親','钦':'欽','轻':'輕','氢':'氫','倾':'傾','顷':'頃','请':'請','庆':'慶','穷':'窮','琼':'瓊','区':'區','驱':'驅','趋':'趨','权':'權','劝':'勸','却':'卻','确':'確',
+  '让':'讓','饶':'饒','扰':'擾','绕':'繞','热':'熱','认':'認','绒':'絨','荣':'榮','软':'軟','锐':'銳','润':'潤',
+  '洒':'灑','赛':'賽','伞':'傘','丧':'喪','扫':'掃','涩':'澀','杀':'殺','纱':'紗','晒':'曬','删':'刪','闪':'閃','陕':'陝','伤':'傷','赏':'賞','烧':'燒','绍':'紹','舍':'捨','设':'設','摄':'攝','审':'審','婶':'嬸','肾':'腎','渗':'滲','声':'聲','胜':'勝','绳':'繩','圣':'聖','湿':'濕','时':'時','识':'識','实':'實','蚀':'蝕','驶':'駛','势':'勢','视':'視','试':'試','饰':'飾','适':'適','释':'釋','兽':'獸','寿':'壽','书':'書','输':'輸','属':'屬','术':'術','树':'樹','竖':'豎','数':'數','帅':'帥','双':'雙','谁':'誰','税':'稅','顺':'順','说':'說','硕':'碩','丝':'絲','饲':'飼','松':'鬆','颂':'頌','苏':'蘇','诉':'訴','肃':'肅','虽':'雖','随':'隨','岁':'歲','穗':'穗','孙':'孫','损':'損','笋':'筍','缩':'縮','锁':'鎖',
+  '台':'臺','态':'態','摊':'攤','贪':'貪','滩':'灘','坛':'壇','谈':'談','谭':'譚','叹':'嘆','汤':'湯','烫':'燙','涛':'濤','讨':'討','腾':'騰','题':'題','体':'體','条':'條','贴':'貼','铁':'鐵','厅':'廳','听':'聽','铜':'銅','统':'統','头':'頭','秃':'禿','图':'圖','涂':'塗','团':'團','脱':'脫','驮':'馱','鸵':'鴕',
+  '弯':'彎','湾':'灣','顽':'頑','万':'萬','网':'網','为':'為','违':'違','围':'圍','维':'維','伟':'偉','伪':'偽','纬':'緯','卫':'衛','谓':'謂','喂':'餵','温':'溫','闻':'聞','纹':'紋','稳':'穩','问':'問','窝':'窩','蜗':'蝸','卧':'臥','乌':'烏','呜':'嗚','无':'無','吴':'吳','务':'務','误':'誤','雾':'霧',
+  '牺':'犧','习':'習','系':'係','细':'細','戏':'戲','虾':'蝦','峡':'峽','狭':'狹','吓':'嚇','纤':'纖','鲜':'鮮','闲':'閒','贤':'賢','咸':'鹹','衔':'銜','显':'顯','险':'險','现':'現','县':'縣','线':'線','宪':'憲','献':'獻','乡':'鄉','详':'詳','响':'響','项':'項','销':'銷','萧':'蕭','嚣':'囂','晓':'曉','协':'協','挟':'挾','携':'攜','写':'寫','泄':'洩','泻':'瀉','谢':'謝','兴':'興','绣':'繡','须':'須','虚':'虛','许':'許','叙':'敘','悬':'懸','选':'選','学':'學','寻':'尋','询':'詢','训':'訓','讯':'訊',
+  '压':'壓','鸦':'鴉','鸭':'鴨','亚':'亞','讶':'訝','烟':'煙','严':'嚴','盐':'鹽','颜':'顏','厌':'厭','验':'驗','阳':'陽','杨':'楊','养':'養','样':'樣','摇':'搖','遥':'遙','药':'藥','钥':'鑰','爷':'爺','业':'業','叶':'葉','页':'頁','医':'醫','仪':'儀','遗':'遺','蚁':'蟻','义':'義','议':'議','忆':'憶','艺':'藝','异':'異','译':'譯','谊':'誼','阴':'陰','银':'銀','饮':'飲','隐':'隱','应':'應','婴':'嬰','营':'營','蝇':'蠅','赢':'贏','哟':'喲','拥':'擁','涌':'湧','优':'優','忧':'憂','邮':'郵','犹':'猶','游':'遊','诱':'誘','于':'於','余':'餘','鱼':'魚','渔':'漁','娱':'娛','与':'與','语':'語','郁':'鬱','誉':'譽','员':'員','园':'園','圆':'圓','缘':'緣','远':'遠','愿':'願','约':'約','阅':'閱','悦':'悅','云':'雲','匀':'勻','运':'運','韵':'韻',
+  '杂':'雜','灾':'災','攒':'攢','暂':'暫','赞':'讚','脏':'髒','枣':'棗','责':'責','择':'擇','则':'則','泽':'澤','贼':'賊','赠':'贈','扎':'紮','债':'債','张':'張','涨':'漲','帐':'帳','账':'賬','胀':'脹','这':'這','针':'針','侦':'偵','诊':'診','阵':'陣','镇':'鎮','争':'爭','征':'徵','挣':'掙','睁':'睜','证':'證','只':'隻','织':'織','执':'執','职':'職','纸':'紙','制':'製','质':'質','钟':'鐘','终':'終','种':'種','众':'眾','轴':'軸','昼':'晝','皱':'皺','猪':'豬','嘱':'囑','驻':'駐','筑':'築','铸':'鑄','专':'專','砖':'磚','转':'轉','赚':'賺','庄':'莊','装':'裝','壮':'壯','状':'狀','准':'準','资':'資','综':'綜','踪':'蹤','总':'總','纵':'縱','组':'組','钻':'鑽',
+  '万':'萬','键':'鍵','误':'誤','汇':'彙','览':'覽'
+};
+
+const T2S = {};
+Object.keys(S2T).forEach(s => { if (!T2S[S2T[s]]) T2S[S2T[s]] = s; });
+
+function toTrad(str){
+  return String(str ?? '').replace(/[\u4e00-\u9fff]/g, ch => S2T[ch] || ch);
+}
+function toSimp(str){
+  return String(str ?? '').replace(/[\u4e00-\u9fff]/g, ch => T2S[ch] || ch);
+}
+function displayHanzi(text){
+  if (gameState.charMode === 'trad') return toTrad(text);
+  return String(text ?? '');
+}
+
 /* ============================================================
    默认词库（幼儿园级别，最简单粤语词）
    ============================================================ */
@@ -793,11 +895,12 @@ const DEFAULT_BANK = {
       { emoji:'🥱', word:'闷', jyutping:'mun6' },
       { emoji:'😎', word:'骄傲', jyutping:'giu1 ngou6' },
       { emoji:'😕', word:'困惑', jyutping:'kwan3 waak6' },
-        ]
-    },
+    ]
+  },
 };
 
-const STORAGE_KEY = 'baby_yue_bank_v1';
+const STORAGE_KEY = 'baby_yue_bank_v2';
+const CHARMODE_KEY = 'baby_yue_charmode_v1';
 
 /* ============================================================
    词库加载 / 保存
@@ -806,7 +909,7 @@ let bank = JSON.parse(JSON.stringify(DEFAULT_BANK));
 
 (function loadBank(){
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('baby_yue_bank_v1');
     if (raw) {
       const data = JSON.parse(raw);
       if (data && typeof data === 'object' && !Array.isArray(data)) {
@@ -832,7 +935,6 @@ function saveBank(){
   const text = document.getElementById('saveText');
   const time = document.getElementById('saveTime');
 
-  // 1) 先写入 localStorage
   let ok = false;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bank));
@@ -841,7 +943,6 @@ function saveBank(){
     ok = false;
   }
 
-  // 2) 更新状态条
   if (!bar || !icon || !text) return;
 
   bar.classList.remove('error');
@@ -884,8 +985,15 @@ const gameState = {
   gameOver: false,
   soundOn: true,
   speechOn: true,
-  mistakes: 0
+  mistakes: 0,
+  charMode: 'trad'
 };
+
+/* 从 localStorage 读回字体偏好 */
+try {
+  const cm = localStorage.getItem(CHARMODE_KEY);
+  if (cm === 'simp' || cm === 'trad') gameState.charMode = cm;
+} catch(e){}
 
 /* ============================================================
    DOM
@@ -899,6 +1007,8 @@ const winModal     = document.getElementById('winModal');
 const btnSpeech    = document.getElementById('btnSpeech');
 const btnSound     = document.getElementById('btnSound');
 const btnShuffle   = document.getElementById('btnShuffle');
+const voiceWarn    = document.getElementById('voiceWarn');
+const voiceWarnBtn = document.getElementById('voiceWarnBtn');
 
 /* ============================================================
    工具
@@ -962,33 +1072,103 @@ function sfx(type){
 }
 
 /* ============================================================
-   粤语发音
+   粤语发音（修复版）
    ============================================================ */
-let voices = [];
+let yueVoice = null;
+let hasYue = false;
+let voiceRetries = 0;
+
 function loadVoices(){
-  if (!window.speechSynthesis) return;
+  if (!window.speechSynthesis) {
+    voiceWarn.classList.add('show');
+    return;
+  }
+  let voices = [];
   try { voices = speechSynthesis.getVoices() || []; } catch(e){ voices = []; }
+
+  // 语音列表还没准备好，等一下再试（最多 8 次）
+  if (!voices.length && voiceRetries < 8) {
+    voiceRetries++;
+    setTimeout(loadVoices, 500);
+    return;
+  }
+
+  yueVoice = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) ||
+             voices.find(v => /zh[-_]HK|yue/i.test(v.name)) ||
+             null;
+  hasYue = !!yueVoice;
+
+  if (hasYue) voiceWarn.classList.remove('show');
+  else voiceWarn.classList.add('show');
 }
-loadVoices();
-if (window.speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices;
 
 function speak(text){
   if (!gameState.speechOn || !window.speechSynthesis || !text) return;
+  // ★ 没有粤语 → 不读，绝不读普通话
+  if (!hasYue || !yueVoice) return;
   try {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-HK';
-    u.rate = 0.75;
-    u.pitch = 1.15;
+    u.voice = yueVoice;              // ★ 明确指定 voice
+    u.lang = yueVoice.lang || 'zh-HK';
+    u.rate = 0.75;                    // 幼儿园版本，慢一点
+    u.pitch = 1.15;                   // 高一点，更可爱
     u.volume = 1.0;
-    if (!voices.length) loadVoices();
-    const v = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) ||
-              voices.find(v => /zh[-_]TW/i.test(v.lang)) ||
-              voices.find(v => /zh/i.test(v.lang));
-    if (v) u.voice = v;
     speechSynthesis.speak(u);
   } catch(e){}
 }
+
+/* 手动重新检测 */
+voiceWarnBtn.addEventListener('click', () => {
+  voiceRetries = 0;
+  if (window.speechSynthesis) {
+    try { speechSynthesis.cancel(); } catch(e){}
+  }
+  loadVoices();
+});
+
+/* 初始检测 */
+loadVoices();
+if (window.speechSynthesis) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+  setTimeout(loadVoices, 500);
+  setTimeout(loadVoices, 1500);
+  setTimeout(loadVoices, 3000);
+}
+
+/* ============================================================
+   字体切换
+   ============================================================ */
+function refreshStaticText(){
+  document.querySelectorAll('[data-t]').forEach(el => {
+    el.textContent = displayHanzi(el.dataset.t);
+  });
+}
+
+function updateFontBtnUI(){
+  document.querySelectorAll('[data-char]').forEach(b => {
+    b.classList.toggle('on', b.dataset.char === gameState.charMode);
+  });
+}
+
+function switchCharMode(mode){
+  if (gameState.charMode === mode) return;
+  gameState.charMode = mode;
+  try { localStorage.setItem(CHARMODE_KEY, mode); } catch(e){}
+  updateFontBtnUI();
+  refreshStaticText();
+  renderTopics();
+  renderTeacherTabs();
+  renderWordList();
+  // 如果棋盘上有卡，重新渲染以更新词面
+  if (gameState.cards.length && !gameState.gameOver) {
+    rerenderBoard();
+  }
+}
+
+document.querySelectorAll('[data-char]').forEach(btn => {
+  btn.addEventListener('click', () => switchCharMode(btn.dataset.char));
+});
 
 /* ============================================================
    主题按钮
@@ -1001,7 +1181,7 @@ function renderTopics(){
     btn.className = 'topic-btn' + (key === gameState.topic ? ' on' : '');
     btn.innerHTML =
       '<span class="icon">' + (t.icon || '🎯') + '</span>' +
-      '<span class="label">' + esc(t.label || key) + '</span>';
+      '<span class="label">' + esc(displayHanzi(t.label || key)) + '</span>';
     btn.onclick = () => {
       gameState.topic = key;
       renderTopics();
@@ -1017,7 +1197,7 @@ function renderTopics(){
 function startGame(){
   const topic = bank[gameState.topic];
   if (!topic || !topic.words || !topic.words.length) {
-    boardEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9C8775;font-weight:800;">这个词库是空的，请在下面添加词语。</div>';
+    boardEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9C8775;font-weight:800;">' + displayHanzi('这个词库是空的，请在下面添加词语。') + '</div>';
     return;
   }
 
@@ -1051,6 +1231,12 @@ function startGame(){
   shuffle(gameState.cards);
   gameState.cards.forEach((c, i) => { c.id = i; });
 
+  rerenderBoard();
+  updateProgress();
+  winModal.classList.remove('show');
+}
+
+function rerenderBoard(){
   boardEl.innerHTML = '';
   boardEl.style.gridTemplateColumns = 'repeat(4, 1fr)';
 
@@ -1059,22 +1245,24 @@ function startGame(){
     el.className = 'card';
     el.dataset.id = String(card.id);
     el.style.animationDelay = (i * 0.045) + 's';
+    if (card.matched) {
+      el.classList.add('matched');
+      el.style.opacity = '0';
+    }
+    if (card.flipped && !card.matched) el.classList.add('flipped');
 
     el.innerHTML =
       '<div class="card-inner">' +
         '<div class="card-face card-back">？</div>' +
         '<div class="card-face card-front">' +
           '<div class="emoji">' + card.emoji + '</div>' +
-          '<div class="word">' + esc(card.word) + '</div>' +
+          '<div class="word">' + esc(displayHanzi(card.word)) + '</div>' +
         '</div>' +
       '</div>';
 
-    el.addEventListener('click', () => onCardClick(el));
+    if (!card.matched) el.addEventListener('click', () => onCardClick(el));
     boardEl.appendChild(el);
   });
-
-  updateProgress();
-  winModal.classList.remove('show');
 }
 
 /* ============================================================
@@ -1189,9 +1377,9 @@ function onWin(){
   document.getElementById('winEmoji').textContent =
     stars === 3 ? '🏆' : (stars === 2 ? '🎉' : '👏');
   document.getElementById('winTitle').textContent =
-    stars === 3 ? '好犀利！' : '好嘢！';
+    stars === 3 ? displayHanzi('好犀利！') : displayHanzi('好嘢！');
   document.getElementById('winSub').textContent =
-    '你找到所有 ' + gameState.totalPairs + ' 对啦！';
+    displayHanzi('你找到所有 ') + gameState.totalPairs + displayHanzi(' 对啦！');
 
   setTimeout(() => {
     winModal.classList.add('show');
@@ -1256,7 +1444,7 @@ function renderTeacherTabs(){
   teacherTabsEl.innerHTML = '';
   Object.keys(bank).forEach(key => {
     const btn = document.createElement('button');
-    btn.textContent = (bank[key].icon || '') + ' ' + (bank[key].label || key);
+    btn.textContent = (bank[key].icon || '') + ' ' + displayHanzi(bank[key].label || key);
     btn.className = (key === teacherTab ? 'on' : '');
     btn.onclick = () => {
       teacherTab = key;
@@ -1272,7 +1460,7 @@ function renderWordList(){
   const words = bank[teacherTab].words || [];
   if (!words.length) {
     wordListEl.innerHTML =
-      '<div style="text-align:center;padding:14px;color:#9C8775;font-size:12px;">还没有词语，点下面「加一个词」。</div>';
+      '<div style="text-align:center;padding:14px;color:#9C8775;font-size:12px;">' + displayHanzi('还没有词语，点下面「加一个词」。') + '</div>';
     return;
   }
   words.forEach((w, idx) => {
@@ -1280,14 +1468,14 @@ function renderWordList(){
     row.className = 'word-item';
     row.innerHTML =
       '<input class="emoji-in" data-k="emoji" value="' + esc(w.emoji) + '" placeholder="😀">' +
-      '<input data-k="word" value="' + esc(w.word) + '" placeholder="粤语词">' +
-      '<input data-k="jyutping" value="' + esc(w.jyutping || '') + '" placeholder="粤拼（可空）">' +
-      '<button class="del">删除</button>';
+      '<input data-k="word" value="' + esc(w.word) + '" placeholder="' + displayHanzi('粤语词') + '">' +
+      '<input data-k="jyutping" value="' + esc(w.jyutping || '') + '" placeholder="' + displayHanzi('粤拼（可空）') + '">' +
+      '<button class="del">' + displayHanzi('删除') + '</button>';
 
     row.querySelectorAll('input').forEach(inp => {
       inp.addEventListener('input', () => {
         w[inp.dataset.k] = inp.value;
-        saveBank();  // 自动保存并显示状态
+        saveBank();
       });
     });
     row.querySelector('.del').onclick = () => {
@@ -1303,9 +1491,9 @@ function renderWordList(){
 document.getElementById('saveBtn').onclick = () => {
   saveBank();
   const btn = document.getElementById('saveBtn');
-  const old = btn.textContent;
-  btn.textContent = '✅ 已保存';
-  setTimeout(() => { btn.textContent = old; }, 1200);
+  const old = btn.innerHTML;
+  btn.textContent = '✅ ' + displayHanzi('已保存');
+  setTimeout(() => { btn.innerHTML = old; }, 1200);
 };
 
 /* 加词 */
@@ -1323,11 +1511,7 @@ document.getElementById('exportBtn').onclick = () => {
   area.value = JSON.stringify(bank, null, 2);
   area.select();
   try { document.execCommand('copy'); } catch(e){}
-  alert(
-    '✅ 词库 JSON 已复制到剪贴板！\n\n' +
-    '请粘贴到备忘录 / 记事本 / 微信收藏里保存。\n' +
-    '下次换设备或换浏览器时，粘贴回「导入词库」就能恢复。'
-  );
+  alert(displayHanzi('✅ 词库 JSON 已复制到剪贴板！\n\n请粘贴到备忘录 / 记事本 / 微信收藏里保存。\n下次换设备或换浏览器时，粘贴回「导入词库」就能恢复。'));
 };
 
 /* 导入 */
@@ -1346,15 +1530,15 @@ document.getElementById('importBtn').onclick = () => {
     renderTeacherTabs();
     renderWordList();
     renderTopics();
-    alert('✅ 词库导入成功！\n共导入 ' + Object.keys(bank).length + ' 个主题。');
+    alert(displayHanzi('✅ 词库导入成功！\n共导入 ') + Object.keys(bank).length + displayHanzi(' 个主题。'));
   } catch(e) {
-    alert('❌ 导入失败：' + e.message + '\n\n请确认粘贴的是正确的 JSON 格式。');
+    alert(displayHanzi('❌ 导入失败：') + e.message + '\n\n' + displayHanzi('请确认粘贴的是正确的 JSON 格式。'));
   }
 };
 
 /* 恢复默认 */
 document.getElementById('resetBtn').onclick = () => {
-  if (!confirm('恢复默认词库？\n\n当前所有修改会丢失，确定吗？')) return;
+  if (!confirm(displayHanzi('恢复默认词库？\n\n当前所有修改会丢失，确定吗？'))) return;
   bank = JSON.parse(JSON.stringify(DEFAULT_BANK));
   saveBank();
   renderTeacherTabs();
@@ -1367,20 +1551,21 @@ document.getElementById('resetBtn').onclick = () => {
    初始化
    ============================================================ */
 function init(){
+  updateFontBtnUI();
+  refreshStaticText();
   renderTopics();
   renderTeacherTabs();
   renderWordList();
   startGame();
 
-  // 页面打开时，显示一次当前保存状态
   const bar  = document.getElementById('saveBar');
   const icon = document.getElementById('saveIcon');
   const text = document.getElementById('saveText');
   const time = document.getElementById('saveTime');
   if (bar && icon && text) {
     icon.textContent = '✅';
-    text.textContent = '词库已从浏览器加载';
-    if (time) time.textContent = '本地保存 · 自动同步';
+    text.textContent = displayHanzi('词库已从浏览器加载');
+    if (time) time.textContent = displayHanzi('本地保存 · 自动同步');
   }
 }
 
