@@ -1,0 +1,2494 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>粤语词语消消乐 · Cantonese Word Match</title>
+<style>
+:root{
+  --primary:#4D96FF; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+  --correct:#22c55e; --wrong:#ef4444; --gold:#f59e0b; --danger:#dc2626;
+  --hanzi-1:#FFF6BF; --hanzi-2:#FFE066; --hanzi-border:#E5C23C;
+  --jyut-1:#D2E4FF; --jyut-2:#8FBBFF; --jyut-border:#5A92E8;
+  --shadow-sm:0 2px 6px rgba(15,23,42,.06);
+  --shadow-md:0 10px 30px rgba(15,23,42,.09);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"PingFang HK","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;
+  background:
+    radial-gradient(1100px 600px at 8% -8%, #dbeafe 0%, transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, #f3e8ff 0%, transparent 55%),
+    radial-gradient(900px 640px at 50% 118%, #dcfce7 0%, transparent 62%),
+    #f1f5f9;
+  color:var(--ink); min-height:100vh; padding-bottom:28px;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;}
+
+/* 顶栏 */
+.topbar{max-width:1080px;margin:0 auto;padding:16px 20px 8px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.brand h1{font-size:clamp(19px,3vw,28px);margin:0;letter-spacing:1px;font-weight:900;
+  background:linear-gradient(90deg,#4D96FF,#a855f7,#f97316);
+  -webkit-background-clip:text;background-clip:text;color:transparent;}
+.brand .sub{font-size:12px;color:var(--muted);margin-top:3px;letter-spacing:.4px;}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #fcd34d;
+  border-radius:12px;padding:7px 13px;font-size:12px;font-weight:900;color:#92400e;
+  box-shadow:var(--shadow-sm);white-space:nowrap;}
+.progress-badge{display:flex;align-items:center;gap:6px;background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:7px 13px;
+  font-size:12px;font-weight:900;color:var(--ink);box-shadow:var(--shadow-sm);
+  cursor:pointer;transition:.18s;white-space:nowrap;}
+.progress-badge:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(15,23,42,.12);}
+.topic-wrap{display:flex;align-items:center;gap:8px;background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:6px 12px;box-shadow:var(--shadow-sm);}
+.topic-wrap label{font-size:12px;font-weight:800;color:var(--muted);}
+.topic-wrap select{border:none;background:transparent;font-size:13px;font-weight:800;
+  color:var(--ink);outline:none;cursor:pointer;padding:4px 2px;max-width:170px;}
+
+/* 选择器 */
+.selector-row{max-width:1080px;margin:10px auto 0;padding:0 20px;
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.selector-group{display:flex;align-items:center;gap:6px;background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:5px 10px;
+  box-shadow:var(--shadow-sm);}
+.selector-group .sgl{font-size:11px;font-weight:900;color:var(--muted);margin-right:2px;}
+.sel-btn{padding:6px 12px;border-radius:8px;background:transparent;
+  font-size:12px;font-weight:800;color:var(--muted);transition:.18s;white-space:nowrap;}
+.sel-btn:hover{background:#f1f5f9;}
+.sel-btn.on{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(77,150,255,.3);}
+.sel-btn.on.gold{background:linear-gradient(135deg,#f59e0b,#d97706);}
+.sel-btn.on.green{background:linear-gradient(135deg,#22c55e,#16a34a);}
+
+/* 进度条 */
+.progress-wrap{max-width:1080px;margin:12px auto 12px;padding:0 20px;}
+.progress-bar{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#4D96FF,#a855f7,#22c55e);
+  border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.progress-info{display:flex;justify-content:space-between;margin-top:5px;
+  font-size:11px;font-weight:800;color:var(--muted);}
+
+/* 状态条 */
+.stats{max-width:1080px;margin:0 auto 14px;padding:0 20px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:10px 12px;box-shadow:var(--shadow-sm);display:flex;
+  flex-direction:column;gap:2px;min-width:0;position:relative;overflow:hidden;}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--primary);opacity:.6;}
+.stat.s-score::before{background:var(--gold);}
+.stat.s-pairs::before{background:var(--correct);}
+.stat.s-time::before{background:#a855f7;}
+.stat .stat-label{font-size:10.5px;color:var(--muted);font-weight:800;
+  letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat .stat-value{font-size:clamp(16px,2.4vw,22px);font-weight:900;color:var(--ink);
+  line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat .stat-sub{font-size:10px;color:var(--muted);font-weight:800;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.stat .stat-value.pulse{animation:statPulse .5s ease;}
+@keyframes statPulse{0%{transform:scale(1);}45%{transform:scale(1.24);color:var(--correct);}100%{transform:scale(1);}}
+.stat .stat-value.pulse-gold{animation:statPulseGold .55s ease;}
+@keyframes statPulseGold{0%{transform:scale(1);}45%{transform:scale(1.3);color:var(--gold);}100%{transform:scale(1);}}
+@media(max-width:620px){.stats{grid-template-columns:repeat(2,1fr);}}
+
+/* 提示 */
+.combo-toast{position:fixed;left:50%;top:26%;transform:translate(-50%,-50%);
+  font-size:clamp(30px,6vw,52px);font-weight:900;color:#f59e0b;
+  text-shadow:0 4px 16px rgba(245,158,11,.5),0 0 0 3px #fff,0 0 0 6px rgba(245,158,11,.4);
+  pointer-events:none;z-index:990;opacity:0;letter-spacing:2px;}
+.combo-toast.show{animation:comboPop 1s ease forwards;}
+@keyframes comboPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(-12deg);}
+  25%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(4deg);}
+  60%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0);}
+  100%{opacity:0;transform:translate(-50%,-70%) scale(.9);}}
+.tip-toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%);
+  background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;
+  font-size:14px;font-weight:900;padding:12px 22px;border-radius:14px;
+  box-shadow:0 8px 24px rgba(245,158,11,.35);border:2px solid #f59e0b;
+  z-index:995;opacity:0;pointer-events:none;white-space:nowrap;}
+.tip-toast.show{animation:tipIn 3s ease forwards;}
+@keyframes tipIn{0%{opacity:0;transform:translateX(-50%) translateY(20px);}
+  12%{opacity:1;transform:translateX(-50%) translateY(0);}
+  88%{opacity:1;transform:translateX(-50%) translateY(0);}
+  100%{opacity:0;transform:translateX(-50%) translateY(-10px);}}
+
+/* 棋盘 */
+.board-wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  max-width:560px;margin:0 auto;padding:14px;background:#fff;
+  border-radius:22px;border:1px solid var(--line);box-shadow:var(--shadow-md);
+  position:relative;}
+@media(max-width:480px){.board{gap:7px;padding:10px;border-radius:16px;}}
+
+.card{position:relative;aspect-ratio:1/1;perspective:900px;cursor:pointer;
+  user-select:none;transition:transform .18s;opacity:0;
+  animation:cardEnter .4s ease forwards;}
+@keyframes cardEnter{0%{opacity:0;transform:translateY(-14px) scale(.85);}
+  100%{opacity:1;transform:translateY(0) scale(1);}}
+.card:hover{transform:translateY(-3px);}
+.card:active{transform:scale(.97);}
+.card.focus-ring{outline:3px solid #a855f7;outline-offset:2px;border-radius:14px;}
+.card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .48s cubic-bezier(.4,.0,.2,1);}
+.card.flipped .card-inner{transform:rotateY(180deg);}
+.card-face{position:absolute;inset:0;backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;border-radius:14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:6px;text-align:center;overflow:hidden;
+  border:2px solid transparent;box-shadow:0 4px 12px rgba(15,23,42,.10);}
+@media(max-width:480px){.card-face{border-radius:10px;padding:4px;}}
+.card-back{background:linear-gradient(150deg,#4D96FF,#7c5cff 60%,#a855f7);
+  color:#fff;font-size:clamp(20px,3.4vw,34px);font-weight:900;
+  letter-spacing:2px;text-shadow:0 2px 6px rgba(0,0,0,.22);}
+.card-back::before{content:"";position:absolute;inset:6px;border-radius:10px;
+  border:2px dashed rgba(255,255,255,.35);pointer-events:none;}
+.card-front{transform:rotateY(180deg);background:#fff;}
+.card-front.hanzi{background:linear-gradient(155deg,var(--hanzi-1),var(--hanzi-2));
+  border-color:var(--hanzi-border);}
+.card-front.jyutping{background:linear-gradient(155deg,var(--jyut-1),var(--jyut-2));
+  border-color:var(--jyut-border);}
+.card-tag{position:absolute;top:4px;left:5px;font-size:8px;font-weight:900;
+  padding:1px 5px;border-radius:5px;letter-spacing:.5px;}
+.card-front.hanzi .card-tag{background:rgba(122,75,0,.18);color:#7a4b00;}
+.card-front.jyutping .card-tag{background:rgba(30,58,138,.18);color:#1e3a8a;}
+.card.pending .card-front::after{content:"↺";position:absolute;top:4px;right:5px;
+  font-size:13px;font-weight:900;color:rgba(30,58,138,.55);
+  animation:pendingPulse 1.4s ease-in-out infinite;}
+@keyframes pendingPulse{0%,100%{opacity:.4;transform:scale(1) rotate(0);}
+  50%{opacity:1;transform:scale(1.15) rotate(-20deg);}}
+.card-content{font-weight:900;line-height:1.1;word-break:break-word;letter-spacing:.5px;}
+.card-content.hanzi-content{font-size:clamp(18px,3.6vw,30px);color:#7a4b00;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);}
+.card-content.jyutping-content{font-size:clamp(12px,2.4vw,19px);color:#1e3a8a;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:.3px;}
+.card-sub{margin-top:5px;font-size:clamp(11px,1.9vw,15px);line-height:1.2;
+  color:#4b5563;font-weight:800;opacity:.92;word-break:break-word;}
+.card-front.hanzi .card-sub{font-size:clamp(15px,2.6vw,24px);}
+.card-front.jyutping .card-sub{font-size:clamp(10px,1.7vw,13px);color:#334155;font-weight:700;}
+.card.matched{animation:matchOut .75s ease forwards;pointer-events:none;}
+@keyframes matchOut{0%{transform:scale(1);opacity:1;}30%{transform:scale(1.1);opacity:1;}
+  55%{transform:scale(1.06);opacity:1;}100%{transform:scale(.2) rotate(8deg);opacity:0;}}
+.card.matched .card-front{box-shadow:0 0 0 4px rgba(34,197,94,.55),0 0 26px rgba(34,197,94,.65);
+  border-color:var(--correct) !important;}
+.card.matched::after{content:"✓";position:absolute;top:4px;right:6px;
+  font-size:14px;font-weight:900;color:var(--correct);
+  animation:popIn .4s ease;z-index:3;}
+@keyframes popIn{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
+.card.wrong .card-inner{animation:shake .5s ease;}
+@keyframes shake{0%,100%{transform:rotateY(180deg) translateX(0);}
+  20%{transform:rotateY(180deg) translateX(-7px);}
+  40%{transform:rotateY(180deg) translateX(7px);}
+  60%{transform:rotateY(180deg) translateX(-5px);}
+  80%{transform:rotateY(180deg) translateX(5px);}}
+.card.wrong .card-front{box-shadow:0 0 0 4px rgba(239,68,68,.5),0 0 22px rgba(239,68,68,.5);
+  border-color:var(--wrong) !important;}
+.card.hint .card-front{box-shadow:0 0 0 4px rgba(245,158,11,.6),0 0 24px rgba(245,158,11,.7);
+  animation:hintPulse 1s ease infinite;}
+@keyframes hintPulse{0%,100%{box-shadow:0 0 0 4px rgba(245,158,11,.6),0 0 24px rgba(245,158,11,.7);}
+  50%{box-shadow:0 0 0 8px rgba(245,158,11,.25),0 0 32px rgba(245,158,11,.9);}}
+.star-burst{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:visible;}
+.star-burst span{position:absolute;left:50%;top:50%;font-size:18px;
+  animation:starFly .85s ease-out forwards;}
+@keyframes starFly{0%{transform:translate(-50%,-50%) scale(.4);opacity:0;}25%{opacity:1;}
+  100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.3) rotate(220deg);opacity:0;}}
+.float-score{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-size:18px;font-weight:900;color:var(--gold);
+  text-shadow:0 2px 6px rgba(245,158,11,.5),0 0 0 2px #fff;
+  pointer-events:none;z-index:6;animation:floatUp 1s ease-out forwards;}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,-50%) scale(.5);}
+  20%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}
+  100%{opacity:0;transform:translate(-50%,-150%) scale(1);}}
+
+/* 底部按钮 */
+.controls{max-width:1080px;margin:16px auto 0;padding:0 20px;
+  display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;}
+.ctrl-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;
+  border:1px solid var(--line);border-radius:12px;padding:10px 14px;
+  font-size:12.5px;font-weight:800;color:var(--ink);box-shadow:var(--shadow-sm);
+  transition:.18s;position:relative;white-space:nowrap;}
+.ctrl-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(15,23,42,.12);}
+.ctrl-btn:active{transform:translateY(0) scale(.98);}
+.ctrl-btn.on{background:var(--primary);color:#fff;border-color:transparent;}
+.ctrl-btn.on:hover{box-shadow:0 8px 20px rgba(77,150,255,.36);}
+.ctrl-btn .dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;transition:.2s;}
+.ctrl-btn.on .dot{background:#86efac;box-shadow:0 0 8px #86efac;}
+.ctrl-btn.hint-btn{background:linear-gradient(135deg,#fef3c7,#fde68a);
+  border-color:#fcd34d;color:#92400e;}
+.ctrl-btn.hint-btn:hover{box-shadow:0 6px 16px rgba(245,158,11,.3);}
+.ctrl-btn.hint-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.ctrl-btn.notebook-btn{background:linear-gradient(135deg,#ddd6fe,#c4b5fd);
+  border-color:#a78bfa;color:#5b21b6;}
+.ctrl-btn.notebook-btn:hover{box-shadow:0 6px 16px rgba(167,139,250,.3);}
+.ctrl-btn.wrongbook-btn{background:linear-gradient(135deg,#fecaca,#fca5a5);
+  border-color:#f87171;color:#991b1b;}
+.ctrl-btn.wrongbook-btn:hover{box-shadow:0 6px 16px rgba(248,113,113,.3);}
+.ctrl-btn .kbd{display:inline-block;font-size:9px;font-weight:900;
+  background:rgba(0,0,0,.08);border-radius:4px;padding:1px 4px;margin-left:2px;}
+
+/* 弹窗通用 */
+.modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.62);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:16px;z-index:1000;}
+.modal-mask.show{display:flex;animation:fadeIn .22s;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:24px;width:100%;max-width:460px;
+  max-height:92vh;overflow-y:auto;box-shadow:0 26px 60px rgba(15,23,42,.4);
+  animation:modalIn .34s cubic-bezier(.2,1.3,.5,1);text-align:center;padding:32px 26px 26px;}
+@keyframes modalIn{from{opacity:0;transform:scale(.88) translateY(24px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal .win-emoji{font-size:64px;animation:bounce 1.1s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.modal .win-title{font-size:26px;font-weight:900;margin:10px 0 6px;color:#d97706;}
+.modal .win-sub{font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.65;}
+.modal .stars{font-size:38px;letter-spacing:6px;margin:6px 0 14px;animation:starPop .6s ease;}
+@keyframes starPop{0%{transform:scale(0) rotate(-30deg);opacity:0}70%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}
+.modal .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 20px;}
+.modal .result-item{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 8px;}
+.modal .result-item .rl{font-size:10.5px;color:var(--muted);font-weight:800;
+  letter-spacing:.5px;text-transform:uppercase;}
+.modal .result-item .rv{font-size:19px;font-weight:900;color:var(--ink);margin-top:3px;}
+.modal .result-item.gold{background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fcd34d;}
+.modal .result-item.gold .rv{color:#92400e;}
+.modal .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal .btn-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.modal .btn-row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;}
+.btn-primary,.btn-secondary,.btn-tertiary,.btn-quaternary{padding:14px 8px;border-radius:14px;
+  font-size:13px;font-weight:900;color:#fff;transition:.18s;letter-spacing:.3px;}
+.btn-primary{background:linear-gradient(135deg,#4D96FF,#7c5cff);box-shadow:0 7px 18px rgba(77,150,255,.36);}
+.btn-secondary{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 7px 18px rgba(34,197,94,.34);}
+.btn-tertiary{background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 7px 18px rgba(245,158,11,.34);}
+.btn-quaternary{background:linear-gradient(135deg,#a855f7,#7c3aed);box-shadow:0 7px 18px rgba(168,85,247,.34);}
+.btn-primary:hover,.btn-secondary:hover,.btn-tertiary:hover,.btn-quaternary:hover{transform:translateY(-2px);}
+.btn-primary:active,.btn-secondary:active,.btn-tertiary:active,.btn-quaternary:active{transform:scale(.97);}
+
+/* 继续弹窗 */
+.resume-modal .modal{padding:36px 28px 28px;}
+.resume-modal .resume-icon{font-size:70px;line-height:1;margin-bottom:8px;
+  animation:bounce 1.2s infinite;}
+.resume-modal .resume-title{font-size:23px;font-weight:900;color:var(--ink);margin-bottom:6px;}
+.resume-modal .resume-sub{font-size:13.5px;color:var(--muted);font-weight:700;margin-bottom:18px;}
+.resume-modal .resume-info{background:linear-gradient(135deg,#f8fafc,#eff6ff);
+  border:2px dashed #c7d7f0;border-radius:16px;padding:16px;
+  margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;}
+.resume-modal .info-item{display:flex;flex-direction:column;gap:2px;}
+.resume-modal .info-item .info-label{font-size:10.5px;color:var(--muted);font-weight:800;
+  letter-spacing:.5px;text-transform:uppercase;}
+.resume-modal .info-item .info-value{font-size:15px;color:var(--ink);font-weight:900;}
+
+/* 我的进度 */
+.progress-modal .modal{max-width:600px;text-align:left;padding:28px 26px 24px;}
+.pm-title{font-size:22px;font-weight:900;color:var(--ink);margin:0 0 6px;
+  display:flex;align-items:center;gap:8px;}
+.pm-sub{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:18px;}
+.pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.pm-item{background:#f8fafc;border:1px solid var(--line);border-radius:13px;
+  padding:12px 14px;display:flex;flex-direction:column;gap:2px;cursor:pointer;
+  transition:.18s;}
+.pm-item:hover{background:#f1f5f9;border-color:var(--primary);transform:translateY(-1px);}
+.pm-item .pm-label{font-size:10.5px;color:var(--muted);font-weight:800;
+  letter-spacing:.5px;text-transform:uppercase;}
+.pm-item .pm-value{font-size:22px;color:var(--ink);font-weight:900;line-height:1.1;}
+.pm-item .pm-hint{font-size:10px;color:var(--primary);font-weight:800;margin-top:2px;}
+.pm-section-title{font-size:12px;font-weight:900;color:var(--muted);
+  letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;}
+.pm-mastery{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;
+  max-height:220px;overflow-y:auto;padding-right:4px;}
+.pm-mastery::-webkit-scrollbar{width:6px;}
+.pm-mastery::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px;}
+.mastery-row{display:flex;align-items:center;gap:10px;}
+.mastery-row .m-icon{font-size:20px;flex-shrink:0;width:26px;text-align:center;}
+.mastery-row .m-name{font-size:12.5px;font-weight:800;color:var(--ink);
+  width:70px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mastery-row .m-bar-wrap{flex:1;height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;}
+.mastery-row .m-bar{height:100%;background:linear-gradient(90deg,#4D96FF,#a855f7);
+  border-radius:999px;transition:width .5s;}
+.mastery-row .m-pct{font-size:11px;font-weight:900;color:var(--muted);
+  width:48px;text-align:right;flex-shrink:0;}
+.pm-actions{display:flex;gap:8px;}
+.pm-btn{flex:1;padding:12px;border-radius:12px;font-size:13px;font-weight:900;
+  transition:.18s;}
+.pm-btn.close{background:#f1f5f9;color:var(--ink);}
+.pm-btn.close:hover{background:#e2e8f0;}
+.pm-btn.danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;
+  box-shadow:0 6px 16px rgba(239,68,68,.3);}
+.pm-btn.danger:hover{transform:translateY(-2px);}
+
+/* 单词本 */
+.notebook-modal .modal{max-width:660px;text-align:left;}
+.nb-title{font-size:20px;font-weight:900;color:var(--ink);margin:0 0 4px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.nb-sub{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:14px;}
+.nb-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.nb-tab{padding:6px 14px;border-radius:9px;background:#f1f5f9;
+  font-size:12px;font-weight:800;color:var(--muted);transition:.18s;}
+.nb-tab.on{background:var(--primary);color:#fff;}
+.nb-tab.on.wrong-tab{background:linear-gradient(135deg,#ef4444,#dc2626);}
+.nb-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:60vh;
+  overflow-y:auto;padding-right:4px;}
+.nb-list::-webkit-scrollbar{width:6px;}
+.nb-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px;}
+@media(max-width:520px){.nb-list{grid-template-columns:1fr;}}
+.nb-item{padding:10px 12px;background:#f8fafc;border:1px solid var(--line);
+  border-radius:11px;cursor:pointer;transition:.18s;position:relative;}
+.nb-item:hover{background:#f1f5f9;border-color:var(--primary);transform:translateY(-1px);}
+.nb-item.wrong-item:hover{background:#fef2f2;border-color:var(--wrong);}
+.nb-item .nb-h{font-size:16px;font-weight:900;color:#7a4b00;
+  display:flex;align-items:center;gap:8px;}
+.nb-item .nb-h .nb-emoji{font-size:22px;}
+.nb-item .nb-j{font-size:11px;font-family:ui-monospace,monospace;
+  color:#1e3a8a;font-weight:700;margin-top:3px;}
+.nb-item .nb-e{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px;}
+.nb-item .nb-wrong-mark{position:absolute;top:6px;right:8px;font-size:12px;
+  color:var(--wrong);font-weight:900;}
+.nb-empty{text-align:center;padding:40px 12px;color:var(--muted);
+  font-weight:800;grid-column:1/-1;}
+.nb-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.nb-action-btn{flex:1;min-width:120px;padding:11px;border-radius:12px;
+  font-size:13px;font-weight:900;color:#fff;transition:.18s;}
+.nb-action-btn.practice{background:linear-gradient(135deg,#4D96FF,#7c5cff);}
+.nb-action-btn.practice-wrong{background:linear-gradient(135deg,#ef4444,#dc2626);}
+.nb-action-btn.clear{background:#f1f5f9;color:var(--muted);}
+.nb-action-btn:disabled{opacity:.4;cursor:not-allowed;}
+.nb-action-btn:hover:not(:disabled){transform:translateY(-2px);}
+
+/* 词条详情 */
+.detail-modal .modal{max-width:520px;text-align:left;padding:26px 24px 22px;}
+.dt-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+.dt-emoji{font-size:52px;line-height:1;flex-shrink:0;}
+.dt-hanzi{font-size:32px;font-weight:900;color:#7a4b00;line-height:1.1;}
+.dt-jyut{font-size:14px;font-family:ui-monospace,monospace;
+  color:#1e3a8a;font-weight:800;margin-top:4px;display:flex;
+  align-items:center;gap:8px;flex-wrap:wrap;}
+.dt-speak{background:#e0e7ff;color:#4338ca;padding:4px 10px;border-radius:8px;
+  font-size:11px;font-weight:900;cursor:pointer;transition:.18s;}
+.dt-speak:hover{background:#c7d2fe;transform:scale(1.05);}
+.dt-level-tag{display:inline-block;padding:3px 9px;border-radius:7px;
+  font-size:10px;font-weight:900;margin-left:8px;vertical-align:middle;}
+.dt-level-tag.basic{background:#DCFCE7;color:#166534;}
+.dt-level-tag.common{background:#DBEAFE;color:#1E40AF;}
+.dt-level-tag.native{background:#FEF3C7;color:#92400E;}
+.dt-section{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);}
+.dt-section .dtl{font-size:11px;font-weight:900;color:var(--muted);
+  letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px;}
+.dt-section .dtv{font-size:14.5px;color:var(--ink);font-weight:700;line-height:1.6;}
+.dt-section .dtv.example{background:#f8fafc;border-left:3px solid var(--primary);
+  padding:10px 14px;border-radius:0 10px 10px 0;color:#334155;}
+.dt-section .dtv.example .ex-cn{color:#7a4b00;font-weight:900;}
+.dt-section .dtv.example .ex-jy{font-family:ui-monospace,monospace;
+  font-size:12px;color:#1e3a8a;font-weight:700;margin-top:4px;}
+.dt-close-btn{margin-top:20px;width:100%;padding:12px;border-radius:12px;
+  background:linear-gradient(135deg,#4D96FF,#7c5cff);color:#fff;font-size:14px;
+  font-weight:900;letter-spacing:.5px;}
+
+/* 难度横幅 */
+.tier-banner{max-width:1080px;margin:8px auto 0;padding:0 20px;
+  display:none;justify-content:center;}
+.tier-banner.show{display:flex;animation:tierIn .5s ease;}
+@keyframes tierIn{0%{opacity:0;transform:translateY(-10px);}100%{opacity:1;transform:translateY(0);}}
+.tier-banner .inner{background:linear-gradient(135deg,#fef3c7,#fde68a,#fcd34d);
+  border:2px solid #f59e0b;border-radius:14px;padding:10px 22px;
+  font-size:14px;font-weight:900;color:#78350f;
+  box-shadow:0 6px 20px rgba(245,158,11,.3);display:flex;align-items:center;gap:10px;}
+.tier-banner .inner .ico{font-size:20px;}
+
+/* 彩带 */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden;}
+.confetti span{position:absolute;top:-20px;width:10px;height:16px;
+  border-radius:2px;animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0);opacity:1;}
+  100%{transform:translateY(105vh) rotate(720deg);opacity:.2;}}
+
+.footer-note{max-width:1080px;margin:12px auto 0;padding:0 20px;
+  text-align:center;font-size:11.5px;color:var(--muted);line-height:1.7;}
+.footer-note kbd{display:inline-block;font-size:10px;font-weight:900;
+  background:#e2e8f0;border-radius:4px;padding:1px 5px;color:#475569;
+  font-family:ui-monospace,monospace;}
+.footer-note .highlight{color:#4D96FF;font-weight:900;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>🀄 粤语词语消消乐</h1>
+    <div class="sub">Cantonese Word Match · 全年龄粤语学习游戏</div>
+  </div>
+  <div class="topbar-right">
+    <div class="best-badge"><span>🏅</span><span>Best Lv <b id="bestLevel">1</b></span></div>
+    <div class="progress-badge" id="btnProgress"><span>📊</span><span>我的进度</span></div>
+    <div class="topic-wrap">
+      <label for="topicSelect">主题</label>
+      <select id="topicSelect"></select>
+    </div>
+  </div>
+</header>
+
+<div class="selector-row">
+  <div class="selector-group">
+    <span class="sgl">词汇层级</span>
+    <button class="sel-btn on green" data-level="basic">🌱 基础</button>
+    <button class="sel-btn" data-level="common">🌿 常用</button>
+    <button class="sel-btn" data-level="native">🔥 地道</button>
+  </div>
+  <div class="selector-group">
+    <span class="sgl">游戏模式</span>
+    <button class="sel-btn on" data-mode="learn">📖 学习</button>
+    <button class="sel-btn gold" data-mode="challenge">⚡ 挑战</button>
+  </div>
+  <div class="selector-group">
+    <span class="sgl">语速</span>
+    <button class="sel-btn" data-speed="0.65">🐢 慢</button>
+    <button class="sel-btn on" data-speed="0.82">🚶 正常</button>
+    <button class="sel-btn" data-speed="1.0">🐇 快</button>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-info">
+    <span id="progressText">进度：0 / 4</span>
+    <span id="comboText">连击：0</span>
+  </div>
+</div>
+
+<div class="tier-banner" id="tierBanner">
+  <div class="inner">
+    <span class="ico" id="tierBannerIcon">⭐</span>
+    <span id="tierBannerText"></span>
+  </div>
+</div>
+
+<section class="stats">
+  <div class="stat">
+    <div class="stat-label">Level 关卡</div>
+    <div class="stat-value" id="statLevel">1</div>
+    <div class="stat-sub" id="statTier">⭐ 入门</div>
+  </div>
+  <div class="stat s-score">
+    <div class="stat-label">Score 得分</div>
+    <div class="stat-value" id="statScore">0</div>
+    <div class="stat-sub" id="statBest">Best 1 关</div>
+  </div>
+  <div class="stat s-pairs">
+    <div class="stat-label">Pairs 剩余</div>
+    <div class="stat-value" id="statPairs">4 / 4</div>
+    <div class="stat-sub" id="statGrid">4×2 · 8 张</div>
+  </div>
+  <div class="stat s-time">
+    <div class="stat-label">Time 用时</div>
+    <div class="stat-value" id="statTime">0:00</div>
+    <div class="stat-sub" id="statTarget"></div>
+  </div>
+</section>
+
+<div class="board-wrap">
+  <div class="board" id="board"></div>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn hint-btn" id="btnHint">💡 提示 <span class="kbd">H</span></button>
+  <button class="ctrl-btn notebook-btn" id="btnNotebook">📖 单词本 <span class="kbd">N</span></button>
+  <button class="ctrl-btn wrongbook-btn" id="btnWrongBook">📕 错题本 <span class="kbd">W</span></button>
+  <button class="ctrl-btn" id="btnPause">⏸️ 暂停</button>
+  <button class="ctrl-btn" id="btnRestart">🔄 重开</button>
+  <button class="ctrl-btn on" id="btnSound"><span class="dot"></span> 🔊</button>
+  <button class="ctrl-btn on" id="btnSpeech"><span class="dot"></span> 🗣️</button>
+</div>
+
+<div class="footer-note">
+  点击卡片翻开，找到 <b>汉字</b> 和对应的 <b>粤拼</b> 配对消除。<br>
+  <span class="highlight">💡 翻开第一张后，再点它一次可以盖回去。</span>
+  <span class="highlight">配对错误的词会进「错题本」。</span><br>
+  快捷键：<kbd>H</kbd> 提示 · <kbd>N</kbd> 单词本 · <kbd>W</kbd> 错题本 · <kbd>Space</kbd> 暂停 · <kbd>R</kbd> 重开
+</div>
+
+<!-- 继续弹窗 -->
+<div class="modal-mask resume-modal" id="resumeModal">
+  <div class="modal">
+    <div class="resume-icon">⏸️</div>
+    <div class="resume-title">发现上次没玩完的一局</div>
+    <div class="resume-sub">要接着玩还是重新开始？</div>
+    <div class="resume-info" id="resumeInfo"></div>
+    <div class="btn-row">
+      <button class="btn-primary" id="btnResumeYes">▶️ 继续</button>
+      <button class="btn-tertiary" id="btnResumeNo">🔄 重新开始</button>
+    </div>
+  </div>
+</div>
+
+<!-- 我的进度弹窗 -->
+<div class="modal-mask progress-modal" id="progressModal">
+  <div class="modal">
+    <div class="pm-title">📊 我的进度</div>
+    <div class="pm-sub">看看学了多久、学了多少</div>
+    <div class="pm-grid">
+      <div class="pm-item">
+        <div class="pm-label">🏅 最佳关卡</div>
+        <div class="pm-value" id="pmBest">1</div>
+      </div>
+      <div class="pm-item" id="pmNotebookItem">
+        <div class="pm-label">📖 已学单词</div>
+        <div class="pm-value" id="pmNotebook">0</div>
+        <div class="pm-hint">点击查看列表 →</div>
+      </div>
+      <div class="pm-item" id="pmWrongItem">
+        <div class="pm-label">📕 错题</div>
+        <div class="pm-value" id="pmWrong">0</div>
+        <div class="pm-hint">点击查看列表 →</div>
+      </div>
+      <div class="pm-item">
+        <div class="pm-label">🎮 游戏次数</div>
+        <div class="pm-value" id="pmGames">0</div>
+      </div>
+      <div class="pm-item" style="grid-column:span 2;">
+        <div class="pm-label">⏱️ 累计用时</div>
+        <div class="pm-value" id="pmTime">0 分钟</div>
+      </div>
+    </div>
+    <div class="pm-section-title">主题掌握度</div>
+    <div class="pm-mastery" id="pmMastery"></div>
+    <div class="pm-actions">
+      <button class="pm-btn danger" id="pmClear">🗑️ 清空所有进度</button>
+      <button class="pm-btn close" id="pmClose">关闭 Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- 通关弹窗 -->
+<div class="modal-mask" id="levelModal">
+  <div class="modal">
+    <div class="win-emoji" id="modalEmoji">🎉</div>
+    <div class="win-title" id="modalTitle">好嘢！You did it!</div>
+    <div class="win-sub" id="modalSub"></div>
+    <div class="stars" id="modalStars">⭐⭐⭐</div>
+    <div class="result-grid">
+      <div class="result-item"><div class="rl">Score 得分</div><div class="rv" id="modalScore">0</div></div>
+      <div class="result-item"><div class="rl">Time 用时</div><div class="rv" id="modalTime">0:00</div></div>
+      <div class="result-item"><div class="rl">Mistakes 错误</div><div class="rv" id="modalMistakes">0</div></div>
+      <div class="result-item gold"><div class="rl">Max Combo 最大连击</div><div class="rv" id="modalCombo">×0</div></div>
+    </div>
+    <div class="btn-row4">
+      <button class="btn-quaternary" id="btnReviewWrong">📕 错题</button>
+      <button class="btn-tertiary" id="btnReview">📖 复习</button>
+      <button class="btn-primary" id="btnReplay">🔄 再玩</button>
+      <button class="btn-secondary" id="btnNext">下一关</button>
+    </div>
+  </div>
+</div>
+
+<!-- 单词本 / 错题本 -->
+<div class="modal-mask notebook-modal" id="notebookModal">
+  <div class="modal">
+    <div class="nb-title">📖 单词本 Word Notebook</div>
+    <div class="nb-sub" id="nbSub">点击任意单词查看意思、用法和例句</div>
+    <div class="nb-tabs">
+      <button class="nb-tab on" id="nbTabLearned">📖 已学 <span id="nbCountLearned">0</span></button>
+      <button class="nb-tab wrong-tab" id="nbTabWrong">📕 错题 <span id="nbCountWrong">0</span></button>
+    </div>
+    <div class="nb-list" id="nbList"></div>
+    <div class="nb-actions">
+      <button class="nb-action-btn practice" id="nbPracticeLearned">🎯 练习已学</button>
+      <button class="nb-action-btn practice-wrong" id="nbPracticeWrong">📕 练习错题</button>
+      <button class="nb-action-btn clear" id="nbClearWrong">🗑️ 清空错题</button>
+    </div>
+    <button class="dt-close-btn" id="nbClose">关闭 Close</button>
+  </div>
+</div>
+
+<!-- 词条详情 -->
+<div class="modal-mask detail-modal" id="detailModal">
+  <div class="modal">
+    <div class="dt-head">
+      <div class="dt-emoji" id="dtEmoji">👋</div>
+      <div style="flex:1;min-width:0;">
+        <div class="dt-hanzi" id="dtHanzi">你好</div>
+        <div class="dt-jyut">
+          <span id="dtJyut">nei5 hou2</span>
+          <span class="dt-speak" id="dtSpeak">🔊 读一次</span>
+        </div>
+      </div>
+    </div>
+    <div id="dtLevelTag"></div>
+    <div class="dt-section">
+      <div class="dtl">英文 English</div>
+      <div class="dtv" id="dtEn">hello</div>
+    </div>
+    <div class="dt-section">
+      <div class="dtl">意思 Meaning</div>
+      <div class="dtv" id="dtMeaning">—</div>
+    </div>
+    <div class="dt-section">
+      <div class="dtl">用法 Usage</div>
+      <div class="dtv" id="dtUsage">—</div>
+    </div>
+    <div class="dt-section">
+      <div class="dtl">例句 Example</div>
+      <div class="dtv example" id="dtExample">—</div>
+    </div>
+    <button class="dt-close-btn" id="dtClose">关闭 Close</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   词库：18 个主题 × 24 个词（8 基础 + 10 常用 + 6 地道）
+   字段：h=汉字 j=粤拼 e=英文 m=emoji l=层级(b/c/n) mn=意思 u=用法 ex=例句
+   ============================================================ */
+const BANK = {
+  greetings: { label:'问候', icon:'👋', group:'basic', words:[
+    {h:'你好',j:'nei5 hou2',e:'hello',m:'👋',l:'b'},
+    {h:'早晨',j:'zou2 san4',e:'good morning',m:'🌅',l:'b'},
+    {h:'晚安',j:'maan5 on1',e:'good night',m:'🌙',l:'b'},
+    {h:'多谢',j:'do1 ze6',e:'thank you',m:'🙏',l:'b'},
+    {h:'唔该',j:'m4 goi1',e:'please',m:'😊',l:'b'},
+    {h:'再见',j:'zoi3 gin3',e:'goodbye',m:'👋',l:'b'},
+    {h:'对唔住',j:'deoi3 m4 zyu6',e:'sorry',m:'😔',l:'b'},
+    {h:'唔好意思',j:'m4 hou2 ji3 si1',e:'excuse me',m:'🙇',l:'b'},
+    {h:'你好吗',j:'nei5 hou2 maa3',e:'how are you',m:'🙂',l:'c',
+      mn:'问候对方近况',u:'朋友间见面时用',ex:'你好吗？几耐冇见！'},
+    {h:'食咗饭未',j:'sik6 zo2 faan6 mei6',e:'have you eaten',m:'🍽️',l:'c',
+      mn:'粤语式打招呼',u:'不一定要请吃饭，就是问好',ex:'食咗饭未呀？'},
+    {h:'慢慢行',j:'maan6 maan2 haang4',e:'take care',m:'🚶',l:'c',
+      mn:'送别时说的客气话',u:'送客或道别时说',ex:'唔送喇，慢慢行！'},
+    {h:'得闲饮茶',j:'dak1 haan4 jam2 caa4',e:"let's do tea sometime",m:'🍵',l:'c',
+      mn:'非正式告别语',u:'想约人又不确定时间时说',ex:'好喇，得闲饮茶！'},
+    {h:'多谢晒',j:'do1 ze6 saai3',e:'thanks a lot',m:'💖',l:'c',
+      mn:'加强语气的感谢',u:'「晒」表示"非常、完全"',ex:'多谢晒你帮我！'},
+    {h:'欢迎',j:'waan1 jing4',e:'welcome',m:'🎉',l:'c',
+      mn:'迎接客人',u:'客人到访或新成员加入时',ex:'欢迎光临！'},
+    {h:'生日快乐',j:'saang1 jat6 faai3 lok6',e:'happy birthday',m:'🎂',l:'c',
+      mn:'生日祝福',u:'朋友生日时用',ex:'生日快乐！身体健康！'},
+    {h:'新年快乐',j:'san1 nin4 faai3 lok6',e:'happy new year',m:'🧧',l:'c',
+      mn:'新年祝福',u:'农历新年前后说',ex:'恭喜发财，新年快乐！'},
+    {h:'一路顺风',j:'jat1 lou6 seon6 fung1',e:'bon voyage',m:'✈️',l:'c',
+      mn:'送行祝福',u:'有人出门远行时说',ex:'一路顺风，早啲返嚟！'},
+    {h:'点解',j:'dim2 gaai2',e:'why',m:'❓',l:'n',
+      mn:'"为什么"的粤语',u:'询问原因时用',ex:'点解你唔嚟呀？'},
+    {h:'冇问题',j:'mou5 man6 tai4',e:'no problem',m:'👌',l:'n',
+      mn:'"没问题"',u:'回应别人请求时用',ex:'冇问题，包在我身上！'},
+    {h:'唔使客气',j:'m4 sai2 haak3 hei3',e:"you're welcome",m:'🤗',l:'n',
+      mn:'"不用客气"',u:'回应多谢时用',ex:'唔使客气，小事！'},
+    {h:'辛苦晒',j:'san1 fu2 saai3',e:'thanks for your hard work',m:'💪',l:'n',
+      mn:'感谢对方付出',u:'别人帮你做完事后说',ex:'辛苦晒你！'},
+    {h:'搞掂',j:'gaau2 dim6',e:'done / sorted',m:'✅',l:'n',
+      mn:'"搞定、完成"',u:'事情办完时说',ex:'搞掂晒喇！'},
+    {h:'点都得',j:'dim2 dou1 dak1',e:'anything works',m:'🤷',l:'n',
+      mn:'"怎么都行"',u:'表示随和、无所谓',ex:'食咩？点都得！'}
+  ]},
+  actions: { label:'动作', icon:'🏃', group:'basic', words:[
+    {h:'食饭',j:'sik6 faan6',e:'eat',m:'🍚',l:'b'},
+    {h:'饮茶',j:'jam2 caa4',e:'drink tea',m:'🍵',l:'b'},
+    {h:'瞓觉',j:'fan3 gaau3',e:'sleep',m:'😴',l:'b'},
+    {h:'写字',j:'se2 zi6',e:'write',m:'✍️',l:'b'},
+    {h:'洗手',j:'sai2 sau2',e:'wash hands',m:'🧼',l:'b'},
+    {h:'刷牙',j:'caat3 ngaa4',e:'brush teeth',m:'🪥',l:'b'},
+    {h:'着衫',j:'zoek3 saam1',e:'get dressed',m:'👕',l:'b'},
+    {h:'除鞋',j:'ceoi4 haai4',e:'take off shoes',m:'👟',l:'b'},
+    {h:'返工',j:'faan1 gung1',e:'go to work',m:'💼',l:'c',
+      mn:'去上班',u:'早上出门上班时说',ex:'我返工喇，拜拜！'},
+    {h:'返学',j:'faan1 hok6',e:'go to school',m:'🎒',l:'c',
+      mn:'去上学',u:'学生出门上学时说',ex:'快啲返学，迟到喇！'},
+    {h:'睇书',j:'tai2 syu1',e:'read',m:'📖',l:'c',
+      mn:'看书',u:'阅读时说',ex:'我锺意睇书。'},
+    {h:'行街',j:'haang4 gaai1',e:'go shopping',m:'🛍️',l:'c',
+      mn:'逛街',u:'去街上走走或购物',ex:'周末去行街啦！'},
+    {h:'唱歌',j:'coeng3 go1',e:'sing',m:'🎤',l:'c',
+      mn:'唱歌',u:'唱K或唱歌时用',ex:'佢唱歌好好听！'},
+    {h:'笑',j:'siu3',e:'laugh',m:'😄',l:'c',
+      mn:'笑',u:'开心时用',ex:'佢听到笑话就笑。'},
+    {h:'喊',j:'haam3',e:'cry',m:'😭',l:'c',
+      mn:'哭',u:'伤心或感动时用',ex:'妹妹跌亲喊咗。'},
+    {h:'做嘢',j:'zou6 je5',e:'work',m:'💼',l:'c',
+      mn:'做事、干活',u:'工作或做事情时用',ex:'我而家做嘢，迟啲覆你。'},
+    {h:'睇戏',j:'tai2 hei3',e:'watch a movie',m:'🎬',l:'c',
+      mn:'看电影',u:'去戏院或在家看',ex:'周末去睇戏。'},
+    {h:'加班',j:'gaa1 baan1',e:'work overtime',m:'⏰',l:'n',
+      mn:'超时工作',u:'下班后继续工作',ex:'今日又要加班，好攰！'},
+    {h:'开会',j:'hoi1 wui2',e:'have a meeting',m:'📊',l:'n',
+      mn:'参加会议',u:'公司或学校开会时',ex:'朝早九点开会。'},
+    {h:'捱夜',j:'ngaai4 je6',e:'stay up late',m:'🌃',l:'n',
+      mn:'熬夜',u:'很晚才睡',ex:'唔好捱夜，伤身㗎！'},
+    {h:'放飞机',j:'fong3 fei1 gei1',e:'stand someone up',m:'🛫',l:'n',
+      mn:'失约、放鸽子',u:'答应了却没出现',ex:'佢又放飞机，唔等喇！'},
+    {h:'叹世界',j:'taan3 sai3 gaai3',e:'enjoy life',m:'🌴',l:'n',
+      mn:'享受生活',u:'悠闲享受时用',ex:'退休后日日叹世界。'},
+    {h:'顶硬上',j:'ding2 ngaang6 soeng5',e:'tough it out',m:'💪',l:'n',
+      mn:'硬撑、勉强应付',u:'明知道难也要做',ex:'冇人帮我，唯有顶硬上。'}
+  ]},
+  family: { label:'家庭', icon:'👨‍👩‍👧', group:'basic', words:[
+    {h:'爸爸',j:'baa4 baa1',e:'father',m:'👨',l:'b'},
+    {h:'妈妈',j:'maa4 maa1',e:'mother',m:'👩',l:'b'},
+    {h:'哥哥',j:'go4 go1',e:'older brother',m:'👦',l:'b'},
+    {h:'姐姐',j:'ze2 ze1',e:'older sister',m:'👧',l:'b'},
+    {h:'细佬',j:'sai3 lou2',e:'younger brother',m:'👦',l:'b'},
+    {h:'妹妹',j:'mui6 mui2',e:'younger sister',m:'👧',l:'b'},
+    {h:'爷爷',j:'je4 je2',e:'grandfather (paternal)',m:'👴',l:'b'},
+    {h:'嫲嫲',j:'maa4 maa4',e:'grandmother (paternal)',m:'👵',l:'b'},
+    {h:'公公',j:'gung1 gung1',e:'grandfather (maternal)',m:'👴',l:'c',
+      mn:'外公',u:'妈妈的爸爸',ex:'公公好锺意种花。'},
+    {h:'婆婆',j:'po4 po2',e:'grandmother (maternal)',m:'👵',l:'c',
+      mn:'外婆',u:'妈妈的妈妈',ex:'婆婆煮嘅嘢最好食。'},
+    {h:'叔叔',j:'suk1 suk1',e:'uncle',m:'🧔',l:'c',
+      mn:'爸爸的弟弟',u:'称呼爸爸的弟弟',ex:'叔叔今日嚟探我哋。'},
+    {h:'姨姨',j:'ji4 ji2',e:'auntie',m:'👩‍🦰',l:'c',
+      mn:'妈妈的姐妹',u:'称呼妈妈嘅姐妹',ex:'姨姨买咗礼物畀我。'},
+    {h:'表哥',j:'biu2 go1',e:'older male cousin',m:'👦',l:'c',
+      mn:'舅舅或姨姨的儿子（比你大）',u:'亲戚间称呼',ex:'表哥带我去玩。'},
+    {h:'表妹',j:'biu2 mui6',e:'younger female cousin',m:'👧',l:'c',
+      mn:'舅舅或姨姨的女儿（比你小）',u:'亲戚间称呼',ex:'表妹好可爱。'},
+    {h:'仔',j:'zai2',e:'son',m:'👶',l:'c',
+      mn:'儿子',u:'称呼自己或别人的儿子',ex:'佢个仔读小学。'},
+    {h:'女',j:'neoi2',e:'daughter',m:'👶',l:'c',
+      mn:'女儿',u:'称呼自己或别人的女儿',ex:'我个女今年五岁。'},
+    {h:'老公',j:'lou5 gung1',e:'husband',m:'🤵',l:'c',
+      mn:'丈夫',u:'已婚女士称丈夫',ex:'我老公煮饭好叻。'},
+    {h:'老婆',j:'lou5 po4',e:'wife',m:'👰',l:'c',
+      mn:'妻子',u:'已婚男士称妻子',ex:'我老婆返咗工。'},
+    {h:'家姐',j:'gaa1 ze1',e:'older sister (colloquial)',m:'👧',l:'n',
+      mn:'粤语口语"姐姐"',u:'面对面叫姐姐时用',ex:'家姐，帮我揸住！'},
+    {h:'老爷',j:'lou5 je4',e:'father-in-law',m:'👴',l:'n',
+      mn:'丈夫的父亲',u:'媳妇称呼丈夫的爸爸',ex:'老爷今日生日。'},
+    {h:'奶奶',j:'naai4 naai2',e:'mother-in-law',m:'👵',l:'n',
+      mn:'丈夫的母亲',u:'媳妇称呼丈夫的妈妈',ex:'奶奶好鍚我。'},
+    {h:'外父',j:'ngoi6 fu2',e:'father-in-law (wife\'s father)',m:'👴',l:'n',
+      mn:'妻子的父亲',u:'女婿称呼妻子的爸爸',ex:'外父锺意饮茶。'},
+    {h:'外母',j:'ngoi6 mou2',e:'mother-in-law (wife\'s mother)',m:'👵',l:'n',
+      mn:'妻子的母亲',u:'女婿称呼妻子的妈妈',ex:'外母煮嘅餸一流。'},
+    {h:'契妈',j:'kai3 maa1',e:'godmother',m:'👩',l:'n',
+      mn:'干妈',u:'上契的干妈',ex:'契妈买咗新衫畀我。'}
+  ]},
+  school: { label:'学校', icon:'🏫', group:'basic', words:[
+    {h:'学校',j:'hok6 haau6',e:'school',m:'🏫',l:'b'},
+    {h:'老师',j:'lou5 si1',e:'teacher',m:'👩‍🏫',l:'b'},
+    {h:'学生',j:'hok6 saang1',e:'student',m:'👨‍🎓',l:'b'},
+    {h:'书包',j:'syu1 baau1',e:'schoolbag',m:'🎒',l:'b'},
+    {h:'铅笔',j:'jyun4 bat1',e:'pencil',m:'✏️',l:'b'},
+    {h:'课本',j:'fo3 bun2',e:'textbook',m:'📚',l:'b'},
+    {h:'黑板',j:'hak1 baan2',e:'blackboard',m:'📋',l:'b'},
+    {h:'功课',j:'gung1 fo3',e:'homework',m:'📝',l:'b'},
+    {h:'书簿',j:'syu1 bou2',e:'notebook',m:'📓',l:'c',
+      mn:'作业本、练习本',u:'学校里用',ex:'带齐书簿返学。'},
+    {h:'擦胶',j:'caat3 gaau1',e:'eraser',m:'🧽',l:'c',
+      mn:'橡皮擦',u:'修改铅笔字用',ex:'借你擦胶用下。'},
+    {h:'尺',j:'cek3',e:'ruler',m:'📏',l:'c',
+      mn:'尺子',u:'度量或画线用',ex:'用尺画直线。'},
+    {h:'笔记',j:'bat1 gei3',e:'notes',m:'📔',l:'c',
+      mn:'上课记录',u:'抄笔记、整理笔记',ex:'堂上抄笔记好重要。'},
+    {h:'考试',j:'haau2 si3',e:'exam',m:'📄',l:'c',
+      mn:'测验、考试',u:'学校考试',ex:'下星期有数学考试。'},
+    {h:'小息',j:'siu2 sik1',e:'recess',m:'⏰',l:'c',
+      mn:'课间休息',u:'两节课之间',ex:'小息去操场玩。'},
+    {h:'操场',j:'cou1 coeng4',e:'playground',m:'🏃',l:'c',
+      mn:'运动场',u:'学校户外活动的地方',ex:'操场好大。'},
+    {h:'图书馆',j:'tou4 syu1 gun2',e:'library',m:'📖',l:'c',
+      mn:'图书馆',u:'借书、看书的地方',ex:'去图书馆借书。'},
+    {h:'校长',j:'haau6 zoeng2',e:'principal',m:'👨‍💼',l:'c',
+      mn:'学校的最高负责人',u:'称呼校长',ex:'校长早！'},
+    {h:'同学',j:'tung4 hok6',e:'classmate',m:'🧑‍🤝‍🧑',l:'c',
+      mn:'同班或同校的人',u:'称呼同学',ex:'同学仔一齐玩。'},
+    {h:'肥佬',j:'fei4 lou2',e:'fail (an exam)',m:'❌',l:'n',
+      mn:'考试不及格',u:'粤语口语说法',ex:'数学肥佬咗，唔开心。'},
+    {h:'贴士',j:'tip1 si2',e:'tips',m:'💡',l:'n',
+      mn:'提示、小费',u:'给建议时用',ex:'老师畀咗啲考试贴士。'},
+    {h:'爆棚',j:'baau3 paang4',e:'packed / full',m:'🔥',l:'n',
+      mn:'爆满，人多到挤不下',u:'形容座位或活动满座',ex:'讲座爆棚，坐都冇得坐。'},
+    {h:'走堂',j:'zau2 tong4',e:'skip class',m:'🏃‍♂️',l:'n',
+      mn:'逃课',u:'不去上课',ex:'唔好走堂呀！'},
+    {h:'抄功课',j:'caau1 gung1 fo3',e:'copy homework',m:'📋',l:'n',
+      mn:'抄作业',u:'不动脑筋抄别人作业',ex:'抄功课唔系好习惯。'},
+    {h:'小卖部',j:'siu2 maai6 bou6',e:'tuck shop',m:'🏪',l:'n',
+      mn:'学校小卖部',u:'买零食的地方',ex:'小息去小卖部买嘢食。'}
+  ]},
+  numbers: { label:'数字', icon:'1️⃣', group:'basic', words:[
+    {h:'一',j:'jat1',e:'one',m:'1️⃣',l:'b'},
+    {h:'二',j:'ji6',e:'two',m:'2️⃣',l:'b'},
+    {h:'三',j:'saam1',e:'three',m:'3️⃣',l:'b'},
+    {h:'四',j:'sei3',e:'four',m:'4️⃣',l:'b'},
+    {h:'五',j:'ng5',e:'five',m:'5️⃣',l:'b'},
+    {h:'六',j:'luk6',e:'six',m:'6️⃣',l:'b'},
+    {h:'七',j:'cat1',e:'seven',m:'7️⃣',l:'b'},
+    {h:'八',j:'baat3',e:'eight',m:'8️⃣',l:'b'},
+    {h:'九',j:'gau2',e:'nine',m:'9️⃣',l:'c',
+      mn:'数字9',u:'数数时用',ex:'我有九本书。'},
+    {h:'十',j:'sap6',e:'ten',m:'🔟',l:'c',
+      mn:'数字10',u:'数数时用',ex:'十只手指。'},
+    {h:'百',j:'baak3',e:'hundred',m:'💯',l:'c',
+      mn:'100',u:'百位数',ex:'一百蚊。'},
+    {h:'千',j:'cin1',e:'thousand',m:'🔢',l:'c',
+      mn:'1000',u:'千位数',ex:'一千人。'},
+    {h:'万',j:'maan6',e:'ten thousand',m:'🔢',l:'c',
+      mn:'10000',u:'万位数',ex:'一万蚊。'},
+    {h:'零',j:'ling4',e:'zero',m:'0️⃣',l:'c',
+      mn:'数字0',u:'数数或电话号码',ex:'零、一、二、三。'},
+    {h:'第一',j:'dai6 jat1',e:'first',m:'🥇',l:'c',
+      mn:'第一个',u:'排序时用',ex:'我考第一！'},
+    {h:'第二',j:'dai6 ji6',e:'second',m:'🥈',l:'c',
+      mn:'第二个',u:'排序时用',ex:'佢排第二。'},
+    {h:'一半',j:'jat1 bun3',e:'half',m:'➗',l:'c',
+      mn:'二分之一',u:'分东西时用',ex:'一人一半。'},
+    {h:'一对',j:'jat1 deoi3',e:'a pair',m:'👫',l:'c',
+      mn:'两个一组',u:'鞋子、情侣等',ex:'一对鞋。'},
+    {h:'一打',j:'jat1 daa1',e:'a dozen',m:'🥚',l:'n',
+      mn:'十二个',u:'卖东西的量词',ex:'一打鸡蛋。'},
+    {h:'半斤八两',j:'bun3 gan1 baat3 loeng2',e:'six of one, half a dozen of the other',m:'⚖️',l:'n',
+      mn:'双方差不多',u:'比较两个人或事物时',ex:'两个都半斤八两。'},
+    {h:'三唔识七',j:'saam1 m4 sik1 cat1',e:'total strangers',m:'🙅',l:'n',
+      mn:'互不认识',u:'形容陌生人关系',ex:'我同佢三唔识七。'},
+    {h:'乱噏廿四',j:'lyun6 ngap1 jaa6 sei3',e:'talk nonsense',m:'💬',l:'n',
+      mn:'胡说八道',u:'形容乱说话',ex:'唔好乱噏廿四啦！'},
+    {h:'话咁快',j:'waa6 gam3 faai3',e:'very quickly',m:'💨',l:'n',
+      mn:'一眨眼那么快',u:'形容速度快',ex:'话咁快就到喇！'},
+    {h:'一五一十',j:'jat1 ng5 jat1 sap6',e:'in full detail',m:'📋',l:'n',
+      mn:'原原本本、详详细细',u:'把事情讲清楚',ex:'一五一十讲畀我听。'}
+  ]},
+  colors: { label:'颜色', icon:'🎨', group:'basic', words:[
+    {h:'红色',j:'hung4 sik1',e:'red',m:'🟥',l:'b'},
+    {h:'蓝色',j:'laam4 sik1',e:'blue',m:'🟦',l:'b'},
+    {h:'绿色',j:'luk6 sik1',e:'green',m:'🟩',l:'b'},
+    {h:'黄色',j:'wong4 sik1',e:'yellow',m:'🟨',l:'b'},
+    {h:'黑色',j:'hak1 sik1',e:'black',m:'⬛',l:'b'},
+    {h:'白色',j:'baak6 sik1',e:'white',m:'⬜',l:'b'},
+    {h:'紫色',j:'zi2 sik1',e:'purple',m:'🟪',l:'b'},
+    {h:'橙色',j:'caang2 sik1',e:'orange',m:'🟧',l:'b'},
+    {h:'粉红色',j:'fan2 hung4 sik1',e:'pink',m:'🩷',l:'c',
+      mn:'粉红',u:'形容浅红',ex:'佢锺意粉红色。'},
+    {h:'灰色',j:'fui1 sik1',e:'grey',m:'🩶',l:'c',
+      mn:'灰色',u:'形容灰的颜色',ex:'灰灰地嘅天。'},
+    {h:'咖啡色',j:'gaa3 fe1 sik1',e:'brown',m:'🟫',l:'c',
+      mn:'棕色',u:'形容深褐色',ex:'咖啡色嘅皮鞋。'},
+    {h:'金色',j:'gam1 sik1',e:'gold',m:'✨',l:'c',
+      mn:'金黄色',u:'形容贵金属色',ex:'金色嘅奖牌。'},
+    {h:'银色',j:'ngan4 sik1',e:'silver',m:'⬜',l:'c',
+      mn:'银白色',u:'形容银色',ex:'银色嘅戒指。'},
+    {h:'深色',j:'sam1 sik1',e:'dark colour',m:'🌑',l:'c',
+      mn:'深色',u:'形容颜色深',ex:'着深色衫好啲。'},
+    {h:'浅色',j:'cin2 sik1',e:'light colour',m:'🌕',l:'c',
+      mn:'浅色',u:'形容颜色浅',ex:'浅色墙纸好靓。'},
+    {h:'彩色',j:'coi2 sik1',e:'colourful',m:'🌈',l:'c',
+      mn:'五颜六色',u:'形容色彩丰富',ex:'彩色嘅气球。'},
+    {h:'透明',j:'tau3 ming4',e:'transparent',m:'💎',l:'c',
+      mn:'透明的',u:'形容看得穿',ex:'透明嘅玻璃杯。'},
+    {h:'米色',j:'mai5 sik1',e:'beige',m:'🟨',l:'c',
+      mn:'浅米黄',u:'形容米黄色',ex:'米色嘅窗帘。'},
+    {h:'花哩碌',j:'faa1 li1 luk1',e:'gaudy',m:'🌈',l:'n',
+      mn:'花花绿绿、花哨',u:'形容太花哨',ex:'件衫花哩碌，好难衬。'},
+    {h:'黑掹掹',j:'hak1 mang1 mang1',e:'very dark',m:'🌑',l:'n',
+      mn:'黑漆漆',u:'形容很黑',ex:'间房黑掹掹，睇唔到路。'},
+    {h:'红当当',j:'hung4 dong1 dong1',e:'bright red',m:'🟥',l:'n',
+      mn:'鲜红色',u:'形容红得喜庆',ex:'新年挂红当当嘅灯笼。'},
+    {h:'白雪雪',j:'baak6 syut3 syut3',e:'snow-white',m:'❄️',l:'n',
+      mn:'雪白',u:'形容非常白',ex:'白雪雪嘅蛋糕。'},
+    {h:'黄黚黚',j:'wong4 gam4 gam4',e:'yellowish',m:'🟨',l:'n',
+      mn:'发黄',u:'形容偏黄不好看的颜色',ex:'张纸黄黚黚。'},
+    {h:'青BB',j:'ceng1 bi1 bi1',e:'greenish / pale',m:'🟩',l:'n',
+      mn:'绿绿的（或脸色发青）',u:'形容颜色或脸色',ex:'佢吓到面都青BB。'}
+  ]},
+  animals: { label:'动物', icon:'🐾', group:'basic', words:[
+    {h:'狗',j:'gau2',e:'dog',m:'🐕',l:'b'},
+    {h:'猫',j:'maau1',e:'cat',m:'🐈',l:'b'},
+    {h:'鱼',j:'jyu2',e:'fish',m:'🐟',l:'b'},
+    {h:'雀仔',j:'zoek3 zai2',e:'bird',m:'🐦',l:'b'},
+    {h:'老虎',j:'lou5 fu2',e:'tiger',m:'🐯',l:'b'},
+    {h:'兔仔',j:'tou3 zai2',e:'rabbit',m:'🐰',l:'b'},
+    {h:'马',j:'maa5',e:'horse',m:'🐴',l:'b'},
+    {h:'猪',j:'zyu1',e:'pig',m:'🐷',l:'b'},
+    {h:'牛',j:'ngau4',e:'cow',m:'🐄',l:'c',
+      mn:'牛',u:'常见家畜',ex:'牛食草。'},
+    {h:'羊',j:'joeng4',e:'sheep',m:'🐑',l:'c',
+      mn:'羊',u:'常见家畜',ex:'羊咩咩叫。'},
+    {h:'鸡',j:'gai1',e:'chicken',m:'🐔',l:'c',
+      mn:'鸡',u:'家禽',ex:'农场有好多鸡。'},
+    {h:'鸭',j:'aap3',e:'duck',m:'🦆',l:'c',
+      mn:'鸭',u:'家禽',ex:'鸭仔游水。'},
+    {h:'鹅',j:'ngo4',e:'goose',m:'🦢',l:'c',
+      mn:'鹅',u:'家禽',ex:'鹅好大只。'},
+    {h:'老鼠',j:'lou5 syu2',e:'mouse',m:'🐭',l:'c',
+      mn:'老鼠',u:'小动物',ex:'老鼠好惊猫。'},
+    {h:'大象',j:'daai6 zoeng6',e:'elephant',m:'🐘',l:'c',
+      mn:'大象',u:'大型动物',ex:'大象嘅鼻好长。'},
+    {h:'狮子',j:'si1 zi2',e:'lion',m:'🦁',l:'c',
+      mn:'狮子',u:'草原之王',ex:'狮子系百兽之王。'},
+    {h:'熊猫',j:'hung4 maau1',e:'panda',m:'🐼',l:'c',
+      mn:'熊猫',u:'国宝',ex:'熊猫好可爱。'},
+    {h:'长颈鹿',j:'coeng4 geng2 luk2',e:'giraffe',m:'🦒',l:'c',
+      mn:'长颈鹿',u:'脖子很长',ex:'长颈鹿食树叶。'},
+    {h:'马骝',j:'maa5 lau1',e:'monkey',m:'🐵',l:'n',
+      mn:'猴子（粤语口语）',u:'口语说马骝',ex:'马骝仔好百厌。'},
+    {h:'曱甴',j:'gaat6 zaat2',e:'cockroach',m:'🪳',l:'n',
+      mn:'蟑螂',u:'粤语特有说法',ex:'厨房有曱甴！'},
+    {h:'乌蝇',j:'wu1 jing1',e:'housefly',m:'🪰',l:'n',
+      mn:'苍蝇',u:'粤语说法',ex:'乌蝇飞嚟飞去。'},
+    {h:'蚊',j:'man1',e:'mosquito',m:'🦟',l:'n',
+      mn:'蚊子',u:'夏天常见',ex:'畀蚊咬咗一啖。'},
+    {h:'金鱼',j:'gam1 jyu2',e:'goldfish',m:'🐠',l:'n',
+      mn:'金鱼',u:'常见宠物鱼',ex:'养咗两条金鱼。'},
+    {h:'壁虎',j:'bik1 fu2',e:'gecko',m:'🦎',l:'n',
+      mn:'壁虎',u:'墙上的小动物',ex:'墙上面有只壁虎。'}
+  ]},
+  weather: { label:'天气', icon:'☀️', group:'basic', words:[
+    {h:'晴天',j:'cing4 tin1',e:'sunny',m:'☀️',l:'b'},
+    {h:'落雨',j:'lok6 jyu5',e:'rainy',m:'🌧️',l:'b'},
+    {h:'阴天',j:'jam1 tin1',e:'cloudy',m:'☁️',l:'b'},
+    {h:'大风',j:'daai6 fung1',e:'windy',m:'💨',l:'b'},
+    {h:'打雷',j:'daa2 leoi4',e:'thunder',m:'⛈️',l:'b'},
+    {h:'好热',j:'hou2 jit6',e:'hot',m:'🔥',l:'b'},
+    {h:'好冻',j:'hou2 dung3',e:'cold',m:'❄️',l:'b'},
+    {h:'落雪',j:'lok6 syut3',e:'snowy',m:'🌨️',l:'b'},
+    {h:'天晴',j:'tin1 cing4',e:'clear sky',m:'🌞',l:'c',
+      mn:'天气晴朗',u:'好天气',ex:'今日天晴，出去玩。'},
+    {h:'有雾',j:'jau5 mou6',e:'foggy',m:'🌫️',l:'c',
+      mn:'有雾',u:'能见度低',ex:'早上有雾，小心揸车。'},
+    {h:'落雹',j:'lok6 bok6',e:'hail',m:'🧊',l:'c',
+      mn:'下冰雹',u:'罕见天气',ex:'昨日落雹好大粒。'},
+    {h:'打风',j:'daa2 fung1',e:'typhoon',m:'🌀',l:'c',
+      mn:'刮台风',u:'香港夏季常见',ex:'打风唔使返工。'},
+    {h:'潮湿',j:'ciu4 sap1',e:'humid',m:'💧',l:'c',
+      mn:'空气湿',u:'梅雨天常见',ex:'春天好潮湿。'},
+    {h:'干燥',j:'gon1 cou3',e:'dry',m:'🌵',l:'c',
+      mn:'空气干',u:'秋冬常见',ex:'天气干燥，搽多啲润肤霜。'},
+    {h:'天阴',j:'tin1 jam1',e:'overcast',m:'☁️',l:'c',
+      mn:'天阴',u:'冇太阳',ex:'今日天阴阴。'},
+    {h:'出太阳',j:'ceot1 taai3 joeng4',e:'sun comes out',m:'🌤️',l:'c',
+      mn:'太阳出来',u:'雨过天晴',ex:'终于出太阳喇！'},
+    {h:'有云',j:'jau5 wan4',e:'cloudy',m:'☁️',l:'c',
+      mn:'有云',u:'多云天气',ex:'天上有云。'},
+    {h:'凉爽',j:'loeng4 song2',e:'cool',m:'🍃',l:'c',
+      mn:'凉快',u:'秋天舒服天气',ex:'秋天好凉爽。'},
+    {h:'翻风',j:'faan1 fung1',e:'turn windy',m:'💨',l:'n',
+      mn:'开始刮风（天气转凉）',u:'冷空气到',ex:'翻风喇，着多件衫。'},
+    {h:'落狗屎',j:'lok6 gau2 si2',e:'raining cats and dogs',m:'🌧️',l:'n',
+      mn:'倾盆大雨（粗俗）',u:'形容雨非常大',ex:'出边落狗屎，唔好出门。'},
+    {h:'翳焗',j:'ai3 guk6',e:'muggy',m:'🥵',l:'n',
+      mn:'闷热、不透气',u:'形容夏天闷热',ex:'今日翳焗到死。'},
+    {h:'热辣辣',j:'jit6 laat6 laat6',e:'scorching',m:'🔥',l:'n',
+      mn:'非常热',u:'强调热度',ex:'太阳热辣辣。'},
+    {h:'冻冰冰',j:'dung3 bing1 bing1',e:'freezing cold',m:'🧊',l:'n',
+      mn:'冷冰冰',u:'形容非常冷',ex:'只手冻冰冰。'},
+    {h:'湿湿碎',j:'sap1 sap1 seoi3',e:'piece of cake',m:'💧',l:'n',
+      mn:'小意思、很容易',u:'形容事情轻松',ex:'湿湿碎啦，包我身上。'}
+  ]},
+  food: { label:'食物', icon:'🍚', group:'life', words:[
+    {h:'米饭',j:'mai5 faan6',e:'rice',m:'🍚',l:'b'},
+    {h:'面包',j:'min6 baau1',e:'bread',m:'🍞',l:'b'},
+    {h:'苹果',j:'ping4 gwo2',e:'apple',m:'🍎',l:'b'},
+    {h:'香蕉',j:'hoeng1 ziu1',e:'banana',m:'🍌',l:'b'},
+    {h:'鸡蛋',j:'gai1 daan2',e:'egg',m:'🥚',l:'b'},
+    {h:'牛奶',j:'ngau4 naai5',e:'milk',m:'🥛',l:'b'},
+    {h:'鱼',j:'jyu2',e:'fish',m:'🐟',l:'b'},
+    {h:'肉',j:'juk6',e:'meat',m:'🍖',l:'b'},
+    {h:'点心',j:'dim2 sam1',e:'dim sum',m:'🥟',l:'c',
+      mn:'粤式点心',u:'饮茶必点',ex:'去饮茶食点心。'},
+    {h:'糖',j:'tong4',e:'candy',m:'🍬',l:'c',
+      mn:'糖果',u:'甜食',ex:'细路仔锺意食糖。'},
+    {h:'菜',j:'coi3',e:'vegetable',m:'🥬',l:'c',
+      mn:'蔬菜',u:'常见餸菜',ex:'炒碟菜。'},
+    {h:'汤',j:'tong1',e:'soup',m:'🍲',l:'c',
+      mn:'汤水',u:'粤式汤水',ex:'煲老火汤。'},
+    {h:'面',j:'min6',e:'noodles',m:'🍜',l:'c',
+      mn:'面条',u:'常见主食',ex:'食碗面。'},
+    {h:'粥',j:'zuk1',e:'porridge',m:'🥣',l:'c',
+      mn:'粥',u:'早餐常见',ex:'朝早食粥。'},
+    {h:'雪糕',j:'syut3 gou1',e:'ice cream',m:'🍦',l:'c',
+      mn:'冰淇淋',u:'甜品',ex:'夏天食雪糕。'},
+    {h:'朱古力',j:'zyu1 gu1 lik6',e:'chocolate',m:'🍫',l:'c',
+      mn:'巧克力',u:'甜食',ex:'情人节送朱古力。'},
+    {h:'茶',j:'caa4',e:'tea',m:'🍵',l:'c',
+      mn:'茶',u:'饮品',ex:'饮杯茶先。'},
+    {h:'水',j:'seoi2',e:'water',m:'💧',l:'c',
+      mn:'水',u:'日常饮品',ex:'饮多啲水。'},
+    {h:'火锅',j:'fo2 wo1',e:'hotpot',m:'🍲',l:'n',
+      mn:'打边炉',u:'一群人一起吃',ex:'冬天最啱食火锅。'},
+    {h:'烧味',j:'siu1 mei2',e:'roast meat',m:'🍖',l:'n',
+      mn:'烧腊',u:'叉烧、烧鹅等',ex:'去买烧味加餸。'},
+    {h:'茶餐厅',j:'caa4 caan1 teng1',e:'HK-style cafe',m:'🍽️',l:'n',
+      mn:'港式茶餐厅',u:'香港特色餐厅',ex:'去茶餐厅食早餐。'},
+    {h:'大排档',j:'daai6 paai4 dong3',e:'street food stall',m:'🍢',l:'n',
+      mn:'路边摊',u:'露天小炒',ex:'夜晚去大排档食宵夜。'},
+    {h:'云吞面',j:'wan4 tan1 min6',e:'wonton noodles',m:'🍜',l:'n',
+      mn:'馄饨面',u:'粤式面食',ex:'一碗云吞面唔该。'},
+    {h:'蛋挞',j:'daan6 taat1',e:'egg tart',m:'🥧',l:'n',
+      mn:'蛋挞',u:'港式点心',ex:'新鲜出炉嘅蛋挞最正。'}
+  ]},
+  clothing: { label:'购物衣服', icon:'👕', group:'life', words:[
+    {h:'衫',j:'saam1',e:'shirt / clothes',m:'👕',l:'b'},
+    {h:'裤',j:'fu3',e:'pants',m:'👖',l:'b'},
+    {h:'鞋',j:'haai4',e:'shoes',m:'👟',l:'b'},
+    {h:'袜',j:'mat6',e:'socks',m:'🧦',l:'b'},
+    {h:'帽',j:'mou2',e:'hat',m:'🧢',l:'b'},
+    {h:'裙',j:'kwan4',e:'skirt',m:'👗',l:'b'},
+    {h:'外套',j:'ngoi6 tou3',e:'coat',m:'🧥',l:'b'},
+    {h:'睡衣',j:'seoi6 ji1',e:'pajamas',m:'🛏️',l:'b'},
+    {h:'恤衫',j:'seot1 saam1',e:'shirt',m:'👔',l:'c',
+      mn:'衬衫',u:'正式场合穿',ex:'着恤衫打领呔。'},
+    {h:'T恤',j:'ti1 seot1',e:'T-shirt',m:'👕',l:'c',
+      mn:'T恤',u:'休闲上衣',ex:'买咗件新T恤。'},
+    {h:'牛仔裤',j:'ngau4 zai2 fu3',e:'jeans',m:'👖',l:'c',
+      mn:'牛仔裤',u:'休闲长裤',ex:'着牛仔裤最舒服。'},
+    {h:'底衫',j:'dai2 saam1',e:'undershirt',m:'👕',l:'c',
+      mn:'内衣、打底衫',u:'贴身穿的衣服',ex:'着件底衫打底。'},
+    {h:'手套',j:'sau2 tou3',e:'gloves',m:'🧤',l:'c',
+      mn:'手套',u:'保暖或防护',ex:'冻天戴手套。'},
+    {h:'颈巾',j:'geng2 gan1',e:'scarf',m:'🧣',l:'c',
+      mn:'围巾',u:'保暖',ex:'戴条颈巾好暖。'},
+    {h:'银包',j:'ngan2 baau1',e:'wallet',m:'👛',l:'c',
+      mn:'钱包',u:'装钱和卡',ex:'银包唔见咗！'},
+    {h:'手袋',j:'sau2 doi2',e:'handbag',m:'👜',l:'c',
+      mn:'手提包',u:'女士常用',ex:'呢个手袋好靓。'},
+    {h:'手表',j:'sau2 biu1',e:'watch',m:'⌚',l:'c',
+      mn:'手表',u:'看时间的饰品',ex:'送手表做生日礼物。'},
+    {h:'眼镜',j:'ngaan5 geng2',e:'glasses',m:'👓',l:'c',
+      mn:'眼镜',u:'矫正视力',ex:'我近视要戴眼镜。'},
+    {h:'试身',j:'si3 san1',e:'try on (clothes)',m:'🚪',l:'n',
+      mn:'试穿',u:'买衫前试穿',ex:'可唔可以试身？'},
+    {h:'讲价',j:'gong2 gaa3',e:'bargain',m:'💬',l:'n',
+      mn:'讨价还价',u:'街市或小店可用',ex:'呢度可以讲价。'},
+    {h:'斩件',j:'zaam2 gin2',e:'chop into pieces',m:'🔪',l:'n',
+      mn:'砍价（斩到一颈血）',u:'形容被宰',ex:'斩到我一颈血。'},
+    {h:'平靓正',j:'peng4 leng3 zeng3',e:'cheap and good',m:'✨',l:'n',
+      mn:'又便宜又好',u:'形容性价比高',ex:'呢间舖平靓正！'},
+    {h:'折头',j:'zit3 tau2',e:'discount',m:'🏷️',l:'n',
+      mn:'折扣',u:'打折',ex:'有冇折头呀？'},
+    {h:'埋单',j:'maai4 daan1',e:'pay the bill',m:'💳',l:'n',
+      mn:'结账',u:'吃完饭或购物后',ex:'唔该埋单！'}
+  ]},
+  restaurant: { label:'餐厅点餐', icon:'🍽️', group:'life', words:[
+    {h:'餐厅',j:'caan1 teng1',e:'restaurant',m:'🍽️',l:'b'},
+    {h:'餐牌',j:'caan1 paai2',e:'menu',m:'📋',l:'b'},
+    {h:'筷子',j:'faai3 zi2',e:'chopsticks',m:'🥢',l:'b'},
+    {h:'匙羹',j:'ci4 gang1',e:'spoon',m:'🥄',l:'b'},
+    {h:'叉',j:'caa1',e:'fork',m:'🍴',l:'b'},
+    {h:'刀',j:'dou1',e:'knife',m:'🔪',l:'b'},
+    {h:'碟',j:'dip6',e:'plate',m:'🍽️',l:'b'},
+    {h:'碗',j:'wun2',e:'bowl',m:'🍚',l:'b'},
+    {h:'杯',j:'bui1',e:'cup',m:'🥤',l:'c',
+      mn:'杯子',u:'喝水用的',ex:'俾我一杯水。'},
+    {h:'餐巾',j:'caan1 gan1',e:'napkin',m:'🧻',l:'c',
+      mn:'纸巾',u:'吃饭时擦手擦嘴',ex:'攞张餐巾。'},
+    {h:'牙签',j:'ngaa4 cim1',e:'toothpick',m:'🦷',l:'c',
+      mn:'牙签',u:'饭后清洁牙缝',ex:'有冇牙签呀？'},
+    {h:'外卖',j:'ngoi6 maai6',e:'takeaway',m:'🥡',l:'c',
+      mn:'外带',u:'带走吃',ex:'叫外卖返屋企食。'},
+    {h:'堂食',j:'tong4 sik6',e:'dine in',m:'🪑',l:'c',
+      mn:'在店里吃',u:'与外卖相对',ex:'堂食定外卖？'},
+    {h:'打包',j:'daa2 baau1',e:'pack leftovers',m:'📦',l:'c',
+      mn:'把吃不完的带走',u:'剩菜带走',ex:'食唔晒打包走。'},
+    {h:'汽水',j:'hei3 seoi2',e:'soft drink',m:'🥤',l:'c',
+      mn:'碳酸饮料',u:'可乐雪碧等',ex:'饮杯冻汽水。'},
+    {h:'奶茶',j:'naai5 caa4',e:'milk tea',m:'🧋',l:'c',
+      mn:'奶茶',u:'港式饮品',ex:'冻奶茶少甜。'},
+    {h:'侍应',j:'si6 jing3',e:'waiter',m:'🤵',l:'c',
+      mn:'服务员',u:'餐厅工作人员',ex:'叫侍应过嚟。'},
+    {h:'搭台',j:'daap3 toi2',e:'share a table',m:'🪑',l:'n',
+      mn:'和陌生人拼桌',u:'茶餐厅常见',ex:'要搭台先有位。'},
+    {h:'加底',j:'gaa1 dai2',e:'extra rice/noodles',m:'➕',l:'n',
+      mn:'加量',u:'面或饭加底',ex:'云吞面加底，唔该。'},
+    {h:'走冰',j:'zau2 bing1',e:'no ice',m:'🧊',l:'n',
+      mn:'不要冰',u:'点冻饮时说',ex:'冻柠茶走冰。'},
+    {h:'飞沙走奶',j:'fei1 saa1 zau2 naai5',e:'no sugar no milk',m:'☕',l:'n',
+      mn:'不加糖不加奶',u:'点咖啡时用',ex:'咖啡飞沙走奶。'},
+    {h:'茶芥',j:'caa4 gaai3',e:'tea & pickles charge',m:'💵',l:'n',
+      mn:'茶位和酱料费',u:'餐厅额外收的费',ex:'呢间收茶芥五蚊。'},
+    {h:'加一',j:'gaa1 jat1',e:'10% service charge',m:'💳',l:'n',
+      mn:'加一服务费',u:'多数餐厅堂食加收',ex:'埋单加一。'}
+  ]},
+  daily: { label:'日常用具', icon:'🪑', group:'life', words:[
+    {h:'台',j:'toi2',e:'table',m:'🪑',l:'b'},
+    {h:'凳',j:'dang3',e:'chair',m:'🪑',l:'b'},
+    {h:'床',j:'cong4',e:'bed',m:'🛏️',l:'b'},
+    {h:'枕头',j:'zam2 tau4',e:'pillow',m:'🛏️',l:'b'},
+    {h:'被',j:'pei5',e:'blanket',m:'🛌',l:'b'},
+    {h:'毛巾',j:'mou4 gan1',e:'towel',m:'🧻',l:'b'},
+    {h:'牙刷',j:'ngaa4 caat3',e:'toothbrush',m:'🪥',l:'b'},
+    {h:'牙膏',j:'ngaa4 gou1',e:'toothpaste',m:'🪥',l:'b'},
+    {h:'镜',j:'geng3',e:'mirror',m:'🪞',l:'c',
+      mn:'镜子',u:'照镜',ex:'照下镜先出门。'},
+    {h:'梳',j:'so1',e:'comb',m:'🪮',l:'c',
+      mn:'梳子',u:'梳头',ex:'借你梳用下。'},
+    {h:'风扇',j:'fung1 sin3',e:'fan',m:'🌀',l:'c',
+      mn:'电风扇',u:'夏天降温',ex:'开风扇吹下。'},
+    {h:'冷气',j:'laang5 hei3',e:'air-con',m:'❄️',l:'c',
+      mn:'空调',u:'夏天降温',ex:'冷气开大啲。'},
+    {h:'雪柜',j:'syut3 gwai6',e:'fridge',m:'🧊',l:'c',
+      mn:'冰箱',u:'冷藏食物',ex:'放雪柜保鲜。'},
+    {h:'洗衣机',j:'sai2 ji1 gei1',e:'washing machine',m:'🌀',l:'c',
+      mn:'洗衣机',u:'洗衣服',ex:'用洗衣机洗衫。'},
+    {h:'电视',j:'din6 si6',e:'TV',m:'📺',l:'c',
+      mn:'电视机',u:'看节目',ex:'睇电视睇到夜。'},
+    {h:'灯',j:'dang1',e:'lamp',m:'💡',l:'c',
+      mn:'灯',u:'照明',ex:'熄灯瞓觉。'},
+    {h:'闹钟',j:'naau6 zung1',e:'alarm clock',m:'⏰',l:'c',
+      mn:'闹钟',u:'叫醒起床',ex:'校闹钟六点。'},
+    {h:'钥匙',j:'so2 si4',e:'key',m:'🔑',l:'c',
+      mn:'钥匙',u:'开门用',ex:'钥匙唔见咗！'},
+    {h:'地拖',j:'dei6 to1',e:'mop',m:'🧹',l:'n',
+      mn:'拖把',u:'拖地清洁',ex:'攞地拖拖地。'},
+    {h:'扫把',j:'sou3 baa2',e:'broom',m:'🧹',l:'n',
+      mn:'扫帚',u:'扫地清洁',ex:'用扫把扫地。'},
+    {h:'晾衫架',j:'long6 saam1 gaa2',e:'clothes rack',m:'👕',l:'n',
+      mn:'晾衣架',u:'晾干衣服用',ex:'晾衫架挂满衫。'},
+    {h:'抽湿机',j:'cau1 sap1 gei1',e:'dehumidifier',m:'💧',l:'n',
+      mn:'除湿机',u:'梅雨天用',ex:'潮湿就开抽湿机。'},
+    {h:'电饭煲',j:'din6 faan6 bou1',e:'rice cooker',m:'🍚',l:'n',
+      mn:'电饭锅',u:'煮饭用',ex:'电饭煲煮饭好方便。'},
+    {h:'热水壶',j:'jit6 seoi2 wu2',e:'kettle',m:'🫖',l:'n',
+      mn:'电热水壶',u:'烧开水',ex:'热水壶煲水。'}
+  ]},
+  illness: { label:'生病看病', icon:'🏥', group:'life', words:[
+    {h:'病',j:'beng6',e:'sick',m:'🤒',l:'b'},
+    {h:'发烧',j:'faat3 siu1',e:'fever',m:'🌡️',l:'b'},
+    {h:'咳',j:'kat1',e:'cough',m:'😷',l:'b'},
+    {h:'感冒',j:'gam2 mou6',e:'cold',m:'🤧',l:'b'},
+    {h:'头痛',j:'tau4 tung3',e:'headache',m:'🤕',l:'b'},
+    {h:'肚痛',j:'tou5 tung3',e:'stomachache',m:'😣',l:'b'},
+    {h:'牙痛',j:'ngaa4 tung3',e:'toothache',m:'🦷',l:'b'},
+    {h:'睇医生',j:'tai2 ji1 sang1',e:'see a doctor',m:'👨‍⚕️',l:'b'},
+    {h:'喉咙痛',j:'hau4 lung4 tung3',e:'sore throat',m:'😖',l:'c',
+      mn:'嗓子疼',u:'感冒时常见',ex:'喉咙痛，讲唔到嘢。'},
+    {h:'流鼻水',j:'lau4 bei6 seoi2',e:'runny nose',m:'🤧',l:'c',
+      mn:'流鼻涕',u:'感冒时常见',ex:'成日流鼻水。'},
+    {h:'打喷嚏',j:'daa2 pan3 tai3',e:'sneeze',m:'🤧',l:'c',
+      mn:'打喷嚏',u:'过敏或感冒',ex:'花粉症打喷嚏。'},
+    {h:'食药',j:'sik6 joek6',e:'take medicine',m:'💊',l:'c',
+      mn:'吃药',u:'生病时服',ex:'记得食药。'},
+    {h:'打针',j:'daa2 zam1',e:'injection',m:'💉',l:'c',
+      mn:'打针',u:'打针治病或预防',ex:'细路仔好惊打针。'},
+    {h:'探热',j:'taam3 jit6',e:'measure temperature',m:'🌡️',l:'c',
+      mn:'量体温',u:'发烧时做',ex:'探热睇下几多度。'},
+    {h:'药水',j:'joek6 seoi2',e:'liquid medicine',m:'🧴',l:'c',
+      mn:'药水',u:'液体药',ex:'咳药水饮一羹。'},
+    {h:'药膏',j:'joek6 gou1',e:'ointment',m:'🧴',l:'c',
+      mn:'药膏',u:'涂皮肤用',ex:'搽药膏好快好。'},
+    {h:'胶布',j:'gaau1 bou3',e:'band-aid',m:'🩹',l:'c',
+      mn:'创可贴',u:'贴小伤口',ex:'贴块胶布。'},
+    {h:'休息',j:'jau1 sik1',e:'rest',m:'😴',l:'c',
+      mn:'休息',u:'生病要多休息',ex:'病咗要休息多啲。'},
+    {h:'唔舒服',j:'m4 syu1 fuk6',e:'unwell',m:'🤒',l:'n',
+      mn:'不舒服',u:'「唔」表示否定',ex:'今日唔舒服，请假。'},
+    {h:'晕浪',j:'wan4 long6',e:'motion sickness',m:'🤢',l:'n',
+      mn:'晕车晕船',u:'坐车坐船头晕',ex:'坐船晕浪。'},
+    {h:'作呕',j:'zok3 au2',e:'nauseous',m:'🤮',l:'n',
+      mn:'想吐',u:'胃不舒服',ex:'闻到就想作呕。'},
+    {h:'肚泻',j:'tou5 se3',e:'diarrhea',m:'🚽',l:'n',
+      mn:'拉肚子',u:'吃坏肚子',ex:'食错嘢肚泻。'},
+    {h:'热气',j:'jit6 hei3',e:'heaty',m:'🔥',l:'n',
+      mn:'上火',u:'中医说法',ex:'食太多煎炸嘢会热气。'},
+    {h:'好返',j:'hou2 faan1',e:'recovered',m:'💪',l:'n',
+      mn:'痊愈',u:'病好了',ex:'食咗药好快好返。'}
+  ]},
+  transport: { label:'交通', icon:'🚌', group:'world', words:[
+    {h:'巴士',j:'baa1 si2',e:'bus',m:'🚌',l:'b'},
+    {h:'地铁',j:'dei6 tit3',e:'subway',m:'🚇',l:'b'},
+    {h:'的士',j:'dik1 si2',e:'taxi',m:'🚕',l:'b'},
+    {h:'火车',j:'fo2 ce1',e:'train',m:'🚆',l:'b'},
+    {h:'飞机',j:'fei1 gei1',e:'airplane',m:'✈️',l:'b'},
+    {h:'船',j:'syun4',e:'boat',m:'🚢',l:'b'},
+    {h:'单车',j:'daan1 ce1',e:'bicycle',m:'🚲',l:'b'},
+    {h:'电车',j:'din6 ce1',e:'tram',m:'🚋',l:'b'},
+    {h:'小巴',j:'siu2 baa1',e:'minibus',m:'🚐',l:'c',
+      mn:'小型巴士',u:'香港常见',ex:'小巴快过巴士。'},
+    {h:'渡轮',j:'dou6 leon4',e:'ferry',m:'⛴️',l:'c',
+      mn:'渡船',u:'过海用',ex:'搭渡轮过海。'},
+    {h:'货车',j:'fo3 ce1',e:'truck',m:'🚚',l:'c',
+      mn:'货车',u:'运货用',ex:'货车泊喺门口。'},
+    {h:'私家车',j:'si1 gaa1 ce1',e:'private car',m:'🚗',l:'c',
+      mn:'私人汽车',u:'自己拥有的车',ex:'佢有架私家车。'},
+    {h:'摩托车',j:'mo1 tok3 ce1',e:'motorbike',m:'🏍️',l:'c',
+      mn:'摩托车',u:'两个轮的车',ex:'揸摩托车好型。'},
+    {h:'直升机',j:'zik6 sing1 gei1',e:'helicopter',m:'🚁',l:'c',
+      mn:'直升机',u:'空中交通工具',ex:'直升机救人。'},
+    {h:'高铁',j:'gou1 tit3',e:'high-speed rail',m:'🚄',l:'c',
+      mn:'高速铁路',u:'中国高铁',ex:'坐高铁去广州。'},
+    {h:'轻铁',j:'hing1 tit3',e:'light rail',m:'🚈',l:'c',
+      mn:'轻便铁路',u:'新界西北常见',ex:'搭轻铁返学。'},
+    {h:'缆车',j:'laam6 ce1',e:'cable car',m:'🚡',l:'c',
+      mn:'缆车',u:'爬山用',ex:'搭缆车上山顶。'},
+    {h:'天星小轮',j:'tin1 sing1 siu2 leon4',e:'Star Ferry',m:'⛴️',l:'c',
+      mn:'天星小轮',u:'香港维港渡轮',ex:'坐天星小轮睇夜景。'},
+    {h:'搭车',j:'daap3 ce1',e:'take transport',m:'🚌',l:'n',
+      mn:'乘车',u:'坐车',ex:'日日搭车返工。'},
+    {h:'转车',j:'zyun3 ce1',e:'transfer',m:'🔄',l:'n',
+      mn:'换乘',u:'换另一条线路',ex:'要转车先到。'},
+    {h:'落车',j:'lok6 ce1',e:'get off',m:'🚏',l:'n',
+      mn:'下车',u:'下车时用',ex:'下一站落车。'},
+    {h:'塞车',j:'sak1 ce1',e:'traffic jam',m:'🚗',l:'n',
+      mn:'堵车',u:'路上车多',ex:'返工时间塞车。'},
+    {h:'打的',j:'daa2 dik1',e:'take a taxi',m:'🚕',l:'n',
+      mn:'打车',u:'坐出租车',ex:'赶时间唯有打的。'},
+    {h:'过海',j:'gwo3 hoi2',e:'cross the harbour',m:'🌊',l:'n',
+      mn:'过维多利亚港',u:'香港常用',ex:'过海隧道好塞车。'}
+  ]},
+  buildings: { label:'建筑', icon:'🏢', group:'world', words:[
+    {h:'屋',j:'uk1',e:'house',m:'🏠',l:'b'},
+    {h:'大厦',j:'daai6 haa6',e:'building',m:'🏢',l:'b'},
+    {h:'学校',j:'hok6 haau6',e:'school',m:'🏫',l:'b'},
+    {h:'医院',j:'ji1 jyun2',e:'hospital',m:'🏥',l:'b'},
+    {h:'公园',j:'gung1 jyun2',e:'park',m:'🌳',l:'b'},
+    {h:'图书馆',j:'tou4 syu1 gun2',e:'library',m:'📖',l:'b'},
+    {h:'银行',j:'ngan4 hong4',e:'bank',m:'🏦',l:'b'},
+    {h:'邮局',j:'jau4 guk6',e:'post office',m:'📮',l:'b'},
+    {h:'博物馆',j:'bok3 mat6 gun2',e:'museum',m:'🏛️',l:'c',
+      mn:'博物馆',u:'看展览',ex:'周末去博物馆。'},
+    {h:'戏院',j:'hei3 jyun2',e:'cinema',m:'🎬',l:'c',
+      mn:'电影院',u:'看电影',ex:'去戏院睇戏。'},
+    {h:'警察局',j:'ging2 caat3 guk6',e:'police station',m:'👮',l:'c',
+      mn:'警察局',u:'报警的地方',ex:'去警察局报案。'},
+    {h:'消防局',j:'siu1 fong4 guk6',e:'fire station',m:'🚒',l:'c',
+      mn:'消防局',u:'消防员基地',ex:'消防局喺隔篱。'},
+    {h:'商场',j:'soeng1 coeng4',e:'shopping mall',m:'🛍️',l:'c',
+      mn:'购物中心',u:'大型购物场',ex:'去商场行街。'},
+    {h:'街市',j:'gaai1 si5',e:'wet market',m:'🥬',l:'c',
+      mn:'菜市场',u:'买菜的地方',ex:'去街市买餸。'},
+    {h:'酒店',j:'zau2 dim3',e:'hotel',m:'🏨',l:'c',
+      mn:'酒店',u:'住宿的地方',ex:'住酒店一晚。'},
+    {h:'餐厅',j:'caan1 teng1',e:'restaurant',m:'🍽️',l:'c',
+      mn:'餐厅',u:'吃饭的地方',ex:'去餐厅食饭。'},
+    {h:'车站',j:'ce1 zaam6',e:'station',m:'🚉',l:'c',
+      mn:'车站',u:'坐车的地方',ex:'喺车站等你。'},
+    {h:'机场',j:'gei1 coeng4',e:'airport',m:'✈️',l:'c',
+      mn:'机场',u:'坐飞机的地方',ex:'去机场接人。'},
+    {h:'唐楼',j:'tong4 lau4',e:'old walk-up building',m:'🏚️',l:'n',
+      mn:'香港旧式住宅楼',u:'无电梯的旧楼',ex:'住喺唐楼五楼。'},
+    {h:'劏房',j:'tong1 fong2',e:'subdivided flat',m:'🏚️',l:'n',
+      mn:'香港分间单位',u:'面积很小的租屋',ex:'劏房租金好贵。'},
+    {h:'骑楼',j:'ke4 lau4',e:'arcade building',m:'🏛️',l:'n',
+      mn:'有柱廊的旧建筑',u:'广州、香港常见',ex:'骑楼底行街好遮阴。'},
+    {h:'村屋',j:'cyun1 uk1',e:'village house',m:'🏘️',l:'n',
+      mn:'乡村屋',u:'新界乡村房屋',ex:'住村屋空间大。'},
+    {h:'公屋',j:'gung1 uk1',e:'public housing',m:'🏢',l:'n',
+      mn:'政府公屋',u:'香港资助房屋',ex:'申请公屋要等好耐。'},
+    {h:'居屋',j:'geoi1 uk1',e:'subsidised housing',m:'🏘️',l:'n',
+      mn:'居者有其屋',u:'政府资助置业',ex:'抽到居屋好幸运。'}
+  ]},
+  time: { label:'时间', icon:'⏰', group:'world', words:[
+    {h:'今日',j:'gam1 jat6',e:'today',m:'📅',l:'b'},
+    {h:'听日',j:'ting1 jat6',e:'tomorrow',m:'📆',l:'b'},
+    {h:'昨日',j:'zok6 jat6',e:'yesterday',m:'📅',l:'b'},
+    {h:'现在',j:'jin6 zoi6',e:'now',m:'⏰',l:'b'},
+    {h:'早上',j:'zou2 soeng6',e:'morning',m:'🌅',l:'b'},
+    {h:'中午',j:'zung1 ng5',e:'noon',m:'☀️',l:'b'},
+    {h:'下午',j:'haa6 ng5',e:'afternoon',m:'🌤️',l:'b'},
+    {h:'夜晚',j:'je6 maan5',e:'night',m:'🌙',l:'b'},
+    {h:'点钟',j:'dim2 zung1',e:"o'clock",m:'🕐',l:'c',
+      mn:'…点钟',u:'说时间',ex:'三点钟见。'},
+    {h:'分钟',j:'fan1 zung1',e:'minute',m:'⏱️',l:'c',
+      mn:'分钟',u:'计时单位',ex:'等五分钟。'},
+    {h:'一个钟',j:'jat1 go3 zung1',e:'one hour',m:'⏰',l:'c',
+      mn:'一小时',u:'时间长',ex:'等咗一个钟。'},
+    {h:'半个钟',j:'bun3 go3 zung1',e:'half an hour',m:'⏰',l:'c',
+      mn:'半小时',u:'时间短',ex:'半个钟就到。'},
+    {h:'星期一',j:'sing1 kei4 jat1',e:'Monday',m:'📅',l:'c',
+      mn:'周一',u:'一周的第一天',ex:'星期一返工。'},
+    {h:'星期二',j:'sing1 kei4 ji6',e:'Tuesday',m:'📅',l:'c',
+      mn:'周二',u:'一周的第二天',ex:'星期二有课。'},
+    {h:'周末',j:'zau1 mut6',e:'weekend',m:'🎉',l:'c',
+      mn:'星期六日',u:'休息时间',ex:'周末去玩。'},
+    {h:'假期',j:'gaa3 kei4',e:'holiday',m:'🏖️',l:'c',
+      mn:'放假',u:'不用上班上学',ex:'假期去旅行。'},
+    {h:'生日',j:'saang1 jat6',e:'birthday',m:'🎂',l:'c',
+      mn:'出生日子',u:'每年庆祝',ex:'今日系我生日。'},
+    {h:'新年',j:'san1 nin4',e:'New Year',m:'🧧',l:'c',
+      mn:'新的一年',u:'农历或公历新年',ex:'新年快乐！'},
+    {h:'一阵间',j:'jat1 zan6 gaan1',e:'in a moment',m:'⏳',l:'n',
+      mn:'一会儿',u:'表示很短的时间',ex:'一阵间见！'},
+    {h:'迟啲',j:'ci4 di1',e:'later',m:'⏰',l:'n',
+      mn:'晚一点',u:'稍后',ex:'迟啲再讲。'},
+    {h:'而家',j:'ji4 gaa1',e:'now',m:'⏰',l:'n',
+      mn:'现在（口语）',u:'粤语口语说法',ex:'而家几点？'},
+    {h:'嗰阵',j:'go2 zan6',e:'at that time',m:'📅',l:'n',
+      mn:'那时候',u:'指过去的某时',ex:'嗰阵仲细个。'},
+    {h:'旧时',j:'gau6 si4',e:'in the past',m:'📜',l:'n',
+      mn:'从前',u:'很久以前',ex:'旧时冇手机。'},
+    {h:'第日',j:'dai6 jat6',e:'another day',m:'📆',l:'n',
+      mn:'改天',u:'未来的某天',ex:'第日再约啦。'}
+  ]},
+  jobs: { label:'职业', icon:'👨‍⚕️', group:'advanced', words:[
+    {h:'老师',j:'lou5 si1',e:'teacher',m:'👩‍🏫',l:'b'},
+    {h:'医生',j:'ji1 sang1',e:'doctor',m:'👨‍⚕️',l:'b'},
+    {h:'护士',j:'wu6 si6',e:'nurse',m:'👩‍⚕️',l:'b'},
+    {h:'警察',j:'ging2 caat3',e:'police',m:'👮',l:'b'},
+    {h:'消防员',j:'siu1 fong4 jyun4',e:'firefighter',m:'👨‍🚒',l:'b'},
+    {h:'司机',j:'si1 gei1',e:'driver',m:'🚗',l:'b'},
+    {h:'厨师',j:'cyu4 si1',e:'chef',m:'👨‍🍳',l:'b'},
+    {h:'服务员',j:'fuk6 mou6 jyun4',e:'waiter',m:'🤵',l:'b'},
+    {h:'律师',j:'leot6 si1',e:'lawyer',m:'⚖️',l:'c',
+      mn:'律师',u:'法律工作者',ex:'佢系个好律师。'},
+    {h:'工程师',j:'gung1 cing4 si1',e:'engineer',m:'👷',l:'c',
+      mn:'工程师',u:'建筑、IT等行业',ex:'工程师负责起桥。'},
+    {h:'记者',j:'gei3 ze2',e:'journalist',m:'📰',l:'c',
+      mn:'记者',u:'采访报道',ex:'记者采访新闻。'},
+    {h:'演员',j:'jin2 jyun4',e:'actor',m:'🎭',l:'c',
+      mn:'演员',u:'演戏的人',ex:'佢系电影演员。'},
+    {h:'歌手',j:'go1 sau2',e:'singer',m:'🎤',l:'c',
+      mn:'歌手',u:'唱歌的人',ex:'我锺意呢个歌手。'},
+    {h:'画家',j:'waa2 gaa1',e:'painter',m:'🎨',l:'c',
+      mn:'画家',u:'画画的人',ex:'佢系出名嘅画家。'},
+    {h:'农民',j:'nung4 man4',e:'farmer',m:'👨‍🌾',l:'c',
+      mn:'农夫',u:'种田的人',ex:'农民种稻米。'},
+    {h:'邮差',j:'jau4 caai1',e:'postman',m:'📮',l:'c',
+      mn:'邮递员',u:'送信的人',ex:'邮差送信嚟。'},
+    {h:'售货员',j:'sau6 fo3 jyun4',e:'salesperson',m:'🛍️',l:'c',
+      mn:'售货员',u:'商店里卖东西',ex:'问售货员有冇大码。'},
+    {h:'理发师',j:'lei5 faat3 si1',e:'hairdresser',m:'💇',l:'c',
+      mn:'理发师',u:'剪头发',ex:'理发师帮我剪短啲。'},
+    {h:'打工仔',j:'daa2 gung1 zai2',e:'office worker',m:'💼',l:'n',
+      mn:'上班族',u:'泛指受雇工作的人',ex:'打工仔好辛苦。'},
+    {h:'老细',j:'lou5 sai3',e:'boss',m:'💼',l:'n',
+      mn:'老板',u:'粤语口语',ex:'我老细好严。'},
+    {h:'散工',j:'saan2 gung1',e:'part-time job',m:'🔨',l:'n',
+      mn:'临时工',u:'零散工作',ex:'打散工帮补家计。'},
+    {h:'炒散',j:'caau2 saan2',e:'do odd jobs',m:'💼',l:'n',
+      mn:'做零工',u:'粤语常用',ex:'炒散过活。'},
+    {h:'秘捞',j:'bei3 lou1',e:'side gig',m:'💼',l:'n',
+      mn:'兼职（粤语）',u:'正职之外的收入',ex:'周末秘捞赚外快。'},
+    {h:'老板娘',j:'lou5 baan2 noeng2',e:'boss lady',m:'💼',l:'n',
+      mn:'女老板',u:'对女老板称呼',ex:'老板娘好好人。'}
+  ]},
+  sports: { label:'运动', icon:'⚽', group:'advanced', words:[
+    {h:'跑步',j:'paau2 bou6',e:'run',m:'🏃',l:'b'},
+    {h:'游水',j:'jau4 seoi2',e:'swim',m:'🏊',l:'b'},
+    {h:'踢波',j:'tek3 bo1',e:'play football',m:'⚽',l:'b'},
+    {h:'打篮球',j:'daa2 laam4 kau4',e:'play basketball',m:'🏀',l:'b'},
+    {h:'跳绳',j:'tiu3 sing2',e:'jump rope',m:'🪢',l:'b'},
+    {h:'踩单车',j:'caai2 daan1 ce1',e:'cycle',m:'🚲',l:'b'},
+    {h:'跳舞',j:'tiu3 mou5',e:'dance',m:'💃',l:'b'},
+    {h:'爬山',j:'paa4 saan1',e:'hike',m:'🥾',l:'b'},
+    {h:'打羽毛球',j:'daa2 jyu5 mou4 kau4',e:'play badminton',m:'🏸',l:'c',
+      mn:'打羽毛球',u:'常见运动',ex:'周末打羽毛球。'},
+    {h:'打乒乓波',j:'daa2 bing1 bam1 bo1',e:'play table tennis',m:'🏓',l:'c',
+      mn:'打乒乓球',u:'国球',ex:'打乒乓波好叻。'},
+    {h:'打网球',j:'daa2 mong5 kau4',e:'play tennis',m:'🎾',l:'c',
+      mn:'打网球',u:'户外或室内',ex:'去打网球。'},
+    {h:'打排球',j:'daa2 paai4 kau4',e:'play volleyball',m:'🏐',l:'c',
+      mn:'打排球',u:'团队运动',ex:'沙滩排球好玩。'},
+    {h:'瑜伽',j:'jyu4 gaa1',e:'yoga',m:'🧘',l:'c',
+      mn:'瑜伽',u:'伸展运动',ex:'练瑜伽放松。'},
+    {h:'健身',j:'gin6 san1',e:'work out',m:'💪',l:'c',
+      mn:'健身',u:'锻炼肌肉',ex:'去健身室健身。'},
+    {h:'滑雪',j:'waat6 syut3',e:'ski',m:'🎿',l:'c',
+      mn:'滑雪',u:'雪地运动',ex:'去日本滑雪。'},
+    {h:'溜冰',j:'lau4 bing1',e:'ice skate',m:'⛸️',l:'c',
+      mn:'滑冰',u:'冰上运动',ex:'溜冰场溜冰。'},
+    {h:'钓鱼',j:'diu3 jyu2',e:'fish',m:'🎣',l:'c',
+      mn:'钓鱼',u:'休闲活动',ex:'去海边钓鱼。'},
+    {h:'打功夫',j:'daa2 gung1 fu1',e:'kung fu',m:'🥋',l:'c',
+      mn:'练武术',u:'中国传统',ex:'细个学过打功夫。'},
+    {h:'打波',j:'daa2 bo1',e:'play ball',m:'⚽',l:'n',
+      mn:'打球',u:'粤语口语',ex:'落场打波。'},
+    {h:'落场',j:'lok6 coeng4',e:'enter the field',m:'🏟️',l:'n',
+      mn:'上场',u:'上场参与比赛',ex:'教练叫我落场。'},
+    {h:'爆汗',j:'baau3 hon6',e:'sweat a lot',m:'💦',l:'n',
+      mn:'出很多汗',u:'运动或热',ex:'打波打到爆汗。'},
+    {h:'做运动',j:'zou6 wan6 dung6',e:'exercise',m:'🏋️',l:'n',
+      mn:'做运动',u:'粤语常用说法',ex:'每日做运动。'},
+    {h:'行山',j:'haang4 saan1',e:'hike',m:'🥾',l:'n',
+      mn:'爬山',u:'粤语说法',ex:'星期日去行山。'},
+    {h:'露营',j:'lou6 jing4',e:'camping',m:'⛺',l:'n',
+      mn:'露营',u:'户外过夜',ex:'夏天去露营。'}
+  ]}
+};
+
+/* 主题分组 */
+const GROUPS = {
+  basic:    { label:'基础', themes:['greetings','actions','family','school','numbers','colors','animals','weather'] },
+  life:     { label:'生活', themes:['food','clothing','restaurant','daily','illness'] },
+  world:    { label:'世界', themes:['transport','buildings','time'] },
+  advanced: { label:'进阶', themes:['jobs','sports'] }
+};
+
+/* ============================================================
+   难度
+   ============================================================ */
+const TIERS = [
+  { tier:1, name:'入门', icon:'⭐',    pairs:4, timeTarget:null, min:1,  max:3  },
+  { tier:2, name:'进阶', icon:'⭐⭐',  pairs:6, timeTarget:null, min:4,  max:6  },
+  { tier:3, name:'挑战', icon:'⭐⭐⭐',pairs:8, timeTarget:null, min:7,  max:9  },
+  { tier:4, name:'高手', icon:'🔥',    pairs:8, timeTarget:90,   min:10, max:12 },
+  { tier:5, name:'大师', icon:'👑',    pairs:8, timeTarget:75,   min:13, max:Infinity }
+];
+function getTier(level){
+  for (const t of TIERS) if (level >= t.min && level <= t.max) return t;
+  return TIERS[TIERS.length - 1];
+}
+
+/* ============================================================
+   状态
+   ============================================================ */
+const PROGRESS_KEY = 'yue_match_progress_v1';
+
+const state = {
+  level:1, score:0, mistakes:0, matched:0, totalPairs:4,
+  cards:[], flipped:[], locked:false, gameOver:false, paused:false,
+  startTime:0, pausedAt:0, totalPausedTime:0, elapsedAtLastSave:0,
+  topic:'greetings', levelFilter:'basic', mode:'learn', speechRate:0.82,
+  soundOn:true, speechOn:true, combo:0, maxCombo:0, hintUsed:0,
+  bestLevel:1, tipShown:false, notebook:[], wrongbook:[],
+  topicMastery:{}, stats:{games:0, totalTime:0}
+};
+
+/* 从 localStorage 加载进度 */
+function loadProgress(){
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return null;
+    return data;
+  } catch(e) { return null; }
+}
+function saveProgress(){
+  try {
+    const data = {
+      session: state.gameOver ? null : {
+        level: state.level,
+        score: state.score,
+        matched: state.matched,
+        totalPairs: state.totalPairs,
+        mistakes: state.mistakes,
+        combo: state.combo,
+        maxCombo: state.maxCombo,
+        hintUsed: state.hintUsed,
+        topic: state.topic,
+        levelFilter: state.levelFilter,
+        mode: state.mode,
+        elapsed: Math.floor((Date.now() - state.startTime - state.totalPausedTime) / 1000),
+        cards: state.cards.map(c => ({
+          id: c.id, pairId: c.pairId, role: c.role,
+          word: c.word, matched: c.matched
+        }))
+      },
+      bestLevel: state.bestLevel,
+      notebook: state.notebook,
+      wrongbook: state.wrongbook,
+      topicMastery: state.topicMastery,
+      stats: state.stats
+    };
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+  } catch(e) { /* ignore */ }
+}
+function clearSession(){
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    data.session = null;
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+  } catch(e){}
+}
+function clearAllProgress(){
+  try { localStorage.removeItem(PROGRESS_KEY); } catch(e){}
+}
+
+/* 加载进度（除 session 外的部分） */
+(function initProgress(){
+  const p = loadProgress();
+  if (!p) return;
+  if (typeof p.bestLevel === 'number') state.bestLevel = Math.max(1, p.bestLevel);
+  if (Array.isArray(p.notebook)) state.notebook = p.notebook;
+  if (Array.isArray(p.wrongbook)) state.wrongbook = p.wrongbook;
+  if (p.topicMastery && typeof p.topicMastery === 'object') state.topicMastery = p.topicMastery;
+  if (p.stats && typeof p.stats === 'object') state.stats = Object.assign(state.stats, p.stats);
+})();
+
+/* ============================================================
+   DOM 引用
+   ============================================================ */
+const boardEl      = document.getElementById('board');
+const statLevel    = document.getElementById('statLevel');
+const statScore    = document.getElementById('statScore');
+const statPairs    = document.getElementById('statPairs');
+const statTime     = document.getElementById('statTime');
+const statTier     = document.getElementById('statTier');
+const statBest     = document.getElementById('statBest');
+const statGrid     = document.getElementById('statGrid');
+const statTarget   = document.getElementById('statTarget');
+const levelModal   = document.getElementById('levelModal');
+const resumeModal  = document.getElementById('resumeModal');
+const progressModal= document.getElementById('progressModal');
+const notebookModal= document.getElementById('notebookModal');
+const detailModal  = document.getElementById('detailModal');
+const topicSelect  = document.getElementById('topicSelect');
+const btnSound     = document.getElementById('btnSound');
+const btnSpeech    = document.getElementById('btnSpeech');
+const btnHint      = document.getElementById('btnHint');
+const btnPause     = document.getElementById('btnPause');
+const btnRestart   = document.getElementById('btnRestart');
+const btnNotebook  = document.getElementById('btnNotebook');
+const btnWrongBook = document.getElementById('btnWrongBook');
+const btnProgress  = document.getElementById('btnProgress');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const comboText    = document.getElementById('comboText');
+const bestLevelEl  = document.getElementById('bestLevel');
+const tierBanner   = document.getElementById('tierBanner');
+
+/* ============================================================
+   工具
+   ============================================================ */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+function shuffle(a){
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function formatTime(sec){
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return m + ':' + String(s).padStart(2, '0');
+}
+function formatDuration(sec){
+  if (sec < 60) return sec + ' 秒';
+  const m = Math.floor(sec / 60);
+  if (m < 60) return m + ' 分钟';
+  const h = Math.floor(m / 60);
+  const rem = m % 60;
+  return h + ' 小时 ' + rem + ' 分';
+}
+function expandWord(w){
+  return {
+    hanzi: w.h, jyutping: w.j, en: w.e, emoji: w.m,
+    level: w.l === 'b' ? 'basic' : (w.l === 'c' ? 'common' : 'native'),
+    meaning: w.mn || '', usage: w.u || '', example: w.ex || ''
+  };
+}
+
+/* ============================================================
+   音效
+   ============================================================ */
+let audioCtx = null;
+function getCtx(){
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch(e){ audioCtx = null; }
+  }
+  return audioCtx;
+}
+function tone(freq, dur, type, vol){
+  if (!state.soundOn) return;
+  const ctx = getCtx(); if (!ctx) return;
+  try {
+    if (ctx.state === 'suspended') ctx.resume();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(vol || 0.12, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + dur);
+  } catch(e){}
+}
+function sfx(type){
+  if (!state.soundOn) return;
+  if (type === 'click') tone(620, 0.07, 'sine', 0.07);
+  else if (type === 'unflip') tone(420, 0.08, 'sine', 0.06);
+  else if (type === 'correct') {
+    tone(523, 0.14, 'sine', 0.13);
+    setTimeout(() => tone(659, 0.14, 'sine', 0.13), 95);
+    setTimeout(() => tone(784, 0.24, 'sine', 0.13), 190);
+  } else if (type === 'combo') {
+    tone(880, 0.1, 'sine', 0.14);
+    setTimeout(() => tone(1108, 0.15, 'sine', 0.14), 80);
+  } else if (type === 'wrong') {
+    tone(300, 0.14, 'sawtooth', 0.08);
+    setTimeout(() => tone(200, 0.20, 'sawtooth', 0.08), 120);
+  } else if (type === 'hint') {
+    tone(740, 0.12, 'triangle', 0.1);
+    setTimeout(() => tone(988, 0.16, 'triangle', 0.1), 90);
+  } else if (type === 'win') {
+    [523, 659, 784, 1047].forEach((f, i) =>
+      setTimeout(() => tone(f, 0.24, 'sine', 0.14), i * 110));
+  } else if (type === 'tier') {
+    [523, 659, 784, 1047].forEach((f, i) =>
+      setTimeout(() => tone(f, 0.18, 'triangle', 0.13), i * 90));
+  }
+}
+
+/* ============================================================
+   粤语发音
+   ============================================================ */
+let voices = [];
+function loadVoices(){
+  if (!window.speechSynthesis) return;
+  try { voices = speechSynthesis.getVoices() || []; } catch(e){ voices = []; }
+}
+loadVoices();
+if (window.speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices;
+function speakCantonese(text){
+  if (!state.speechOn || !window.speechSynthesis || !text) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-HK'; u.rate = state.speechRate; u.pitch = 1.0;
+    if (!voices.length) loadVoices();
+    const v = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) ||
+              voices.find(v => /zh[-_]TW/i.test(v.lang)) ||
+              voices.find(v => /zh/i.test(v.lang));
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
+  } catch(e){}
+}
+
+/* ============================================================
+   抽题
+   ============================================================ */
+const wordHistory = {};
+function pickWords(topic, count, levelFilter, preferWrong){
+  // 错题练习优先
+  if (preferWrong && state.wrongbook.length > 0) {
+    let pool = state.wrongbook.filter(w => {
+      if (topic === 'mixed') return true;
+      return w._topic === topic;
+    });
+    if (pool.length < count) pool = state.wrongbook.slice();
+    shuffle(pool);
+    return pool.slice(0, count);
+  }
+
+  let pool = [];
+  if (topic === 'mixed') {
+    Object.keys(BANK).forEach(k =>
+      BANK[k].words.forEach(w =>
+        pool.push(Object.assign({ _topic:k }, expandWord(w)))));
+  } else {
+    (BANK[topic]?.words || []).forEach(w =>
+      pool.push(Object.assign({ _topic:topic }, expandWord(w))));
+  }
+  if (levelFilter === 'basic') pool = pool.filter(w => w.level === 'basic');
+  else if (levelFilter === 'common') pool = pool.filter(w => w.level === 'basic' || w.level === 'common');
+
+  const seen = new Set();
+  pool = pool.filter(w => {
+    const k = w._topic + '::' + w.hanzi;
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+
+  const key = topic + '::' + levelFilter;
+  if (!wordHistory[key]) wordHistory[key] = new Set();
+  const used = wordHistory[key];
+  let available = pool.filter(w => !used.has(w._topic + '::' + w.hanzi));
+  if (available.length < count) {
+    wordHistory[key] = new Set();
+    available = pool.slice();
+  }
+  shuffle(available);
+  const picked = available.slice(0, count);
+  picked.forEach(w => wordHistory[key].add(w._topic + '::' + w.hanzi));
+  return picked;
+}
+
+/* ============================================================
+   主题下拉
+   ============================================================ */
+function buildTopicSelect(){
+  topicSelect.innerHTML = '';
+  const optMixed = document.createElement('option');
+  optMixed.value = 'mixed';
+  optMixed.textContent = '混合 All Themes';
+  topicSelect.appendChild(optMixed);
+
+  Object.keys(GROUPS).forEach(gk => {
+    const g = GROUPS[gk];
+    const og = document.createElement('optgroup');
+    og.label = '── ' + g.label + ' ──';
+    g.themes.forEach(tk => {
+      if (!BANK[tk]) return;
+      const o = document.createElement('option');
+      o.value = tk;
+      o.textContent = BANK[tk].icon + ' ' + BANK[tk].label;
+      og.appendChild(o);
+    });
+    topicSelect.appendChild(og);
+  });
+  topicSelect.value = state.topic;
+}
+
+/* ============================================================
+   渲染棋盘
+   ============================================================ */
+function renderBoard(){
+  boardEl.innerHTML = '';
+  state.cards.forEach((card, i) => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.dataset.id = String(card.id);
+    el.style.animationDelay = (i * 0.025) + 's';
+    if (card.matched) {
+      el.classList.add('matched');
+      el.style.opacity = '0';
+    }
+
+    const frontClass = card.role === 'hanzi' ? 'hanzi' : 'jyutping';
+    const tagText = card.role === 'hanzi' ? '漢' : '拼';
+    const isChallenge = state.mode === 'challenge';
+    let frontHtml = '';
+
+    if (card.role === 'hanzi') {
+      frontHtml = '<div class="card-tag">' + tagText + '</div>' +
+        '<div class="card-content hanzi-content">' + esc(card.word.hanzi) + '</div>';
+      if (!isChallenge) frontHtml += '<div class="card-sub">' + esc(card.word.emoji || '') + '</div>';
+    } else {
+      frontHtml = '<div class="card-tag">' + tagText + '</div>' +
+        '<div class="card-content jyutping-content">' + esc(card.word.jyutping) + '</div>';
+      if (!isChallenge) frontHtml += '<div class="card-sub">' + esc(card.word.en || '') + '</div>';
+    }
+
+    el.innerHTML =
+      '<div class="card-inner">' +
+        '<div class="card-face card-back">中</div>' +
+        '<div class="card-face card-front ' + frontClass + '">' + frontHtml + '</div>' +
+      '</div>';
+
+    if (!card.matched) el.addEventListener('click', () => onCardClick(el));
+    boardEl.appendChild(el);
+  });
+}
+
+/* ============================================================
+   卡片点击
+   ============================================================ */
+function onCardClick(el){
+  if (state.locked || state.gameOver || state.paused) return;
+  const id = Number(el.dataset.id);
+  const card = state.cards.find(c => c.id === id);
+  if (!card || card.matched) return;
+
+  // 盖回
+  if (state.flipped.length === 1 && state.flipped[0].card.id === id) {
+    card.flipped = false;
+    el.classList.remove('flipped', 'pending');
+    state.flipped = [];
+    sfx('unflip');
+    return;
+  }
+  if (card.flipped) return;
+
+  document.querySelectorAll('.card.hint').forEach(c => c.classList.remove('hint'));
+  card.flipped = true;
+  el.classList.add('flipped');
+  sfx('click');
+  if (card.role === 'hanzi') speakCantonese(card.word.hanzi);
+
+  state.flipped.push({ card, el });
+
+  if (state.flipped.length === 1) {
+    el.classList.add('pending');
+    showOnceTip();
+    return;
+  }
+
+  state.locked = true;
+  const [a, b] = state.flipped;
+  a.el.classList.remove('pending');
+
+  if (a.card.pairId === b.card.pairId) {
+    // 配对成功
+    state.combo++;
+    if (state.combo > state.maxCombo) state.maxCombo = state.combo;
+
+    const comboBonus = state.combo >= 3 ? (state.combo - 2) * 2 : 0;
+    const gained = 10 + comboBonus;
+    state.matched++;
+    state.score += gained;
+
+    // 加入单词本
+    const word = a.card.word;
+    if (!state.notebook.some(w => w.hanzi === word.hanzi)) {
+      state.notebook.push(word);
+    }
+    // 主题掌握度
+    const topicKey = word._topic || state.topic;
+    if (!state.topicMastery[topicKey]) state.topicMastery[topicKey] = { learned:0 };
+    if (!state.topicMastery[topicKey][word.hanzi]) {
+      state.topicMastery[topicKey][word.hanzi] = true;
+      state.topicMastery[topicKey].learned = (state.topicMastery[topicKey].learned || 0) + 1;
+    }
+
+    if (state.combo >= 2) { sfx('combo'); showComboToast('×' + state.combo + ' COMBO!'); }
+    else sfx('correct');
+
+    updateStats(true, gained);
+    burstStars(a.el); burstStars(b.el);
+    showFloatScore(a.el, '+' + gained);
+    showFloatScore(b.el, '+' + gained);
+
+    setTimeout(() => {
+      a.card.matched = true; b.card.matched = true;
+      a.el.classList.add('matched'); b.el.classList.add('matched');
+      speakCantonese(a.card.word.hanzi);
+    }, 260);
+
+    setTimeout(() => {
+      state.flipped = [];
+      state.locked = false;
+      updateStats();
+      updateProgress();
+      saveProgress(); // 保存进度
+      if (state.matched === state.totalPairs) onLevelComplete();
+    }, 900);
+  } else {
+    state.mistakes++;
+    state.combo = 0;
+    sfx('wrong');
+    a.el.classList.add('wrong'); b.el.classList.add('wrong');
+    // 记录错题
+    const w1 = a.card.word;
+    if (!state.wrongbook.some(w => w.hanzi === w1.hanzi)) {
+      state.wrongbook.push(w1);
+    }
+    const w2 = b.card.word;
+    if (!state.wrongbook.some(w => w.hanzi === w2.hanzi)) {
+      state.wrongbook.push(w2);
+    }
+    updateProgress();
+    saveProgress(); // 保存进度
+    setTimeout(() => {
+      a.card.flipped = false; b.card.flipped = false;
+      a.el.classList.remove('flipped','wrong');
+      b.el.classList.remove('flipped','wrong');
+      state.flipped = [];
+      state.locked = false;
+    }, 1050);
+  }
+}
+
+function burstStars(el){
+  const burst = document.createElement('div');
+  burst.className = 'star-burst';
+  ['⭐','✨','⭐','✨','⭐'].forEach((s, i) => {
+    const span = document.createElement('span');
+    span.textContent = s;
+    const angle = (i / 5) * Math.PI * 2;
+    const dist = 42 + Math.random() * 26;
+    span.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    span.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    span.style.animationDelay = (i * 0.04) + 's';
+    burst.appendChild(span);
+  });
+  el.appendChild(burst);
+  setTimeout(() => burst.remove(), 1100);
+}
+function showFloatScore(el, text){
+  const s = document.createElement('div');
+  s.className = 'float-score'; s.textContent = text;
+  el.appendChild(s);
+  setTimeout(() => s.remove(), 1050);
+}
+function showComboToast(text){
+  const el = document.createElement('div');
+  el.className = 'combo-toast show'; el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1100);
+}
+function showOnceTip(){
+  if (state.tipShown) return;
+  state.tipShown = true;
+  const el = document.createElement('div');
+  el.className = 'tip-toast show';
+  el.textContent = '💡 再点它一次可以盖回去';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+/* ============================================================
+   UI 更新
+   ============================================================ */
+function updateStats(pulse, gained){
+  const tier = getTier(state.level);
+  statLevel.textContent = String(state.level);
+  statTier.textContent = tier.icon + ' ' + tier.name;
+  statScore.textContent = String(state.score);
+  statBest.textContent = 'Best ' + state.bestLevel + ' 关';
+  statPairs.textContent = (state.totalPairs - state.matched) + ' / ' + state.totalPairs;
+  const cols = 4;
+  const rows = Math.ceil(state.totalPairs * 2 / cols);
+  statGrid.textContent = cols + '×' + rows + ' · ' + (state.totalPairs * 2) + ' 张';
+  if (tier.timeTarget) { statTarget.textContent = '目标 ' + tier.timeTarget + ' 秒'; statTarget.style.color = '#a855f7'; }
+  else statTarget.textContent = '';
+  bestLevelEl.textContent = String(state.bestLevel);
+  if (pulse) {
+    statScore.classList.remove('pulse', 'pulse-gold');
+    void statScore.offsetWidth;
+    statScore.classList.add(gained && gained > 10 ? 'pulse-gold' : 'pulse');
+  }
+  comboText.textContent = '连击：' + state.combo;
+}
+function updateProgress(){
+  const pct = state.totalPairs > 0 ? (state.matched / state.totalPairs) * 100 : 0;
+  progressFill.style.width = pct + '%';
+  progressText.textContent = '进度：' + state.matched + ' / ' + state.totalPairs;
+}
+
+/* ============================================================
+   计时
+   ============================================================ */
+let timerInterval = null;
+function startTimer(){
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (state.paused) return;
+    const elapsed = Math.floor((Date.now() - state.startTime - state.totalPausedTime) / 1000);
+    statTime.textContent = formatTime(Math.max(0, elapsed));
+  }, 250);
+}
+
+/* ============================================================
+   开始关卡
+   ============================================================ */
+let lastTier = null;
+function startLevel(){
+  const tier = getTier(state.level);
+
+  state.cards = []; state.flipped = [];
+  state.matched = 0; state.mistakes = 0;
+  state.combo = 0; state.maxCombo = 0; state.hintUsed = 0;
+  state.locked = false; state.gameOver = false; state.paused = false;
+  state.totalPausedTime = 0; state.startTime = Date.now();
+  btnHint.disabled = false; btnHint.textContent = '💡 提示';
+  btnPause.classList.remove('on');
+  boardEl.style.filter = ''; boardEl.style.pointerEvents = '';
+
+  const words = pickWords(state.topic, tier.pairs, state.levelFilter, false);
+  state.totalPairs = words.length;
+
+  if (state.totalPairs === 0) {
+    boardEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#64748b;font-weight:700;">这个组合下没有词，请换一个层级或主题。</div>';
+    updateStats(); updateProgress(); return;
+  }
+
+  let nextId = 0;
+  words.forEach((word, pairId) => {
+    state.cards.push({ id:nextId++, pairId, role:'hanzi', word, flipped:false, matched:false });
+    state.cards.push({ id:nextId++, pairId, role:'jyutping', word, flipped:false, matched:false });
+  });
+  shuffle(state.cards);
+  state.cards.forEach((c, i) => { c.id = i; });
+
+  renderBoard();
+  updateStats();
+  updateProgress();
+  startTimer();
+  levelModal.classList.remove('show');
+
+  if (lastTier !== null && tier.tier !== lastTier) {
+    showTierBanner(tier);
+    sfx('tier');
+  }
+  lastTier = tier.tier;
+}
+
+function showTierBanner(tier){
+  document.getElementById('tierBannerIcon').textContent = tier.icon;
+  document.getElementById('tierBannerText').textContent =
+    '难度升级！进入「' + tier.name + '」· ' + tier.pairs + ' 对';
+  tierBanner.classList.add('show');
+  setTimeout(() => tierBanner.classList.remove('show'), 3400);
+}
+
+/* ============================================================
+   提示 / 暂停
+   ============================================================ */
+function useHint(){
+  if (state.locked || state.gameOver || state.paused) return;
+  if (state.hintUsed >= 3) return;
+
+  const unpaired = state.cards.filter(c => !c.matched);
+  if (!unpaired.length) return;
+  const byPair = {};
+  unpaired.forEach(c => {
+    if (!byPair[c.pairId]) byPair[c.pairId] = [];
+    byPair[c.pairId].push(c);
+  });
+  const pairId = Object.keys(byPair).find(k => byPair[k].length === 2);
+  if (!pairId) return;
+
+  state.hintUsed++;
+  state.score = Math.max(0, state.score - 3);
+  state.combo = 0;
+  sfx('hint');
+  updateStats();
+
+  byPair[pairId].forEach(c => {
+    const el = document.querySelector('.card[data-id="' + c.id + '"]');
+    if (el && !el.classList.contains('flipped')) {
+      el.classList.add('hint');
+      setTimeout(() => el.classList.remove('hint'), 2200);
+    }
+  });
+  if (state.hintUsed >= 3) {
+    btnHint.disabled = true;
+    btnHint.textContent = '💡 已用完';
+  }
+  saveProgress();
+}
+function togglePause(){
+  if (state.gameOver) return;
+  state.paused = !state.paused;
+  btnPause.classList.toggle('on', state.paused);
+  if (state.paused) {
+    state.pausedAt = Date.now();
+    boardEl.style.filter = 'blur(4px)';
+    boardEl.style.pointerEvents = 'none';
+  } else {
+    state.totalPausedTime += Date.now() - state.pausedAt;
+    boardEl.style.filter = '';
+    boardEl.style.pointerEvents = '';
+  }
+}
+
+/* ============================================================
+   通关
+   ============================================================ */
+function onLevelComplete(){
+  state.gameOver = true;
+  sfx('win');
+  launchConfetti();
+
+  const tier = getTier(state.level);
+  const elapsed = Math.floor((Date.now() - state.startTime - state.totalPausedTime) / 1000);
+
+  let stars = 3;
+  if (tier.timeTarget) {
+    if (state.mistakes <= 1 && elapsed <= tier.timeTarget) stars = 3;
+    else if (state.mistakes <= 3 && elapsed <= tier.timeTarget * 1.5) stars = 2;
+    else stars = 1;
+  } else {
+    if (state.mistakes >= 4) stars = 1;
+    else if (state.mistakes >= 2) stars = 2;
+    else stars = 3;
+  }
+
+  const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  document.getElementById('modalEmoji').textContent = stars === 3 ? '🏆' : (stars === 2 ? '🎉' : '👏');
+  document.getElementById('modalTitle').textContent = stars === 3 ? '好犀利！Excellent!' : '好嘢！You did it!';
+  document.getElementById('modalSub').textContent = '你完成咗第 ' + state.level + ' 关 · ' + tier.icon + ' ' + tier.name;
+  document.getElementById('modalStars').textContent = starStr;
+  document.getElementById('modalScore').textContent = String(state.score);
+  document.getElementById('modalTime').textContent = formatTime(elapsed) + (tier.timeTarget ? ' / ' + tier.timeTarget + 's' : '');
+  document.getElementById('modalMistakes').textContent = String(state.mistakes);
+  document.getElementById('modalCombo').textContent = '×' + state.maxCombo;
+
+  // 更新长期进度
+  state.stats.games += 1;
+  state.stats.totalTime += elapsed;
+  if (state.level >= state.bestLevel) {
+    state.bestLevel = state.level;
+  }
+  // 清除 session
+  clearSession();
+  // 保存长期进度
+  saveProgress();
+
+  setTimeout(() => levelModal.classList.add('show'), 450);
+}
+
+function launchConfetti(){
+  const wrap = document.createElement('div');
+  wrap.className = 'confetti';
+  const colors = ['#FFD93D','#6BCB77','#4D96FF','#FF6B6B','#a855f7','#f97316'];
+  for (let i = 0; i < 46; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.background = colors[Math.floor(Math.random() * colors.length)];
+    s.style.animationDuration = (1.6 + Math.random() * 1.6) + 's';
+    s.style.animationDelay = (Math.random() * 0.5) + 's';
+    wrap.appendChild(s);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(() => wrap.remove(), 3600);
+}
+
+/* ============================================================
+   单词本 / 错题本
+   ============================================================ */
+let nbCurrentTab = 'learned';
+function openNotebook(tab){
+  nbCurrentTab = tab || 'learned';
+  const list = document.getElementById('nbList');
+  document.getElementById('nbCountLearned').textContent = String(state.notebook.length);
+  document.getElementById('nbCountWrong').textContent = String(state.wrongbook.length);
+  document.getElementById('nbTabLearned').classList.toggle('on', nbCurrentTab === 'learned');
+  document.getElementById('nbTabWrong').classList.toggle('on', nbCurrentTab === 'wrong');
+  renderNotebookList(list);
+  notebookModal.classList.add('show');
+}
+function renderNotebookList(list){
+  list.innerHTML = '';
+  const arr = nbCurrentTab === 'learned' ? state.notebook : state.wrongbook;
+
+  if (!arr.length) {
+    list.innerHTML = '<div class="nb-empty">' +
+      (nbCurrentTab === 'learned'
+        ? '还没有学过的词，先玩一关吧！<br>No words yet — play a round first!'
+        : '还没有错题，继续保持！<br>No mistakes yet — keep it up!') +
+      '</div>';
+    return;
+  }
+
+  arr.forEach(w => {
+    const item = document.createElement('div');
+    item.className = 'nb-item' + (nbCurrentTab === 'wrong' ? ' wrong-item' : '');
+    if (nbCurrentTab === 'wrong') {
+      item.innerHTML = '<div class="nb-wrong-mark">✕</div>';
+    }
+    item.innerHTML +=
+      '<div class="nb-h"><span class="nb-emoji">' + esc(w.emoji || '') + '</span>' + esc(w.hanzi) + '</div>' +
+      '<div class="nb-j">' + esc(w.jyutping) + '</div>' +
+      '<div class="nb-e">' + esc(w.en) + '</div>';
+    item.onclick = () => openDetail(w);
+    list.appendChild(item);
+  });
+}
+
+/* 词条详情 */
+function openDetail(w){
+  document.getElementById('dtEmoji').textContent = w.emoji || '📖';
+  document.getElementById('dtHanzi').textContent = w.hanzi;
+  document.getElementById('dtJyut').textContent = w.jyutping;
+  document.getElementById('dtEn').textContent = w.en;
+
+  const levelMap = { basic:['🌱 基础','basic'], common:['🌿 常用','common'], native:['🔥 地道','native'] };
+  const lv = levelMap[w.level] || levelMap.basic;
+  document.getElementById('dtLevelTag').innerHTML =
+    '<span class="dt-level-tag ' + lv[1] + '">' + lv[0] + '</span>';
+
+  document.getElementById('dtMeaning').textContent = w.meaning || w.en;
+  document.getElementById('dtUsage').textContent = w.usage || '—';
+
+  const exEl = document.getElementById('dtExample');
+  if (w.example) {
+    exEl.innerHTML =
+      '<div class="ex-cn">' + esc(w.example) + '</div>' +
+      '<div class="ex-jy">' + esc(w.jyutping) + '</div>';
+  } else {
+    exEl.textContent = '—';
+  }
+
+  speakCantonese(w.hanzi);
+  detailModal.classList.add('show');
+}
+
+/* ============================================================
+   我的进度面板
+   ============================================================ */
+function openProgress(){
+  document.getElementById('pmBest').textContent = String(state.bestLevel);
+  document.getElementById('pmNotebook').textContent = String(state.notebook.length);
+  document.getElementById('pmWrong').textContent = String(state.wrongbook.length);
+  document.getElementById('pmGames').textContent = String(state.stats.games);
+  document.getElementById('pmTime').textContent = formatDuration(state.stats.totalTime);
+
+  // 主题掌握度
+  const mastery = document.getElementById('pmMastery');
+  mastery.innerHTML = '';
+  let hasAny = false;
+  Object.keys(BANK).forEach(tk => {
+    const total = BANK[tk].words.length;
+    const learned = state.topicMastery[tk]?.learned || 0;
+    if (learned <= 0) return;
+    hasAny = true;
+    const pct = Math.round((learned / total) * 100);
+    const row = document.createElement('div');
+    row.className = 'mastery-row';
+    row.innerHTML =
+      '<div class="m-icon">' + (BANK[tk].icon || '📘') + '</div>' +
+      '<div class="m-name">' + esc(BANK[tk].label) + '</div>' +
+      '<div class="m-bar-wrap"><div class="m-bar" style="width:' + pct + '%"></div></div>' +
+      '<div class="m-pct">' + learned + '/' + total + '</div>';
+    mastery.appendChild(row);
+  });
+  if (!hasAny) {
+    mastery.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-weight:800;font-size:12px;">还没有学过任何单词</div>';
+  }
+
+  progressModal.classList.add('show');
+}
+
+/* ============================================================
+   继续上次进度
+   ============================================================ */
+function checkResume(){
+  const p = loadProgress();
+  if (!p || !p.session) { startLevel(); return; }
+
+  const s = p.session;
+  // 显示继续弹窗
+  const info = document.getElementById('resumeInfo');
+  const topicLabel = s.topic === 'mixed' ? '混合' : (BANK[s.topic]?.icon + ' ' + BANK[s.topic]?.label || s.topic);
+  const levelLabel = { basic:'🌱 基础', common:'🌿 常用', native:'🔥 地道' }[s.levelFilter] || '';
+  info.innerHTML =
+    '<div class="info-item"><div class="info-label">Level 关卡</div><div class="info-value">第 ' + s.level + ' 关</div></div>' +
+    '<div class="info-item"><div class="info-label">Theme 主题</div><div class="info-value">' + topicLabel + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Level 层级</div><div class="info-value">' + levelLabel + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Progress 进度</div><div class="info-value">' + s.matched + ' / ' + s.totalPairs + ' 对</div></div>';
+
+  resumeModal.classList.add('show');
+
+  document.getElementById('btnResumeYes').onclick = () => {
+    resumeModal.classList.remove('show');
+    resumeGame(s);
+  };
+  document.getElementById('btnResumeNo').onclick = () => {
+    resumeModal.classList.remove('show');
+    clearSession();
+    startLevel();
+  };
+}
+
+function resumeGame(s){
+  // 恢复状态
+  state.level = s.level;
+  state.score = s.score;
+  state.matched = s.matched;
+  state.totalPairs = s.totalPairs;
+  state.mistakes = s.mistakes || 0;
+  state.combo = s.combo || 0;
+  state.maxCombo = s.maxCombo || 0;
+  state.hintUsed = s.hintUsed || 0;
+  state.topic = s.topic;
+  state.levelFilter = s.levelFilter;
+  state.mode = s.mode || 'learn';
+  state.cards = s.cards.map(c => Object.assign({}, c, { flipped:false }));
+  state.flipped = [];
+  state.locked = false;
+  state.gameOver = false;
+  state.paused = false;
+  state.totalPausedTime = 0;
+  state.startTime = Date.now() - (s.elapsed || 0) * 1000;
+
+  // 同步 UI 选择器
+  topicSelect.value = state.topic;
+  document.querySelectorAll('[data-level]').forEach(b => {
+    b.classList.toggle('on', b.dataset.level === state.levelFilter);
+    b.classList.toggle('green', b.dataset.level === state.levelFilter);
+  });
+  document.querySelectorAll('[data-mode]').forEach(b => {
+    b.classList.toggle('on', b.dataset.mode === state.mode);
+  });
+
+  btnHint.disabled = false; btnHint.textContent = '💡 提示';
+  if (state.hintUsed >= 3) {
+    btnHint.disabled = true; btnHint.textContent = '💡 已用完';
+  }
+  btnPause.classList.remove('on');
+
+  renderBoard();
+  updateStats();
+  updateProgress();
+  startTimer();
+  lastTier = getTier(state.level).tier;
+}
+
+/* ============================================================
+   按钮绑定
+   ============================================================ */
+document.getElementById('btnReplay').addEventListener('click', () => {
+  levelModal.classList.remove('show'); startLevel();
+});
+document.getElementById('btnNext').addEventListener('click', () => {
+  state.level++;
+  if (state.level > state.bestLevel) {
+    state.bestLevel = state.level;
+  }
+  levelModal.classList.remove('show'); startLevel();
+});
+document.getElementById('btnReview').addEventListener('click', () => {
+  levelModal.classList.remove('show'); openNotebook('learned');
+});
+document.getElementById('btnReviewWrong').addEventListener('click', () => {
+  levelModal.classList.remove('show'); openNotebook('wrong');
+});
+
+btnRestart.addEventListener('click', () => {
+  if (!confirm('重新开始这一局？当前进度会丢失。')) return;
+  clearSession();
+  state.level = 1; state.score = 0; lastTier = null;
+  levelModal.classList.remove('show'); startLevel();
+});
+btnNotebook.addEventListener('click', () => openNotebook('learned'));
+btnWrongBook.addEventListener('click', () => openNotebook('wrong'));
+btnProgress.addEventListener('click', openProgress);
+
+topicSelect.addEventListener('change', () => {
+  if (!state.gameOver && state.matched > 0) {
+    if (!confirm('切换主题会放弃当前这一局，确定吗？')) {
+      topicSelect.value = state.topic;
+      return;
+    }
+  }
+  state.topic = topicSelect.value;
+  state.level = 1; state.score = 0; lastTier = null;
+  clearSession();
+  levelModal.classList.remove('show'); startLevel();
+});
+
+document.querySelectorAll('[data-level]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!state.gameOver && state.matched > 0) {
+      if (!confirm('切换层级会放弃当前这一局，确定吗？')) return;
+    }
+    state.levelFilter = btn.dataset.level;
+    document.querySelectorAll('[data-level]').forEach(b => {
+      b.classList.toggle('on', b === btn);
+      b.classList.toggle('green', b === btn);
+    });
+    state.level = 1; state.score = 0; lastTier = null;
+    clearSession();
+    levelModal.classList.remove('show');
+    startLevel();
+  });
+});
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.mode = btn.dataset.mode;
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b === btn));
+    if (state.matched > 0) {
+      // 已开始的局，切换模式后需要重绘卡片正面
+      renderBoard();
+    } else {
+      startLevel();
+    }
+  });
+});
+document.querySelectorAll('[data-speed]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.speechRate = Number(btn.dataset.speed);
+    document.querySelectorAll('[data-speed]').forEach(b => b.classList.toggle('on', b === btn));
+    // 试读一次
+    speakCantonese('你好');
+  });
+});
+
+btnSound.addEventListener('click', () => {
+  state.soundOn = !state.soundOn;
+  btnSound.classList.toggle('on', state.soundOn);
+  if (state.soundOn) sfx('click');
+});
+btnSpeech.addEventListener('click', () => {
+  state.speechOn = !state.speechOn;
+  btnSpeech.classList.toggle('on', state.speechOn);
+  if (!state.speechOn && window.speechSynthesis) {
+    try { speechSynthesis.cancel(); } catch(e){}
+  }
+});
+btnHint.addEventListener('click', useHint);
+btnPause.addEventListener('click', togglePause);
+
+document.getElementById('nbClose').addEventListener('click', () => notebookModal.classList.remove('show'));
+document.getElementById('dtClose').addEventListener('click', () => detailModal.classList.remove('show'));
+document.getElementById('pmClose').addEventListener('click', () => progressModal.classList.remove('show'));
+document.getElementById('pmClear').addEventListener('click', () => {
+  if (!confirm('确定清空所有进度吗？\n\n包括：最佳关卡、单词本、错题本、主题掌握度。\n此操作不可恢复。')) return;
+  clearAllProgress();
+  state.bestLevel = 1;
+  state.notebook = [];
+  state.wrongbook = [];
+  state.topicMastery = {};
+  state.stats = { games:0, totalTime:0 };
+  bestLevelEl.textContent = '1';
+  progressModal.classList.remove('show');
+  alert('✅ 所有进度已清空');
+});
+
+document.getElementById('nbTabLearned').onclick = () => {
+  nbCurrentTab = 'learned';
+  document.getElementById('nbTabLearned').classList.add('on');
+  document.getElementById('nbTabWrong').classList.remove('on');
+  renderNotebookList(document.getElementById('nbList'));
+};
+document.getElementById('nbTabWrong').onclick = () => {
+  nbCurrentTab = 'wrong';
+  document.getElementById('nbTabWrong').classList.add('on');
+  document.getElementById('nbTabLearned').classList.remove('on');
+  renderNotebookList(document.getElementById('nbList'));
+};
+document.getElementById('nbPracticeLearned').onclick = () => {
+  if (!state.notebook.length) { alert('还没有学过的单词'); return; }
+  notebookModal.classList.remove('show');
+  startPractice(state.notebook, '复习已学');
+};
+document.getElementById('nbPracticeWrong').onclick = () => {
+  if (!state.wrongbook.length) { alert('还没有错题'); return; }
+  notebookModal.classList.remove('show');
+  startPractice(state.wrongbook, '复习错题');
+};
+document.getElementById('nbClearWrong').onclick = () => {
+  if (!state.wrongbook.length) { alert('错题本已经是空的'); return; }
+  if (!confirm('清空错题本？')) return;
+  state.wrongbook = [];
+  saveProgress();
+  renderNotebookList(document.getElementById('nbList'));
+  document.getElementById('nbCountWrong').textContent = '0';
+};
+
+/* 从单词本 / 错题本开始练习 */
+function startPractice(wordList, title){
+  const tier = getTier(state.level);
+  const count = Math.min(tier.pairs, wordList.length);
+  if (count === 0) return;
+  const words = shuffle(wordList.slice()).slice(0, count);
+
+  state.cards = []; state.flipped = [];
+  state.matched = 0; state.mistakes = 0;
+  state.combo = 0; state.maxCombo = 0; state.hintUsed = 0;
+  state.locked = false; state.gameOver = false; state.paused = false;
+  state.totalPausedTime = 0; state.startTime = Date.now();
+  btnHint.disabled = false; btnHint.textContent = '💡 提示';
+  btnPause.classList.remove('on');
+
+  state.totalPairs = words.length;
+  let nextId = 0;
+  words.forEach((word, pairId) => {
+    state.cards.push({ id:nextId++, pairId, role:'hanzi', word, flipped:false, matched:false });
+    state.cards.push({ id:nextId++, pairId, role:'jyutping', word, flipped:false, matched:false });
+  });
+  shuffle(state.cards);
+  state.cards.forEach((c, i) => { c.id = i; });
+
+  renderBoard();
+  updateStats();
+  updateProgress();
+  startTimer();
+  levelModal.classList.remove('show');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, textarea, select')) return;
+  if (e.key === 'Escape') {
+    notebookModal.classList.remove('show');
+    detailModal.classList.remove('show');
+    progressModal.classList.remove('show');
+    return;
+  }
+  const k = e.key.toLowerCase();
+  if (k === 'h') useHint();
+  else if (k === 'n') openNotebook('learned');
+  else if (k === 'w') openNotebook('wrong');
+  else if (k === ' ' || e.code === 'Space') { e.preventDefault(); togglePause(); }
+  else if (k === 'r') {
+    if (!confirm('重新开始？')) return;
+    clearSession();
+    state.level = 1; state.score = 0; lastTier = null;
+    levelModal.classList.remove('show'); startLevel();
+  }
+});
+
+/* ============================================================
+   初始化
+   ============================================================ */
+function init(){
+  buildTopicSelect();
+  bestLevelEl.textContent = String(state.bestLevel);
+  checkResume(); // 检查是否有未完成的局
+}
+init();
+</script>
+</body>
+</html>
