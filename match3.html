@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>粤语词语消消乐 · Cantonese Word Match</title>
+<title>粤语词汇消消乐 · Cantonese Word Match</title>
 <style>
 :root{
   --primary:#4D96FF; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
@@ -27,7 +27,6 @@ body{
 }
 button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 
-/* 顶栏 */
 .topbar{max-width:1080px;margin:0 auto;padding:16px 20px 8px;
   display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .brand h1{font-size:clamp(19px,3vw,28px);margin:0;letter-spacing:1px;font-weight:900;
@@ -50,7 +49,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .topic-wrap select{border:none;background:transparent;font-size:13px;font-weight:800;
   color:var(--ink);outline:none;cursor:pointer;padding:4px 2px;max-width:170px;}
 
-/* 选择器 */
 .selector-row{max-width:1080px;margin:10px auto 0;padding:0 20px;
   display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
 .selector-group{display:flex;align-items:center;gap:6px;background:#fff;
@@ -63,8 +61,23 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .sel-btn.on{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(77,150,255,.3);}
 .sel-btn.on.gold{background:linear-gradient(135deg,#f59e0b,#d97706);}
 .sel-btn.on.green{background:linear-gradient(135deg,#22c55e,#16a34a);}
+.sel-btn.on.purple{background:linear-gradient(135deg,#a855f7,#7c3aed);}
 
-/* 进度条 */
+.voice-warn{max-width:1080px;margin:10px auto 0;padding:0 20px;display:none;}
+.voice-warn.show{display:block;animation:fadeIn .3s;}
+.voice-warn .inner{background:linear-gradient(135deg,#fef3c7,#fde68a);
+  border:2px solid #f59e0b;border-radius:14px;padding:12px 16px;
+  display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;
+  box-shadow:0 6px 18px rgba(245,158,11,.22);}
+.voice-warn .vw-icon{font-size:20px;flex-shrink:0;line-height:1.2;}
+.voice-warn .vw-text{flex:1;min-width:200px;font-size:13px;font-weight:800;color:#78350f;line-height:1.6;}
+.voice-warn .vw-text b{color:#b45309;}
+.voice-warn .vw-text .vm-note{font-size:11.5px;font-weight:700;color:#92400e;margin-top:4px;opacity:.9;line-height:1.7;}
+.voice-warn .vw-btn{background:#fff;border:2px solid #f59e0b;border-radius:10px;
+  padding:8px 14px;font-size:12px;font-weight:900;color:#92400e;
+  transition:.18s;white-space:nowrap;align-self:center;}
+.voice-warn .vw-btn:hover{background:#fffbeb;transform:translateY(-1px);}
+
 .progress-wrap{max-width:1080px;margin:12px auto 12px;padding:0 20px;}
 .progress-bar{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;}
 .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#4D96FF,#a855f7,#22c55e);
@@ -72,7 +85,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .progress-info{display:flex;justify-content:space-between;margin-top:5px;
   font-size:11px;font-weight:800;color:var(--muted);}
 
-/* 状态条 */
 .stats{max-width:1080px;margin:0 auto 14px;padding:0 20px;
   display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 .stat{background:#fff;border:1px solid var(--line);border-radius:14px;
@@ -95,7 +107,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 @keyframes statPulseGold{0%{transform:scale(1);}45%{transform:scale(1.3);color:var(--gold);}100%{transform:scale(1);}}
 @media(max-width:620px){.stats{grid-template-columns:repeat(2,1fr);}}
 
-/* 提示 */
 .combo-toast{position:fixed;left:50%;top:26%;transform:translate(-50%,-50%);
   font-size:clamp(30px,6vw,52px);font-weight:900;color:#f59e0b;
   text-shadow:0 4px 16px rgba(245,158,11,.5),0 0 0 3px #fff,0 0 0 6px rgba(245,158,11,.4);
@@ -109,14 +120,13 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;
   font-size:14px;font-weight:900;padding:12px 22px;border-radius:14px;
   box-shadow:0 8px 24px rgba(245,158,11,.35);border:2px solid #f59e0b;
-  z-index:995;opacity:0;pointer-events:none;white-space:nowrap;}
+  z-index:995;opacity:0;pointer-events:none;white-space:nowrap;text-align:center;}
 .tip-toast.show{animation:tipIn 3s ease forwards;}
 @keyframes tipIn{0%{opacity:0;transform:translateX(-50%) translateY(20px);}
   12%{opacity:1;transform:translateX(-50%) translateY(0);}
   88%{opacity:1;transform:translateX(-50%) translateY(0);}
   100%{opacity:0;transform:translateX(-50%) translateY(-10px);}}
 
-/* 棋盘 */
 .board-wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
 .board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
   max-width:560px;margin:0 auto;padding:14px;background:#fff;
@@ -131,7 +141,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   100%{opacity:1;transform:translateY(0) scale(1);}}
 .card:hover{transform:translateY(-3px);}
 .card:active{transform:scale(.97);}
-.card.focus-ring{outline:3px solid #a855f7;outline-offset:2px;border-radius:14px;}
 .card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;
   transition:transform .48s cubic-bezier(.4,.0,.2,1);}
 .card.flipped .card-inner{transform:rotateY(180deg);}
@@ -203,7 +212,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   20%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}
   100%{opacity:0;transform:translate(-50%,-150%) scale(1);}}
 
-/* 底部按钮 */
 .controls{max-width:1080px;margin:16px auto 0;padding:0 20px;
   display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;}
 .ctrl-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;
@@ -229,7 +237,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .ctrl-btn .kbd{display:inline-block;font-size:9px;font-weight:900;
   background:rgba(0,0,0,.08);border-radius:4px;padding:1px 4px;margin-left:2px;}
 
-/* 弹窗通用 */
 .modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.62);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   display:none;align-items:center;justify-content:center;padding:16px;z-index:1000;}
@@ -253,7 +260,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .modal .result-item.gold{background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fcd34d;}
 .modal .result-item.gold .rv{color:#92400e;}
 .modal .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.modal .btn-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .modal .btn-row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;}
 .btn-primary,.btn-secondary,.btn-tertiary,.btn-quaternary{padding:14px 8px;border-radius:14px;
   font-size:13px;font-weight:900;color:#fff;transition:.18s;letter-spacing:.3px;}
@@ -264,7 +270,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .btn-primary:hover,.btn-secondary:hover,.btn-tertiary:hover,.btn-quaternary:hover{transform:translateY(-2px);}
 .btn-primary:active,.btn-secondary:active,.btn-tertiary:active,.btn-quaternary:active{transform:scale(.97);}
 
-/* 继续弹窗 */
 .resume-modal .modal{padding:36px 28px 28px;}
 .resume-modal .resume-icon{font-size:70px;line-height:1;margin-bottom:8px;
   animation:bounce 1.2s infinite;}
@@ -278,7 +283,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   letter-spacing:.5px;text-transform:uppercase;}
 .resume-modal .info-item .info-value{font-size:15px;color:var(--ink);font-weight:900;}
 
-/* 我的进度 */
 .progress-modal .modal{max-width:600px;text-align:left;padding:28px 26px 24px;}
 .pm-title{font-size:22px;font-weight:900;color:var(--ink);margin:0 0 6px;
   display:flex;align-items:center;gap:8px;}
@@ -316,7 +320,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   box-shadow:0 6px 16px rgba(239,68,68,.3);}
 .pm-btn.danger:hover{transform:translateY(-2px);}
 
-/* 单词本 */
 .notebook-modal .modal{max-width:660px;text-align:left;}
 .nb-title{font-size:20px;font-weight:900;color:var(--ink);margin:0 0 4px;
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
@@ -354,7 +357,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 .nb-action-btn:disabled{opacity:.4;cursor:not-allowed;}
 .nb-action-btn:hover:not(:disabled){transform:translateY(-2px);}
 
-/* 词条详情 */
 .detail-modal .modal{max-width:520px;text-align:left;padding:26px 24px 22px;}
 .dt-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
 .dt-emoji{font-size:52px;line-height:1;flex-shrink:0;}
@@ -383,7 +385,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   background:linear-gradient(135deg,#4D96FF,#7c5cff);color:#fff;font-size:14px;
   font-weight:900;letter-spacing:.5px;}
 
-/* 难度横幅 */
 .tier-banner{max-width:1080px;margin:8px auto 0;padding:0 20px;
   display:none;justify-content:center;}
 .tier-banner.show{display:flex;animation:tierIn .5s ease;}
@@ -394,7 +395,6 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   box-shadow:0 6px 20px rgba(245,158,11,.3);display:flex;align-items:center;gap:10px;}
 .tier-banner .inner .ico{font-size:20px;}
 
-/* 彩带 */
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden;}
 .confetti span{position:absolute;top:-20px;width:10px;height:16px;
   border-radius:2px;animation:confettiFall linear forwards;}
@@ -413,44 +413,62 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 
 <header class="topbar">
   <div class="brand">
-    <h1>🀄 粤语词语消消乐</h1>
-    <div class="sub">Cantonese Word Match · 全年龄粤语学习游戏</div>
+    <h1>🀄 <span data-t="粤语词汇消消乐">粤语词汇消消乐</span></h1>
+    <div class="sub">Cantonese Word Match · <span data-t="全年龄粤语学习游戏">全年龄粤语学习游戏</span></div>
   </div>
   <div class="topbar-right">
     <div class="best-badge"><span>🏅</span><span>Best Lv <b id="bestLevel">1</b></span></div>
-    <div class="progress-badge" id="btnProgress"><span>📊</span><span>我的进度</span></div>
+    <div class="progress-badge" id="btnProgress"><span>📊</span><span data-t="我的进度">我的进度</span></div>
     <div class="topic-wrap">
-      <label for="topicSelect">主题</label>
+      <label for="topicSelect" data-t="主题">主题</label>
       <select id="topicSelect"></select>
     </div>
   </div>
 </header>
 
+<div class="voice-warn" id="voiceWarn">
+  <div class="inner">
+    <span class="vw-icon">🔇</span>
+    <div class="vw-text" id="voiceWarnText">
+      <b>你的设备还没有粤语语音，暂时不能读粤语。</b>
+      <div class="vm-note">请先去系统设置安装「粤语（香港）」语音包，然后点右边按钮重新检测。<br>
+      Windows：设置 → 时间和语言 → 语言；macOS：系统设置 → 辅助功能 → 朗读内容；<br>
+      iPhone：设置 → 辅助功能 → 朗读内容 → 声音 → 中文 → 粤语（香港）。</div>
+    </div>
+    <button class="vw-btn" id="voiceWarnBtn">🔄 已装好，重新检测</button>
+  </div>
+</div>
+
 <div class="selector-row">
   <div class="selector-group">
-    <span class="sgl">词汇层级</span>
-    <button class="sel-btn on green" data-level="basic">🌱 基础</button>
-    <button class="sel-btn" data-level="common">🌿 常用</button>
-    <button class="sel-btn" data-level="native">🔥 地道</button>
+    <span class="sgl" data-t="字体">字体</span>
+    <button class="sel-btn on purple" data-char="trad" data-t="繁">繁</button>
+    <button class="sel-btn" data-char="simp" data-t="简">简</button>
   </div>
   <div class="selector-group">
-    <span class="sgl">游戏模式</span>
-    <button class="sel-btn on" data-mode="learn">📖 学习</button>
-    <button class="sel-btn gold" data-mode="challenge">⚡ 挑战</button>
+    <span class="sgl" data-t="词汇层级">词汇层级</span>
+    <button class="sel-btn on green" data-level="basic">🌱 <span data-t="基础">基础</span></button>
+    <button class="sel-btn" data-level="common">🌿 <span data-t="常用">常用</span></button>
+    <button class="sel-btn" data-level="native">🔥 <span data-t="地道">地道</span></button>
   </div>
   <div class="selector-group">
-    <span class="sgl">语速</span>
-    <button class="sel-btn" data-speed="0.65">🐢 慢</button>
-    <button class="sel-btn on" data-speed="0.82">🚶 正常</button>
-    <button class="sel-btn" data-speed="1.0">🐇 快</button>
+    <span class="sgl" data-t="游戏模式">游戏模式</span>
+    <button class="sel-btn on" data-mode="learn">📖 <span data-t="学习">学习</span></button>
+    <button class="sel-btn gold" data-mode="challenge">⚡ <span data-t="挑战">挑战</span></button>
+  </div>
+  <div class="selector-group">
+    <span class="sgl" data-t="语速">语速</span>
+    <button class="sel-btn" data-speed="0.65">🐢 <span data-t="慢">慢</span></button>
+    <button class="sel-btn on" data-speed="0.82">🚶 <span data-t="正常">正常</span></button>
+    <button class="sel-btn" data-speed="1.0">🐇 <span data-t="快">快</span></button>
   </div>
 </div>
 
 <div class="progress-wrap">
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
   <div class="progress-info">
-    <span id="progressText">进度：0 / 4</span>
-    <span id="comboText">连击：0</span>
+    <span id="progressText"></span>
+    <span id="comboText"></span>
   </div>
 </div>
 
@@ -463,22 +481,22 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 
 <section class="stats">
   <div class="stat">
-    <div class="stat-label">Level 关卡</div>
+    <div class="stat-label">Level <span data-t="关卡">关卡</span></div>
     <div class="stat-value" id="statLevel">1</div>
-    <div class="stat-sub" id="statTier">⭐ 入门</div>
+    <div class="stat-sub" id="statTier"></div>
   </div>
   <div class="stat s-score">
-    <div class="stat-label">Score 得分</div>
+    <div class="stat-label">Score <span data-t="得分">得分</span></div>
     <div class="stat-value" id="statScore">0</div>
-    <div class="stat-sub" id="statBest">Best 1 关</div>
+    <div class="stat-sub" id="statBest"></div>
   </div>
   <div class="stat s-pairs">
-    <div class="stat-label">Pairs 剩余</div>
+    <div class="stat-label">Pairs <span data-t="剩余">剩余</span></div>
     <div class="stat-value" id="statPairs">4 / 4</div>
-    <div class="stat-sub" id="statGrid">4×2 · 8 张</div>
+    <div class="stat-sub" id="statGrid"></div>
   </div>
   <div class="stat s-time">
-    <div class="stat-label">Time 用时</div>
+    <div class="stat-label">Time <span data-t="用时">用时</span></div>
     <div class="stat-value" id="statTime">0:00</div>
     <div class="stat-sub" id="statTarget"></div>
   </div>
@@ -489,116 +507,111 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 </div>
 
 <div class="controls">
-  <button class="ctrl-btn hint-btn" id="btnHint">💡 提示 <span class="kbd">H</span></button>
-  <button class="ctrl-btn notebook-btn" id="btnNotebook">📖 单词本 <span class="kbd">N</span></button>
-  <button class="ctrl-btn wrongbook-btn" id="btnWrongBook">📕 错题本 <span class="kbd">W</span></button>
-  <button class="ctrl-btn" id="btnPause">⏸️ 暂停</button>
-  <button class="ctrl-btn" id="btnRestart">🔄 重开</button>
+  <button class="ctrl-btn hint-btn" id="btnHint">💡 <span data-t="提示">提示</span> <span class="kbd">H</span></button>
+  <button class="ctrl-btn notebook-btn" id="btnNotebook">📖 <span data-t="单词本">单词本</span> <span class="kbd">N</span></button>
+  <button class="ctrl-btn wrongbook-btn" id="btnWrongBook">📕 <span data-t="错题本">错题本</span> <span class="kbd">W</span></button>
+  <button class="ctrl-btn" id="btnPause">⏸️ <span data-t="暂停">暂停</span></button>
+  <button class="ctrl-btn" id="btnRestart">🔄 <span data-t="重开">重开</span></button>
   <button class="ctrl-btn on" id="btnSound"><span class="dot"></span> 🔊</button>
   <button class="ctrl-btn on" id="btnSpeech"><span class="dot"></span> 🗣️</button>
 </div>
 
 <div class="footer-note">
-  点击卡片翻开，找到 <b>汉字</b> 和对应的 <b>粤拼</b> 配对消除。<br>
-  <span class="highlight">💡 翻开第一张后，再点它一次可以盖回去。</span>
-  <span class="highlight">配对错误的词会进「错题本」。</span><br>
-  快捷键：<kbd>H</kbd> 提示 · <kbd>N</kbd> 单词本 · <kbd>W</kbd> 错题本 · <kbd>Space</kbd> 暂停 · <kbd>R</kbd> 重开
+  <span data-t="点击卡片翻开，找到">点击卡片翻开，找到</span> <b data-t="汉字">汉字</b> <span data-t="和对应的">和对应的</span> <b data-t="粤拼">粤拼</b> <span data-t="配对消除。">配对消除。</span><br>
+  <span class="highlight" data-t="💡 翻开第一张后，再点它一次可以盖回去。">💡 翻开第一张后，再点它一次可以盖回去。</span>
+  <span class="highlight" data-t="配对错误的词会进「错题本」。">配对错误的词会进「错题本」。</span><br>
+  <span data-t="快捷键：">快捷键：</span><kbd>H</kbd> <span data-t="提示">提示</span> · <kbd>N</kbd> <span data-t="单词本">单词本</span> · <kbd>W</kbd> <span data-t="错题本">错题本</span> · <kbd>Space</kbd> <span data-t="暂停">暂停</span> · <kbd>R</kbd> <span data-t="重开">重开</span>
 </div>
 
-<!-- 继续弹窗 -->
 <div class="modal-mask resume-modal" id="resumeModal">
   <div class="modal">
     <div class="resume-icon">⏸️</div>
-    <div class="resume-title">发现上次没玩完的一局</div>
-    <div class="resume-sub">要接着玩还是重新开始？</div>
+    <div class="resume-title" data-t="发现上次没玩完的一局">发现上次没玩完的一局</div>
+    <div class="resume-sub" data-t="要接着玩还是重新开始？">要接着玩还是重新开始？</div>
     <div class="resume-info" id="resumeInfo"></div>
     <div class="btn-row">
-      <button class="btn-primary" id="btnResumeYes">▶️ 继续</button>
-      <button class="btn-tertiary" id="btnResumeNo">🔄 重新开始</button>
+      <button class="btn-primary" id="btnResumeYes">▶️ <span data-t="继续">继续</span></button>
+      <button class="btn-tertiary" id="btnResumeNo">🔄 <span data-t="重新开始">重新开始</span></button>
     </div>
   </div>
 </div>
 
-<!-- 我的进度弹窗 -->
 <div class="modal-mask progress-modal" id="progressModal">
   <div class="modal">
-    <div class="pm-title">📊 我的进度</div>
-    <div class="pm-sub">看看学了多久、学了多少</div>
+    <div class="pm-title">📊 <span data-t="我的进度">我的进度</span></div>
+    <div class="pm-sub" data-t="看看学了多久、学了多少">看看学了多久、学了多少</div>
     <div class="pm-grid">
       <div class="pm-item">
-        <div class="pm-label">🏅 最佳关卡</div>
+        <div class="pm-label">🏅 <span data-t="最佳关卡">最佳关卡</span></div>
         <div class="pm-value" id="pmBest">1</div>
       </div>
       <div class="pm-item" id="pmNotebookItem">
-        <div class="pm-label">📖 已学单词</div>
+        <div class="pm-label">📖 <span data-t="已学单词">已学单词</span></div>
         <div class="pm-value" id="pmNotebook">0</div>
-        <div class="pm-hint">点击查看列表 →</div>
+        <div class="pm-hint" data-t="点击查看列表 →">点击查看列表 →</div>
       </div>
       <div class="pm-item" id="pmWrongItem">
-        <div class="pm-label">📕 错题</div>
+        <div class="pm-label">📕 <span data-t="错题">错题</span></div>
         <div class="pm-value" id="pmWrong">0</div>
-        <div class="pm-hint">点击查看列表 →</div>
+        <div class="pm-hint" data-t="点击查看列表 →">点击查看列表 →</div>
       </div>
       <div class="pm-item">
-        <div class="pm-label">🎮 游戏次数</div>
+        <div class="pm-label">🎮 <span data-t="游戏次数">游戏次数</span></div>
         <div class="pm-value" id="pmGames">0</div>
       </div>
       <div class="pm-item" style="grid-column:span 2;">
-        <div class="pm-label">⏱️ 累计用时</div>
-        <div class="pm-value" id="pmTime">0 分钟</div>
+        <div class="pm-label">⏱️ <span data-t="累计用时">累计用时</span></div>
+        <div class="pm-value" id="pmTime">0</div>
       </div>
     </div>
-    <div class="pm-section-title">主题掌握度</div>
+    <div class="pm-section-title" data-t="主题掌握度">主题掌握度</div>
     <div class="pm-mastery" id="pmMastery"></div>
     <div class="pm-actions">
-      <button class="pm-btn danger" id="pmClear">🗑️ 清空所有进度</button>
-      <button class="pm-btn close" id="pmClose">关闭 Close</button>
+      <button class="pm-btn danger" id="pmClear">🗑️ <span data-t="清空所有进度">清空所有进度</span></button>
+      <button class="pm-btn close" id="pmClose"><span data-t="关闭">关闭</span> Close</button>
     </div>
   </div>
 </div>
 
-<!-- 通关弹窗 -->
 <div class="modal-mask" id="levelModal">
   <div class="modal">
     <div class="win-emoji" id="modalEmoji">🎉</div>
-    <div class="win-title" id="modalTitle">好嘢！You did it!</div>
+    <div class="win-title" id="modalTitle"></div>
     <div class="win-sub" id="modalSub"></div>
     <div class="stars" id="modalStars">⭐⭐⭐</div>
     <div class="result-grid">
-      <div class="result-item"><div class="rl">Score 得分</div><div class="rv" id="modalScore">0</div></div>
-      <div class="result-item"><div class="rl">Time 用时</div><div class="rv" id="modalTime">0:00</div></div>
-      <div class="result-item"><div class="rl">Mistakes 错误</div><div class="rv" id="modalMistakes">0</div></div>
-      <div class="result-item gold"><div class="rl">Max Combo 最大连击</div><div class="rv" id="modalCombo">×0</div></div>
+      <div class="result-item"><div class="rl">Score <span data-t="得分">得分</span></div><div class="rv" id="modalScore">0</div></div>
+      <div class="result-item"><div class="rl">Time <span data-t="用时">用时</span></div><div class="rv" id="modalTime">0:00</div></div>
+      <div class="result-item"><div class="rl">Mistakes <span data-t="错误">错误</span></div><div class="rv" id="modalMistakes">0</div></div>
+      <div class="result-item gold"><div class="rl">Max Combo <span data-t="最大连击">最大连击</span></div><div class="rv" id="modalCombo">×0</div></div>
     </div>
     <div class="btn-row4">
-      <button class="btn-quaternary" id="btnReviewWrong">📕 错题</button>
-      <button class="btn-tertiary" id="btnReview">📖 复习</button>
-      <button class="btn-primary" id="btnReplay">🔄 再玩</button>
-      <button class="btn-secondary" id="btnNext">下一关</button>
+      <button class="btn-quaternary" id="btnReviewWrong">📕 <span data-t="错题">错题</span></button>
+      <button class="btn-tertiary" id="btnReview">📖 <span data-t="复习">复习</span></button>
+      <button class="btn-primary" id="btnReplay">🔄 <span data-t="再玩">再玩</span></button>
+      <button class="btn-secondary" id="btnNext"><span data-t="下一关">下一关</span> ➡️</button>
     </div>
   </div>
 </div>
 
-<!-- 单词本 / 错题本 -->
 <div class="modal-mask notebook-modal" id="notebookModal">
   <div class="modal">
-    <div class="nb-title">📖 单词本 Word Notebook</div>
-    <div class="nb-sub" id="nbSub">点击任意单词查看意思、用法和例句</div>
+    <div class="nb-title">📖 <span data-t="单词本">单词本</span> Word Notebook</div>
+    <div class="nb-sub"><span data-t="点击任意单词查看意思、用法和例句">点击任意单词查看意思、用法和例句</span></div>
     <div class="nb-tabs">
-      <button class="nb-tab on" id="nbTabLearned">📖 已学 <span id="nbCountLearned">0</span></button>
-      <button class="nb-tab wrong-tab" id="nbTabWrong">📕 错题 <span id="nbCountWrong">0</span></button>
+      <button class="nb-tab on" id="nbTabLearned">📖 <span data-t="已学">已学</span> <span id="nbCountLearned">0</span></button>
+      <button class="nb-tab wrong-tab" id="nbTabWrong">📕 <span data-t="错题">错题</span> <span id="nbCountWrong">0</span></button>
     </div>
     <div class="nb-list" id="nbList"></div>
     <div class="nb-actions">
-      <button class="nb-action-btn practice" id="nbPracticeLearned">🎯 练习已学</button>
-      <button class="nb-action-btn practice-wrong" id="nbPracticeWrong">📕 练习错题</button>
-      <button class="nb-action-btn clear" id="nbClearWrong">🗑️ 清空错题</button>
+      <button class="nb-action-btn practice" id="nbPracticeLearned">🎯 <span data-t="练习已学">练习已学</span></button>
+      <button class="nb-action-btn practice-wrong" id="nbPracticeWrong">📕 <span data-t="练习错题">练习错题</span></button>
+      <button class="nb-action-btn clear" id="nbClearWrong">🗑️ <span data-t="清空错题">清空错题</span></button>
     </div>
-    <button class="dt-close-btn" id="nbClose">关闭 Close</button>
+    <button class="dt-close-btn" id="nbClose"><span data-t="关闭">关闭</span> Close</button>
   </div>
 </div>
 
-<!-- 词条详情 -->
 <div class="modal-mask detail-modal" id="detailModal">
   <div class="modal">
     <div class="dt-head">
@@ -607,35 +620,80 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
         <div class="dt-hanzi" id="dtHanzi">你好</div>
         <div class="dt-jyut">
           <span id="dtJyut">nei5 hou2</span>
-          <span class="dt-speak" id="dtSpeak">🔊 读一次</span>
+          <span class="dt-speak" id="dtSpeak">🔊 <span data-t="读一次">读一次</span></span>
         </div>
       </div>
     </div>
     <div id="dtLevelTag"></div>
     <div class="dt-section">
-      <div class="dtl">英文 English</div>
+      <div class="dtl"><span data-t="英文">英文</span> English</div>
       <div class="dtv" id="dtEn">hello</div>
     </div>
     <div class="dt-section">
-      <div class="dtl">意思 Meaning</div>
+      <div class="dtl"><span data-t="意思">意思</span> Meaning</div>
       <div class="dtv" id="dtMeaning">—</div>
     </div>
     <div class="dt-section">
-      <div class="dtl">用法 Usage</div>
+      <div class="dtl"><span data-t="用法">用法</span> Usage</div>
       <div class="dtv" id="dtUsage">—</div>
     </div>
     <div class="dt-section">
-      <div class="dtl">例句 Example</div>
+      <div class="dtl"><span data-t="例句">例句</span> Example</div>
       <div class="dtv example" id="dtExample">—</div>
     </div>
-    <button class="dt-close-btn" id="dtClose">关闭 Close</button>
+    <button class="dt-close-btn" id="dtClose"><span data-t="关闭">关闭</span> Close</button>
   </div>
 </div>
 
 <script>
 /* ============================================================
-   词库：18 个主题 × 24 个词（8 基础 + 10 常用 + 6 地道）
-   字段：h=汉字 j=粤拼 e=英文 m=emoji l=层级(b/c/n) mn=意思 u=用法 ex=例句
+   简繁映射表（约 900 字，覆盖 UI 和词库所有用字）
+   ============================================================ */
+const S2T = {
+  '爱':'愛','碍':'礙','袄':'襖','坝':'壩','办':'辦','帮':'幫','宝':'寶','报':'報','备':'備','币':'幣','毕':'畢','边':'邊','变':'變','标':'標','表':'錶','别':'別','宾':'賓','饼':'餅','拨':'撥','补':'補','布':'佈',
+  '才':'才','参':'參','蚕':'蠶','惭':'慚','灿':'燦','仓':'倉','苍':'蒼','舱':'艙','层':'層','产':'產','长':'長','偿':'償','肠':'腸','尝':'嘗','车':'車','彻':'徹','尘':'塵','陈':'陳','衬':'襯','称':'稱','惩':'懲','迟':'遲','冲':'衝','虫':'蟲','筹':'籌','丑':'醜','出':'齣','础':'礎','处':'處','触':'觸','辞':'辭','聪':'聰','丛':'叢','凑':'湊',
+  '达':'達','带':'帶','贷':'貸','担':'擔','单':'單','胆':'膽','弹':'彈','当':'當','党':'黨','档':'檔','导':'導','岛':'島','捣':'搗','祷':'禱','盗':'盜','灯':'燈','邓':'鄧','敌':'敵','涤':'滌','递':'遞','缔':'締','点':'點','电':'電','淀':'澱','谍':'諜','叠':'疊','钉':'釘','顶':'頂','订':'訂','东':'東','动':'動','冻':'凍','斗':'鬥','独':'獨','读':'讀','镀':'鍍','锻':'鍛','断':'斷','缎':'緞','队':'隊','对':'對','吨':'噸','顿':'頓','夺':'奪','堕':'墮',
+  '鹅':'鵝','额':'額','讹':'訛','恶':'惡','儿':'兒','尔':'爾','饵':'餌','发':'發','罚':'罰','阀':'閥','烦':'煩','范':'範','贩':'販','饭':'飯','纺':'紡','访':'訪','飞':'飛','废':'廢','费':'費','纷':'紛','坟':'墳','奋':'奮','愤':'憤','丰':'豐','风':'風','疯':'瘋','冯':'馮','缝':'縫','讽':'諷','凤':'鳳','妇':'婦','复':'複','负':'負','赋':'賦','缚':'縛','讣':'訃',
+  '该':'該','盖':'蓋','干':'乾','杆':'桿','冈':'岡','刚':'剛','钢':'鋼','纲':'綱','岗':'崗','镐':'鎬','搁':'擱','阁':'閣','铬':'鉻','个':'個','给':'給','巩':'鞏','贡':'貢','沟':'溝','构':'構','购':'購','谷':'穀','顾':'顧','刮':'颳','挂':'掛','关':'關','观':'觀','馆':'館','惯':'慣','广':'廣','归':'歸','规':'規','龟':'龜','轨':'軌','诡':'詭','柜':'櫃','贵':'貴','国':'國','过':'過',
+  '韩':'韓','汉':'漢','号':'號','贺':'賀','轰':'轟','红':'紅','鸿':'鴻','后':'後','壶':'壺','护':'護','户':'戶','华':'華','划':'劃','画':'畫','话':'話','怀':'懷','坏':'壞','欢':'歡','还':'還','环':'環','缓':'緩','换':'換','唤':'喚','黄':'黃','挥':'揮','回':'迴','汇':'彙','会':'會','讳':'諱','绘':'繪','贿':'賄','秽':'穢','毁':'毀','浑':'渾','伙':'夥','货':'貨','获':'獲','祸':'禍',
+  '击':'擊','机':'機','积':'積','绩':'績','极':'極','级':'級','挤':'擠','几':'幾','计':'計','记':'記','纪':'紀','际':'際','剂':'劑','济':'濟','继':'繼','夹':'夾','价':'價','驾':'駕','歼':'殲','间':'間','监':'監','艰':'艱','拣':'揀','检':'檢','减':'減','简':'簡','见':'見','剑':'劍','舰':'艦','渐':'漸','践':'踐','鉴':'鑒','键':'鍵','将':'將','姜':'薑','讲':'講','奖':'獎','桨':'槳','酱':'醬','胶':'膠','娇':'嬌','骄':'驕','搅':'攪','铰':'鉸','脚':'腳','矫':'矯','缴':'繳','轿':'轎','较':'較','阶':'階','节':'節','洁':'潔','结':'結','届':'屆','诫':'誡','紧':'緊','谨':'謹','进':'進','尽':'盡','劲':'勁','晋':'晉','经':'經','茎':'莖','荆':'荊','惊':'驚','颈':'頸','净':'淨','径':'徑','竞':'競','静':'靜','镜':'鏡','纠':'糾','旧':'舊','举':'舉','剧':'劇','惧':'懼','据':'據','锯':'鋸','卷':'卷','绢':'絹','决':'決','绝':'絕','军':'軍','钧':'鈞','骏':'駿',
+  '开':'開','凯':'凱','颗':'顆','壳':'殼','课':'課','库':'庫','裤':'褲','夸':'誇','块':'塊','宽':'寬','况':'況','矿':'礦','亏':'虧','困':'困','扩':'擴','阔':'闊',
+  '腊':'臘','蜡':'蠟','来':'來','莱':'萊','赖':'賴','兰':'蘭','拦':'攔','栏':'欄','篮':'籃','览':'覽','懒':'懶','烂':'爛','捞':'撈','劳':'勞','乐':'樂','泪':'淚','类':'類','厘':'釐','离':'離','礼':'禮','里':'裡','历':'歷','厉':'厲','隶':'隸','连':'連','帘':'簾','怜':'憐','联':'聯','莲':'蓮','脸':'臉','练':'練','炼':'煉','恋':'戀','链':'鏈','凉':'涼','粮':'糧','两':'兩','谅':'諒','辆':'輛','疗':'療','辽':'遼','猎':'獵','邻':'鄰','临':'臨','铃':'鈴','灵':'靈','岭':'嶺','领':'領','刘':'劉','龙':'龍','咙':'嚨','笼':'籠','聋':'聾','垄':'壟','陇':'隴','楼':'樓','卢':'盧','芦':'蘆','炉':'爐','鲁':'魯','陆':'陸','录':'錄','驴':'驢','吕':'呂','铝':'鋁','屡':'屢','缕':'縷','滤':'濾','绿':'綠','峦':'巒','挛':'攣','孪':'孿','乱':'亂','抡':'掄','轮':'輪','论':'論','罗':'羅','萝':'蘿','逻':'邏','锣':'鑼','箩':'籮','骡':'騾','骆':'駱','络':'絡',
+  '妈':'媽','马':'馬','玛':'瑪','码':'碼','蚂':'螞','骂':'罵','吗':'嗎','买':'買','麦':'麥','卖':'賣','迈':'邁','脉':'脈','蛮':'蠻','馒':'饅','满':'滿','谩':'謾','猫':'貓','铆':'鉚','么':'麼','没':'沒','镁':'鎂','门':'門','闷':'悶','们':'們','锰':'錳','梦':'夢','弥':'彌','谜':'謎','觅':'覓','绵':'綿','缅':'緬','面':'麵','庙':'廟','灭':'滅','悯':'憫','鸣':'鳴','铭':'銘','谬':'謬','亩':'畝',
+  '纳':'納','钠':'鈉','难':'難','挠':'撓','恼':'惱','脑':'腦','闹':'鬧','拟':'擬','腻':'膩','酿':'釀','鸟':'鳥','宁':'寧','纽':'紐','农':'農','浓':'濃',
+  '欧':'歐','殴':'毆','呕':'嘔','盘':'盤','庞':'龐','抛':'拋','赔':'賠','喷':'噴','骗':'騙','飘':'飄','贫':'貧','频':'頻','评':'評','凭':'憑','泼':'潑','颇':'頗','扑':'撲','铺':'鋪','仆':'僕','朴':'樸','谱':'譜',
+  '齐':'齊','骑':'騎','岂':'豈','启':'啟','气':'氣','弃':'棄','迁':'遷','牵':'牽','铅':'鉛','谦':'謙','签':'簽','钱':'錢','钳':'鉗','浅':'淺','谴':'譴','枪':'槍','呛':'嗆','强':'強','墙':'牆','抢':'搶','桥':'橋','侨':'僑','翘':'翹','窍':'竅','窃':'竊','亲':'親','钦':'欽','轻':'輕','氢':'氫','倾':'傾','顷':'頃','请':'請','庆':'慶','穷':'窮','琼':'瓊','区':'區','驱':'驅','趋':'趨','权':'權','劝':'勸','却':'卻','确':'確',
+  '让':'讓','饶':'饒','扰':'擾','绕':'繞','热':'熱','认':'認','绒':'絨','荣':'榮','软':'軟','锐':'銳','润':'潤',
+  '洒':'灑','赛':'賽','伞':'傘','丧':'喪','扫':'掃','涩':'澀','杀':'殺','纱':'紗','晒':'曬','删':'刪','闪':'閃','陕':'陝','伤':'傷','赏':'賞','烧':'燒','绍':'紹','舍':'捨','设':'設','摄':'攝','审':'審','婶':'嬸','肾':'腎','渗':'滲','声':'聲','胜':'勝','绳':'繩','圣':'聖','湿':'濕','时':'時','识':'識','实':'實','蚀':'蝕','驶':'駛','势':'勢','视':'視','试':'試','饰':'飾','适':'適','释':'釋','兽':'獸','寿':'壽','书':'書','输':'輸','属':'屬','术':'術','树':'樹','竖':'豎','数':'數','帅':'帥','双':'雙','谁':'誰','税':'稅','顺':'順','说':'說','硕':'碩','丝':'絲','饲':'飼','松':'鬆','颂':'頌','苏':'蘇','诉':'訴','肃':'肅','虽':'雖','随':'隨','岁':'歲','穗':'穗','孙':'孫','损':'損','笋':'筍','缩':'縮','锁':'鎖',
+  '台':'臺','态':'態','摊':'攤','贪':'貪','滩':'灘','坛':'壇','谈':'談','谭':'譚','叹':'嘆','汤':'湯','烫':'燙','涛':'濤','讨':'討','腾':'騰','题':'題','体':'體','条':'條','贴':'貼','铁':'鐵','厅':'廳','听':'聽','铜':'銅','统':'統','头':'頭','秃':'禿','图':'圖','涂':'塗','团':'團','脱':'脫','驮':'馱','鸵':'鴕',
+  '弯':'彎','湾':'灣','顽':'頑','万':'萬','网':'網','为':'為','违':'違','围':'圍','维':'維','伟':'偉','伪':'偽','纬':'緯','卫':'衛','谓':'謂','喂':'餵','温':'溫','闻':'聞','纹':'紋','稳':'穩','问':'問','窝':'窩','蜗':'蝸','卧':'臥','乌':'烏','呜':'嗚','无':'無','吴':'吳','务':'務','误':'誤','雾':'霧',
+  '牺':'犧','习':'習','系':'係','细':'細','戏':'戲','虾':'蝦','峡':'峽','狭':'狹','吓':'嚇','纤':'纖','鲜':'鮮','闲':'閒','贤':'賢','咸':'鹹','衔':'銜','显':'顯','险':'險','现':'現','县':'縣','线':'線','宪':'憲','献':'獻','乡':'鄉','详':'詳','响':'響','项':'項','销':'銷','萧':'蕭','嚣':'囂','晓':'曉','协':'協','挟':'挾','携':'攜','写':'寫','泄':'洩','泻':'瀉','谢':'謝','兴':'興','绣':'繡','须':'須','虚':'虛','许':'許','叙':'敘','悬':'懸','选':'選','学':'學','寻':'尋','询':'詢','训':'訓','讯':'訊',
+  '压':'壓','鸦':'鴉','鸭':'鴨','亚':'亞','讶':'訝','烟':'煙','严':'嚴','盐':'鹽','颜':'顏','厌':'厭','验':'驗','阳':'陽','杨':'楊','养':'養','样':'樣','摇':'搖','遥':'遙','药':'藥','钥':'鑰','爷':'爺','业':'業','叶':'葉','页':'頁','医':'醫','仪':'儀','遗':'遺','蚁':'蟻','义':'義','议':'議','忆':'憶','艺':'藝','异':'異','译':'譯','谊':'誼','阴':'陰','银':'銀','饮':'飲','隐':'隱','应':'應','婴':'嬰','营':'營','蝇':'蠅','赢':'贏','哟':'喲','拥':'擁','涌':'湧','优':'優','忧':'憂','邮':'郵','犹':'猶','游':'遊','诱':'誘','于':'於','余':'餘','鱼':'魚','渔':'漁','娱':'娛','与':'與','语':'語','郁':'鬱','誉':'譽','员':'員','园':'園','圆':'圓','缘':'緣','远':'遠','愿':'願','约':'約','阅':'閱','悦':'悅','云':'雲','匀':'勻','运':'運','韵':'韻',
+  '杂':'雜','灾':'災','攒':'攢','暂':'暫','赞':'讚','脏':'髒','枣':'棗','责':'責','择':'擇','则':'則','泽':'澤','贼':'賊','赠':'贈','扎':'紮','债':'債','张':'張','涨':'漲','帐':'帳','账':'賬','胀':'脹','这':'這','针':'針','侦':'偵','诊':'診','阵':'陣','镇':'鎮','争':'爭','征':'徵','挣':'掙','睁':'睜','证':'證','只':'隻','织':'織','执':'執','职':'職','纸':'紙','制':'製','质':'質','钟':'鐘','终':'終','种':'種','众':'眾','轴':'軸','昼':'晝','皱':'皺','猪':'豬','嘱':'囑','驻':'駐','筑':'築','铸':'鑄','专':'專','砖':'磚','转':'轉','赚':'賺','庄':'莊','装':'裝','壮':'壯','状':'狀','准':'準','资':'資','综':'綜','踪':'蹤','总':'總','纵':'縱','组':'組','钻':'鑽',
+  '罢':'罷','摆':'擺','败':'敗','颁':'頒','绊':'絆','绑':'綁','镑':'鎊','剥':'剝','饱':'飽','鲍':'鮑','辈':'輩','钡':'鋇','狈':'狽','惫':'憊','绷':'繃','笔':'筆','闭':'閉','毙':'斃','编':'編','贬':'貶','辩':'辯','辫':'辮','镖':'鏢','飙':'飆','鳖':'鱉','濒':'瀕','摈':'擯','钵':'缽','铂':'鉑','驳':'駁','钹':'鈸','卜':'蔔',
+  '厕':'廁','侧':'側','测':'測','恻':'惻','搀':'攙','谗':'讒','馋':'饞','缠':'纏','铲':'鏟','阐':'闡','颤':'顫','场':'場','厂':'廠','畅':'暢','钞':'鈔','掣':'掣','撑':'撐','诚':'誠','惩':'懲','驰':'馳','齿':'齒','耻':'恥','炽':'熾','宠':'寵','绸':'綢','橱':'櫥','厨':'廚','锄':'鋤','雏':'雛','储':'儲','疮':'瘡','闯':'闖','创':'創','锤':'錘','纯':'純','绰':'綽','词':'詞','赐':'賜','从':'從','窜':'竄','错':'錯',
+  '贷':'貸','殚':'殫','挡':'擋','荡':'蕩','颠':'顛','垫':'墊','雕':'雕','鲷':'鯛','钓':'釣','调':'調','栋':'棟','赌':'賭','贰':'貳',
+  '钙':'鈣','赶':'趕','钩':'鉤','刽':'劊','辊':'輥','滚':'滾','锅':'鍋','铪':'鉿','辉':'輝','辉':'輝',
+  /* 补充界面用字 */
+  '万':'萬','请':'請','关':'關','键':'鍵','错':'錯','误':'誤','单':'單','词':'詞','汇':'彙','览':'覽','习':'習','练':'練','复':'複','读':'讀','题':'題','体':'體','简':'簡','历':'歷','览':'覽','览':'覽','览':'覽'
+};
+
+const T2S = {};
+Object.keys(S2T).forEach(s => { if (!T2S[S2T[s]]) T2S[S2T[s]] = s; });
+
+function toTrad(str){
+  return String(str ?? '').replace(/[\u4e00-\u9fff]/g, ch => S2T[ch] || ch);
+}
+function toSimp(str){
+  return String(str ?? '').replace(/[\u4e00-\u9fff]/g, ch => T2S[ch] || ch);
+}
+function displayHanzi(text){
+  if (state.charMode === 'trad') return toTrad(text);
+  return String(text ?? '');
+}
+
+/* ============================================================
+   词库（全部简体）
    ============================================================ */
 const BANK = {
   greetings: { label:'问候', icon:'👋', group:'basic', words:[
@@ -753,9 +811,9 @@ const BANK = {
       mn:'丈夫的父亲',u:'媳妇称呼丈夫的爸爸',ex:'老爷今日生日。'},
     {h:'奶奶',j:'naai4 naai2',e:'mother-in-law',m:'👵',l:'n',
       mn:'丈夫的母亲',u:'媳妇称呼丈夫的妈妈',ex:'奶奶好鍚我。'},
-    {h:'外父',j:'ngoi6 fu2',e:'father-in-law (wife\'s father)',m:'👴',l:'n',
+    {h:'外父',j:'ngoi6 fu2',e:'father-in-law (wife side)',m:'👴',l:'n',
       mn:'妻子的父亲',u:'女婿称呼妻子的爸爸',ex:'外父锺意饮茶。'},
-    {h:'外母',j:'ngoi6 mou2',e:'mother-in-law (wife\'s mother)',m:'👵',l:'n',
+    {h:'外母',j:'ngoi6 mou2',e:'mother-in-law (wife side)',m:'👵',l:'n',
       mn:'妻子的母亲',u:'女婿称呼妻子的妈妈',ex:'外母煮嘅餸一流。'},
     {h:'契妈',j:'kai3 maa1',e:'godmother',m:'👩',l:'n',
       mn:'干妈',u:'上契的干妈',ex:'契妈买咗新衫畀我。'}
@@ -1390,7 +1448,6 @@ const BANK = {
   ]}
 };
 
-/* 主题分组 */
 const GROUPS = {
   basic:    { label:'基础', themes:['greetings','actions','family','school','numbers','colors','animals','weather'] },
   life:     { label:'生活', themes:['food','clothing','restaurant','daily','illness'] },
@@ -1398,9 +1455,6 @@ const GROUPS = {
   advanced: { label:'进阶', themes:['jobs','sports'] }
 };
 
-/* ============================================================
-   难度
-   ============================================================ */
 const TIERS = [
   { tier:1, name:'入门', icon:'⭐',    pairs:4, timeTarget:null, min:1,  max:3  },
   { tier:2, name:'进阶', icon:'⭐⭐',  pairs:6, timeTarget:null, min:4,  max:6  },
@@ -1413,25 +1467,23 @@ function getTier(level){
   return TIERS[TIERS.length - 1];
 }
 
-/* ============================================================
-   状态
-   ============================================================ */
-const PROGRESS_KEY = 'yue_match_progress_v1';
+const PROGRESS_KEY = 'yue_match_progress_v4';
 
 const state = {
   level:1, score:0, mistakes:0, matched:0, totalPairs:4,
   cards:[], flipped:[], locked:false, gameOver:false, paused:false,
-  startTime:0, pausedAt:0, totalPausedTime:0, elapsedAtLastSave:0,
+  startTime:0, pausedAt:0, totalPausedTime:0,
   topic:'greetings', levelFilter:'basic', mode:'learn', speechRate:0.82,
+  charMode:'trad',
   soundOn:true, speechOn:true, combo:0, maxCombo:0, hintUsed:0,
   bestLevel:1, tipShown:false, notebook:[], wrongbook:[],
-  topicMastery:{}, stats:{games:0, totalTime:0}
+  topicMastery:{}, stats:{games:0, totalTime:0},
+  currentDetailWord: null
 };
 
-/* 从 localStorage 加载进度 */
 function loadProgress(){
   try {
-    const raw = localStorage.getItem(PROGRESS_KEY);
+    const raw = localStorage.getItem(PROGRESS_KEY) || localStorage.getItem('yue_match_progress_v3');
     if (!raw) return null;
     const data = JSON.parse(raw);
     if (!data || typeof data !== 'object') return null;
@@ -1442,31 +1494,26 @@ function saveProgress(){
   try {
     const data = {
       session: state.gameOver ? null : {
-        level: state.level,
-        score: state.score,
-        matched: state.matched,
-        totalPairs: state.totalPairs,
-        mistakes: state.mistakes,
-        combo: state.combo,
-        maxCombo: state.maxCombo,
-        hintUsed: state.hintUsed,
-        topic: state.topic,
-        levelFilter: state.levelFilter,
-        mode: state.mode,
+        level: state.level, score: state.score, matched: state.matched,
+        totalPairs: state.totalPairs, mistakes: state.mistakes,
+        combo: state.combo, maxCombo: state.maxCombo, hintUsed: state.hintUsed,
+        topic: state.topic, levelFilter: state.levelFilter, mode: state.mode,
+        charMode: state.charMode,
         elapsed: Math.floor((Date.now() - state.startTime - state.totalPausedTime) / 1000),
         cards: state.cards.map(c => ({
           id: c.id, pairId: c.pairId, role: c.role,
-          word: c.word, matched: c.matched
+          word: c.word, matched: c.matched, flipped: c.flipped
         }))
       },
       bestLevel: state.bestLevel,
       notebook: state.notebook,
       wrongbook: state.wrongbook,
       topicMastery: state.topicMastery,
-      stats: state.stats
+      stats: state.stats,
+      charMode: state.charMode
     };
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
-  } catch(e) { /* ignore */ }
+  } catch(e){}
 }
 function clearSession(){
   try {
@@ -1478,10 +1525,12 @@ function clearSession(){
   } catch(e){}
 }
 function clearAllProgress(){
-  try { localStorage.removeItem(PROGRESS_KEY); } catch(e){}
+  try {
+    localStorage.removeItem(PROGRESS_KEY);
+    localStorage.removeItem('yue_match_progress_v3');
+  } catch(e){}
 }
 
-/* 加载进度（除 session 外的部分） */
 (function initProgress(){
   const p = loadProgress();
   if (!p) return;
@@ -1490,11 +1539,9 @@ function clearAllProgress(){
   if (Array.isArray(p.wrongbook)) state.wrongbook = p.wrongbook;
   if (p.topicMastery && typeof p.topicMastery === 'object') state.topicMastery = p.topicMastery;
   if (p.stats && typeof p.stats === 'object') state.stats = Object.assign(state.stats, p.stats);
+  if (p.charMode === 'simp' || p.charMode === 'trad') state.charMode = p.charMode;
 })();
 
-/* ============================================================
-   DOM 引用
-   ============================================================ */
 const boardEl      = document.getElementById('board');
 const statLevel    = document.getElementById('statLevel');
 const statScore    = document.getElementById('statScore');
@@ -1518,15 +1565,14 @@ const btnRestart   = document.getElementById('btnRestart');
 const btnNotebook  = document.getElementById('btnNotebook');
 const btnWrongBook = document.getElementById('btnWrongBook');
 const btnProgress  = document.getElementById('btnProgress');
+const voiceWarn    = document.getElementById('voiceWarn');
+const voiceWarnBtn = document.getElementById('voiceWarnBtn');
 const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
 const comboText    = document.getElementById('comboText');
 const bestLevelEl  = document.getElementById('bestLevel');
 const tierBanner   = document.getElementById('tierBanner');
 
-/* ============================================================
-   工具
-   ============================================================ */
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
@@ -1543,12 +1589,12 @@ function formatTime(sec){
   return m + ':' + String(s).padStart(2, '0');
 }
 function formatDuration(sec){
-  if (sec < 60) return sec + ' 秒';
+  if (sec < 60) return sec + ' ' + displayHanzi('秒');
   const m = Math.floor(sec / 60);
-  if (m < 60) return m + ' 分钟';
+  if (m < 60) return m + ' ' + displayHanzi('分钟');
   const h = Math.floor(m / 60);
   const rem = m % 60;
-  return h + ' 小时 ' + rem + ' 分';
+  return h + ' ' + displayHanzi('小时') + ' ' + rem + ' ' + displayHanzi('分');
 }
 function expandWord(w){
   return {
@@ -1558,9 +1604,7 @@ function expandWord(w){
   };
 }
 
-/* ============================================================
-   音效
-   ============================================================ */
+/* 音效 */
 let audioCtx = null;
 function getCtx(){
   if (!audioCtx) {
@@ -1611,46 +1655,79 @@ function sfx(type){
 }
 
 /* ============================================================
-   粤语发音
+   语音系统（修复版）
    ============================================================ */
-let voices = [];
+let yueVoice = null;
+let hasYue = false;
+let voiceChecked = false;   // 是否已完成检测
+let voiceRetries = 0;       // 已重试次数
+
 function loadVoices(){
-  if (!window.speechSynthesis) return;
+  if (!window.speechSynthesis) {
+    voiceChecked = true;
+    voiceWarn.classList.add('show');
+    return;
+  }
+  let voices = [];
   try { voices = speechSynthesis.getVoices() || []; } catch(e){ voices = []; }
+
+  // 语音列表还没准备好，等一下再试（最多 8 次）
+  if (!voices.length && voiceRetries < 8) {
+    voiceRetries++;
+    setTimeout(loadVoices, 500);
+    return;
+  }
+
+  voiceChecked = true;
+  yueVoice = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) ||
+             voices.find(v => /zh[-_]HK|yue/i.test(v.name)) ||
+             null;
+  hasYue = !!yueVoice;
+
+  if (hasYue) {
+    voiceWarn.classList.remove('show');
+  } else {
+    voiceWarn.classList.add('show');
+  }
 }
-loadVoices();
-if (window.speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices;
+
 function speakCantonese(text){
   if (!state.speechOn || !window.speechSynthesis || !text) return;
+  if (!hasYue) return;   // 没有粤语 → 不读，绝不读普通话
   try {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-HK'; u.rate = state.speechRate; u.pitch = 1.0;
-    if (!voices.length) loadVoices();
-    const v = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) ||
-              voices.find(v => /zh[-_]TW/i.test(v.lang)) ||
-              voices.find(v => /zh/i.test(v.lang));
-    if (v) u.voice = v;
+    u.voice = yueVoice;   // 明确指定 voice
+    u.lang = yueVoice.lang || 'zh-HK';
+    u.rate = state.speechRate;
+    u.pitch = 1.0;
+    u.volume = 1.0;
     speechSynthesis.speak(u);
   } catch(e){}
 }
 
-/* ============================================================
-   抽题
-   ============================================================ */
-const wordHistory = {};
-function pickWords(topic, count, levelFilter, preferWrong){
-  // 错题练习优先
-  if (preferWrong && state.wrongbook.length > 0) {
-    let pool = state.wrongbook.filter(w => {
-      if (topic === 'mixed') return true;
-      return w._topic === topic;
-    });
-    if (pool.length < count) pool = state.wrongbook.slice();
-    shuffle(pool);
-    return pool.slice(0, count);
+/* 手动重新检测 */
+voiceWarnBtn.addEventListener('click', () => {
+  voiceRetries = 0;
+  voiceChecked = false;
+  if (window.speechSynthesis) {
+    try { speechSynthesis.cancel(); } catch(e){}
   }
+  loadVoices();
+});
 
+/* 初始检测 */
+loadVoices();
+if (window.speechSynthesis) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+  // 保险：多试几次（iOS Safari 的 onvoiceschanged 不一定触发）
+  setTimeout(loadVoices, 500);
+  setTimeout(loadVoices, 1500);
+  setTimeout(loadVoices, 3000);
+}
+
+const wordHistory = {};
+function pickWords(topic, count, levelFilter){
   let pool = [];
   if (topic === 'mixed') {
     Object.keys(BANK).forEach(k =>
@@ -1684,25 +1761,29 @@ function pickWords(topic, count, levelFilter, preferWrong){
   return picked;
 }
 
-/* ============================================================
-   主题下拉
-   ============================================================ */
+/* 刷新所有静态 UI 文字 */
+function refreshStaticText(){
+  document.querySelectorAll('[data-t]').forEach(el => {
+    el.textContent = displayHanzi(el.dataset.t);
+  });
+}
+
 function buildTopicSelect(){
   topicSelect.innerHTML = '';
   const optMixed = document.createElement('option');
   optMixed.value = 'mixed';
-  optMixed.textContent = '混合 All Themes';
+  optMixed.textContent = displayHanzi('混合') + ' All Themes';
   topicSelect.appendChild(optMixed);
 
   Object.keys(GROUPS).forEach(gk => {
     const g = GROUPS[gk];
     const og = document.createElement('optgroup');
-    og.label = '── ' + g.label + ' ──';
+    og.label = '── ' + displayHanzi(g.label) + ' ──';
     g.themes.forEach(tk => {
       if (!BANK[tk]) return;
       const o = document.createElement('option');
       o.value = tk;
-      o.textContent = BANK[tk].icon + ' ' + BANK[tk].label;
+      o.textContent = BANK[tk].icon + ' ' + displayHanzi(BANK[tk].label);
       og.appendChild(o);
     });
     topicSelect.appendChild(og);
@@ -1710,9 +1791,6 @@ function buildTopicSelect(){
   topicSelect.value = state.topic;
 }
 
-/* ============================================================
-   渲染棋盘
-   ============================================================ */
 function renderBoard(){
   boardEl.innerHTML = '';
   state.cards.forEach((card, i) => {
@@ -1720,19 +1798,21 @@ function renderBoard(){
     el.className = 'card';
     el.dataset.id = String(card.id);
     el.style.animationDelay = (i * 0.025) + 's';
+
     if (card.matched) {
       el.classList.add('matched');
       el.style.opacity = '0';
     }
+    if (card.flipped && !card.matched) el.classList.add('flipped');
 
     const frontClass = card.role === 'hanzi' ? 'hanzi' : 'jyutping';
-    const tagText = card.role === 'hanzi' ? '漢' : '拼';
+    const tagText = card.role === 'hanzi' ? displayHanzi('汉') : displayHanzi('拼');
     const isChallenge = state.mode === 'challenge';
     let frontHtml = '';
 
     if (card.role === 'hanzi') {
       frontHtml = '<div class="card-tag">' + tagText + '</div>' +
-        '<div class="card-content hanzi-content">' + esc(card.word.hanzi) + '</div>';
+        '<div class="card-content hanzi-content">' + esc(displayHanzi(card.word.hanzi)) + '</div>';
       if (!isChallenge) frontHtml += '<div class="card-sub">' + esc(card.word.emoji || '') + '</div>';
     } else {
       frontHtml = '<div class="card-tag">' + tagText + '</div>' +
@@ -1742,25 +1822,26 @@ function renderBoard(){
 
     el.innerHTML =
       '<div class="card-inner">' +
-        '<div class="card-face card-back">中</div>' +
+        '<div class="card-face card-back">' + displayHanzi('中') + '</div>' +
         '<div class="card-face card-front ' + frontClass + '">' + frontHtml + '</div>' +
       '</div>';
 
     if (!card.matched) el.addEventListener('click', () => onCardClick(el));
     boardEl.appendChild(el);
   });
+  if (state.flipped.length === 1) {
+    const f = state.flipped[0];
+    const el = document.querySelector('.card[data-id="' + f.card.id + '"]');
+    if (el) el.classList.add('pending');
+  }
 }
 
-/* ============================================================
-   卡片点击
-   ============================================================ */
 function onCardClick(el){
   if (state.locked || state.gameOver || state.paused) return;
   const id = Number(el.dataset.id);
   const card = state.cards.find(c => c.id === id);
   if (!card || card.matched) return;
 
-  // 盖回
   if (state.flipped.length === 1 && state.flipped[0].card.id === id) {
     card.flipped = false;
     el.classList.remove('flipped', 'pending');
@@ -1789,21 +1870,15 @@ function onCardClick(el){
   a.el.classList.remove('pending');
 
   if (a.card.pairId === b.card.pairId) {
-    // 配对成功
     state.combo++;
     if (state.combo > state.maxCombo) state.maxCombo = state.combo;
-
     const comboBonus = state.combo >= 3 ? (state.combo - 2) * 2 : 0;
     const gained = 10 + comboBonus;
     state.matched++;
     state.score += gained;
 
-    // 加入单词本
     const word = a.card.word;
-    if (!state.notebook.some(w => w.hanzi === word.hanzi)) {
-      state.notebook.push(word);
-    }
-    // 主题掌握度
+    if (!state.notebook.some(w => w.hanzi === word.hanzi)) state.notebook.push(word);
     const topicKey = word._topic || state.topic;
     if (!state.topicMastery[topicKey]) state.topicMastery[topicKey] = { learned:0 };
     if (!state.topicMastery[topicKey][word.hanzi]) {
@@ -1830,7 +1905,7 @@ function onCardClick(el){
       state.locked = false;
       updateStats();
       updateProgress();
-      saveProgress(); // 保存进度
+      saveProgress();
       if (state.matched === state.totalPairs) onLevelComplete();
     }, 900);
   } else {
@@ -1838,17 +1913,12 @@ function onCardClick(el){
     state.combo = 0;
     sfx('wrong');
     a.el.classList.add('wrong'); b.el.classList.add('wrong');
-    // 记录错题
     const w1 = a.card.word;
-    if (!state.wrongbook.some(w => w.hanzi === w1.hanzi)) {
-      state.wrongbook.push(w1);
-    }
+    if (!state.wrongbook.some(w => w.hanzi === w1.hanzi)) state.wrongbook.push(w1);
     const w2 = b.card.word;
-    if (!state.wrongbook.some(w => w.hanzi === w2.hanzi)) {
-      state.wrongbook.push(w2);
-    }
+    if (!state.wrongbook.some(w => w.hanzi === w2.hanzi)) state.wrongbook.push(w2);
     updateProgress();
-    saveProgress(); // 保存进度
+    saveProgress();
     setTimeout(() => {
       a.card.flipped = false; b.card.flipped = false;
       a.el.classList.remove('flipped','wrong');
@@ -1892,25 +1962,25 @@ function showOnceTip(){
   state.tipShown = true;
   const el = document.createElement('div');
   el.className = 'tip-toast show';
-  el.textContent = '💡 再点它一次可以盖回去';
+  el.textContent = displayHanzi('💡 再点它一次可以盖回去');
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 3200);
 }
 
-/* ============================================================
-   UI 更新
-   ============================================================ */
 function updateStats(pulse, gained){
   const tier = getTier(state.level);
   statLevel.textContent = String(state.level);
-  statTier.textContent = tier.icon + ' ' + tier.name;
+  statTier.textContent = tier.icon + ' ' + displayHanzi(tier.name);
   statScore.textContent = String(state.score);
-  statBest.textContent = 'Best ' + state.bestLevel + ' 关';
+  statBest.textContent = 'Best ' + state.bestLevel + ' ' + displayHanzi('关');
   statPairs.textContent = (state.totalPairs - state.matched) + ' / ' + state.totalPairs;
   const cols = 4;
   const rows = Math.ceil(state.totalPairs * 2 / cols);
-  statGrid.textContent = cols + '×' + rows + ' · ' + (state.totalPairs * 2) + ' 张';
-  if (tier.timeTarget) { statTarget.textContent = '目标 ' + tier.timeTarget + ' 秒'; statTarget.style.color = '#a855f7'; }
+  statGrid.textContent = cols + '×' + rows + ' · ' + (state.totalPairs * 2) + ' ' + displayHanzi('张');
+  if (tier.timeTarget) {
+    statTarget.textContent = displayHanzi('目标') + ' ' + tier.timeTarget + ' ' + displayHanzi('秒');
+    statTarget.style.color = '#a855f7';
+  }
   else statTarget.textContent = '';
   bestLevelEl.textContent = String(state.bestLevel);
   if (pulse) {
@@ -1918,17 +1988,14 @@ function updateStats(pulse, gained){
     void statScore.offsetWidth;
     statScore.classList.add(gained && gained > 10 ? 'pulse-gold' : 'pulse');
   }
-  comboText.textContent = '连击：' + state.combo;
+  comboText.textContent = displayHanzi('连击：') + state.combo;
 }
 function updateProgress(){
   const pct = state.totalPairs > 0 ? (state.matched / state.totalPairs) * 100 : 0;
   progressFill.style.width = pct + '%';
-  progressText.textContent = '进度：' + state.matched + ' / ' + state.totalPairs;
+  progressText.textContent = displayHanzi('进度：') + state.matched + ' / ' + state.totalPairs;
 }
 
-/* ============================================================
-   计时
-   ============================================================ */
 let timerInterval = null;
 function startTimer(){
   if (timerInterval) clearInterval(timerInterval);
@@ -1939,27 +2006,24 @@ function startTimer(){
   }, 250);
 }
 
-/* ============================================================
-   开始关卡
-   ============================================================ */
 let lastTier = null;
 function startLevel(){
   const tier = getTier(state.level);
-
   state.cards = []; state.flipped = [];
   state.matched = 0; state.mistakes = 0;
   state.combo = 0; state.maxCombo = 0; state.hintUsed = 0;
   state.locked = false; state.gameOver = false; state.paused = false;
   state.totalPausedTime = 0; state.startTime = Date.now();
-  btnHint.disabled = false; btnHint.textContent = '💡 提示';
+  btnHint.disabled = false;
+  btnHint.innerHTML = '💡 <span data-t="提示">' + displayHanzi('提示') + '</span> <span class="kbd">H</span>';
   btnPause.classList.remove('on');
   boardEl.style.filter = ''; boardEl.style.pointerEvents = '';
 
-  const words = pickWords(state.topic, tier.pairs, state.levelFilter, false);
+  const words = pickWords(state.topic, tier.pairs, state.levelFilter);
   state.totalPairs = words.length;
 
   if (state.totalPairs === 0) {
-    boardEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#64748b;font-weight:700;">这个组合下没有词，请换一个层级或主题。</div>';
+    boardEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#64748b;font-weight:700;">' + displayHanzi('这个组合下没有词，请换一个层级或主题。') + '</div>';
     updateStats(); updateProgress(); return;
   }
 
@@ -1987,18 +2051,14 @@ function startLevel(){
 function showTierBanner(tier){
   document.getElementById('tierBannerIcon').textContent = tier.icon;
   document.getElementById('tierBannerText').textContent =
-    '难度升级！进入「' + tier.name + '」· ' + tier.pairs + ' 对';
+    displayHanzi('难度升级！进入「') + displayHanzi(tier.name) + displayHanzi('」· ') + tier.pairs + ' ' + displayHanzi('对');
   tierBanner.classList.add('show');
   setTimeout(() => tierBanner.classList.remove('show'), 3400);
 }
 
-/* ============================================================
-   提示 / 暂停
-   ============================================================ */
 function useHint(){
   if (state.locked || state.gameOver || state.paused) return;
   if (state.hintUsed >= 3) return;
-
   const unpaired = state.cards.filter(c => !c.matched);
   if (!unpaired.length) return;
   const byPair = {};
@@ -2014,7 +2074,6 @@ function useHint(){
   state.combo = 0;
   sfx('hint');
   updateStats();
-
   byPair[pairId].forEach(c => {
     const el = document.querySelector('.card[data-id="' + c.id + '"]');
     if (el && !el.classList.contains('flipped')) {
@@ -2024,7 +2083,7 @@ function useHint(){
   });
   if (state.hintUsed >= 3) {
     btnHint.disabled = true;
-    btnHint.textContent = '💡 已用完';
+    btnHint.innerHTML = '💡 <span data-t="已用完">' + displayHanzi('已用完') + '</span>';
   }
   saveProgress();
 }
@@ -2043,17 +2102,12 @@ function togglePause(){
   }
 }
 
-/* ============================================================
-   通关
-   ============================================================ */
 function onLevelComplete(){
   state.gameOver = true;
   sfx('win');
   launchConfetti();
-
   const tier = getTier(state.level);
   const elapsed = Math.floor((Date.now() - state.startTime - state.totalPausedTime) / 1000);
-
   let stars = 3;
   if (tier.timeTarget) {
     if (state.mistakes <= 1 && elapsed <= tier.timeTarget) stars = 3;
@@ -2064,28 +2118,22 @@ function onLevelComplete(){
     else if (state.mistakes >= 2) stars = 2;
     else stars = 3;
   }
-
   const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
   document.getElementById('modalEmoji').textContent = stars === 3 ? '🏆' : (stars === 2 ? '🎉' : '👏');
-  document.getElementById('modalTitle').textContent = stars === 3 ? '好犀利！Excellent!' : '好嘢！You did it!';
-  document.getElementById('modalSub').textContent = '你完成咗第 ' + state.level + ' 关 · ' + tier.icon + ' ' + tier.name;
+  document.getElementById('modalTitle').textContent = stars === 3 ? displayHanzi('好犀利！Excellent!') : displayHanzi('好嘢！You did it!');
+  document.getElementById('modalSub').textContent = displayHanzi('你完成咗第 ') + state.level + displayHanzi(' 关 · ') + tier.icon + ' ' + displayHanzi(tier.name);
   document.getElementById('modalStars').textContent = starStr;
   document.getElementById('modalScore').textContent = String(state.score);
-  document.getElementById('modalTime').textContent = formatTime(elapsed) + (tier.timeTarget ? ' / ' + tier.timeTarget + 's' : '');
+  document.getElementById('modalTime').textContent = formatTime(elapsed) + (tier.timeTarget ? ' / ' + displayHanzi('目标') + ' ' + tier.timeTarget + 's' : '');
   document.getElementById('modalMistakes').textContent = String(state.mistakes);
   document.getElementById('modalCombo').textContent = '×' + state.maxCombo;
 
-  // 更新长期进度
   state.stats.games += 1;
   state.stats.totalTime += elapsed;
-  if (state.level >= state.bestLevel) {
-    state.bestLevel = state.level;
-  }
-  // 清除 session
-  clearSession();
-  // 保存长期进度
-  saveProgress();
+  if (state.level >= state.bestLevel) state.bestLevel = state.level;
 
+  clearSession();
+  saveProgress();
   setTimeout(() => levelModal.classList.add('show'), 450);
 }
 
@@ -2105,79 +2153,70 @@ function launchConfetti(){
   setTimeout(() => wrap.remove(), 3600);
 }
 
-/* ============================================================
-   单词本 / 错题本
-   ============================================================ */
 let nbCurrentTab = 'learned';
 function openNotebook(tab){
   nbCurrentTab = tab || 'learned';
-  const list = document.getElementById('nbList');
   document.getElementById('nbCountLearned').textContent = String(state.notebook.length);
   document.getElementById('nbCountWrong').textContent = String(state.wrongbook.length);
   document.getElementById('nbTabLearned').classList.toggle('on', nbCurrentTab === 'learned');
   document.getElementById('nbTabWrong').classList.toggle('on', nbCurrentTab === 'wrong');
-  renderNotebookList(list);
+  renderNotebookList();
   notebookModal.classList.add('show');
 }
-function renderNotebookList(list){
+function renderNotebookList(){
+  const list = document.getElementById('nbList');
   list.innerHTML = '';
   const arr = nbCurrentTab === 'learned' ? state.notebook : state.wrongbook;
-
   if (!arr.length) {
     list.innerHTML = '<div class="nb-empty">' +
       (nbCurrentTab === 'learned'
-        ? '还没有学过的词，先玩一关吧！<br>No words yet — play a round first!'
-        : '还没有错题，继续保持！<br>No mistakes yet — keep it up!') +
+        ? displayHanzi('还没有学过的词，先玩一关吧！')
+        : displayHanzi('还没有错题，继续保持！')) +
       '</div>';
     return;
   }
-
   arr.forEach(w => {
     const item = document.createElement('div');
     item.className = 'nb-item' + (nbCurrentTab === 'wrong' ? ' wrong-item' : '');
-    if (nbCurrentTab === 'wrong') {
-      item.innerHTML = '<div class="nb-wrong-mark">✕</div>';
-    }
-    item.innerHTML +=
-      '<div class="nb-h"><span class="nb-emoji">' + esc(w.emoji || '') + '</span>' + esc(w.hanzi) + '</div>' +
+    let html = '';
+    if (nbCurrentTab === 'wrong') html += '<div class="nb-wrong-mark">✕</div>';
+    html +=
+      '<div class="nb-h"><span class="nb-emoji">' + esc(w.emoji || '') + '</span>' + esc(displayHanzi(w.hanzi)) + '</div>' +
       '<div class="nb-j">' + esc(w.jyutping) + '</div>' +
       '<div class="nb-e">' + esc(w.en) + '</div>';
+    item.innerHTML = html;
     item.onclick = () => openDetail(w);
     list.appendChild(item);
   });
 }
 
-/* 词条详情 */
 function openDetail(w){
+  state.currentDetailWord = w;
   document.getElementById('dtEmoji').textContent = w.emoji || '📖';
-  document.getElementById('dtHanzi').textContent = w.hanzi;
+  document.getElementById('dtHanzi').textContent = displayHanzi(w.hanzi);
   document.getElementById('dtJyut').textContent = w.jyutping;
   document.getElementById('dtEn').textContent = w.en;
 
   const levelMap = { basic:['🌱 基础','basic'], common:['🌿 常用','common'], native:['🔥 地道','native'] };
   const lv = levelMap[w.level] || levelMap.basic;
   document.getElementById('dtLevelTag').innerHTML =
-    '<span class="dt-level-tag ' + lv[1] + '">' + lv[0] + '</span>';
+    '<span class="dt-level-tag ' + lv[1] + '">' + displayHanzi(lv[0]) + '</span>';
 
-  document.getElementById('dtMeaning').textContent = w.meaning || w.en;
-  document.getElementById('dtUsage').textContent = w.usage || '—';
+  document.getElementById('dtMeaning').textContent = displayHanzi(w.meaning || w.en);
+  document.getElementById('dtUsage').textContent = displayHanzi(w.usage || '—');
 
   const exEl = document.getElementById('dtExample');
   if (w.example) {
     exEl.innerHTML =
-      '<div class="ex-cn">' + esc(w.example) + '</div>' +
+      '<div class="ex-cn">' + esc(displayHanzi(w.example)) + '</div>' +
       '<div class="ex-jy">' + esc(w.jyutping) + '</div>';
   } else {
     exEl.textContent = '—';
   }
-
   speakCantonese(w.hanzi);
   detailModal.classList.add('show');
 }
 
-/* ============================================================
-   我的进度面板
-   ============================================================ */
 function openProgress(){
   document.getElementById('pmBest').textContent = String(state.bestLevel);
   document.getElementById('pmNotebook').textContent = String(state.notebook.length);
@@ -2185,7 +2224,6 @@ function openProgress(){
   document.getElementById('pmGames').textContent = String(state.stats.games);
   document.getElementById('pmTime').textContent = formatDuration(state.stats.totalTime);
 
-  // 主题掌握度
   const mastery = document.getElementById('pmMastery');
   mastery.innerHTML = '';
   let hasAny = false;
@@ -2199,38 +2237,36 @@ function openProgress(){
     row.className = 'mastery-row';
     row.innerHTML =
       '<div class="m-icon">' + (BANK[tk].icon || '📘') + '</div>' +
-      '<div class="m-name">' + esc(BANK[tk].label) + '</div>' +
+      '<div class="m-name">' + esc(displayHanzi(BANK[tk].label)) + '</div>' +
       '<div class="m-bar-wrap"><div class="m-bar" style="width:' + pct + '%"></div></div>' +
       '<div class="m-pct">' + learned + '/' + total + '</div>';
     mastery.appendChild(row);
   });
   if (!hasAny) {
-    mastery.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-weight:800;font-size:12px;">还没有学过任何单词</div>';
+    mastery.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-weight:800;font-size:12px;">' + displayHanzi('还没有学过任何单词') + '</div>';
   }
-
   progressModal.classList.add('show');
 }
 
-/* ============================================================
-   继续上次进度
-   ============================================================ */
 function checkResume(){
   const p = loadProgress();
   if (!p || !p.session) { startLevel(); return; }
-
   const s = p.session;
-  // 显示继续弹窗
+  if (s.charMode === 'simp' || s.charMode === 'trad') {
+    state.charMode = s.charMode;
+    updateCharModeUI();
+    refreshStaticText();
+  }
   const info = document.getElementById('resumeInfo');
-  const topicLabel = s.topic === 'mixed' ? '混合' : (BANK[s.topic]?.icon + ' ' + BANK[s.topic]?.label || s.topic);
-  const levelLabel = { basic:'🌱 基础', common:'🌿 常用', native:'🔥 地道' }[s.levelFilter] || '';
+  const topicLabel = s.topic === 'mixed' ? displayHanzi('混合') : (BANK[s.topic]?.icon + ' ' + displayHanzi(BANK[s.topic]?.label) || s.topic);
+  const levelLabel = { basic:'🌱 ' + displayHanzi('基础'), common:'🌿 ' + displayHanzi('常用'), native:'🔥 ' + displayHanzi('地道') }[s.levelFilter] || '';
   info.innerHTML =
-    '<div class="info-item"><div class="info-label">Level 关卡</div><div class="info-value">第 ' + s.level + ' 关</div></div>' +
-    '<div class="info-item"><div class="info-label">Theme 主题</div><div class="info-value">' + topicLabel + '</div></div>' +
-    '<div class="info-item"><div class="info-label">Level 层级</div><div class="info-value">' + levelLabel + '</div></div>' +
-    '<div class="info-item"><div class="info-label">Progress 进度</div><div class="info-value">' + s.matched + ' / ' + s.totalPairs + ' 对</div></div>';
+    '<div class="info-item"><div class="info-label">Level ' + displayHanzi('关卡') + '</div><div class="info-value">' + displayHanzi('第') + ' ' + s.level + ' ' + displayHanzi('关') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Theme ' + displayHanzi('主题') + '</div><div class="info-value">' + topicLabel + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Level ' + displayHanzi('层级') + '</div><div class="info-value">' + levelLabel + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Progress ' + displayHanzi('进度') + '</div><div class="info-value">' + s.matched + ' / ' + s.totalPairs + ' ' + displayHanzi('对') + '</div></div>';
 
   resumeModal.classList.add('show');
-
   document.getElementById('btnResumeYes').onclick = () => {
     resumeModal.classList.remove('show');
     resumeGame(s);
@@ -2243,7 +2279,6 @@ function checkResume(){
 }
 
 function resumeGame(s){
-  // 恢复状态
   state.level = s.level;
   state.score = s.score;
   state.matched = s.matched;
@@ -2255,7 +2290,7 @@ function resumeGame(s){
   state.topic = s.topic;
   state.levelFilter = s.levelFilter;
   state.mode = s.mode || 'learn';
-  state.cards = s.cards.map(c => Object.assign({}, c, { flipped:false }));
+  state.cards = s.cards.map(c => Object.assign({}, c, { flipped: !!c.flipped }));
   state.flipped = [];
   state.locked = false;
   state.gameOver = false;
@@ -2263,7 +2298,6 @@ function resumeGame(s){
   state.totalPausedTime = 0;
   state.startTime = Date.now() - (s.elapsed || 0) * 1000;
 
-  // 同步 UI 选择器
   topicSelect.value = state.topic;
   document.querySelectorAll('[data-level]').forEach(b => {
     b.classList.toggle('on', b.dataset.level === state.levelFilter);
@@ -2273,9 +2307,11 @@ function resumeGame(s){
     b.classList.toggle('on', b.dataset.mode === state.mode);
   });
 
-  btnHint.disabled = false; btnHint.textContent = '💡 提示';
+  btnHint.disabled = false;
+  btnHint.innerHTML = '💡 <span data-t="提示">' + displayHanzi('提示') + '</span> <span class="kbd">H</span>';
   if (state.hintUsed >= 3) {
-    btnHint.disabled = true; btnHint.textContent = '💡 已用完';
+    btnHint.disabled = true;
+    btnHint.innerHTML = '💡 <span data-t="已用完">' + displayHanzi('已用完') + '</span>';
   }
   btnPause.classList.remove('on');
 
@@ -2286,17 +2322,34 @@ function resumeGame(s){
   lastTier = getTier(state.level).tier;
 }
 
-/* ============================================================
-   按钮绑定
-   ============================================================ */
+function updateCharModeUI(){
+  document.querySelectorAll('[data-char]').forEach(b => {
+    b.classList.toggle('on', b.dataset.char === state.charMode);
+    b.classList.toggle('purple', b.dataset.char === state.charMode);
+  });
+}
+function switchCharMode(mode){
+  if (state.charMode === mode) return;
+  state.charMode = mode;
+  updateCharModeUI();
+  refreshStaticText();
+  buildTopicSelect();
+  renderBoard();
+  updateStats();
+  updateProgress();
+  saveProgress();
+  if (notebookModal.classList.contains('show')) renderNotebookList();
+  if (detailModal.classList.contains('show') && state.currentDetailWord) {
+    openDetail(state.currentDetailWord);
+  }
+}
+
 document.getElementById('btnReplay').addEventListener('click', () => {
   levelModal.classList.remove('show'); startLevel();
 });
 document.getElementById('btnNext').addEventListener('click', () => {
   state.level++;
-  if (state.level > state.bestLevel) {
-    state.bestLevel = state.level;
-  }
+  if (state.level > state.bestLevel) state.bestLevel = state.level;
   levelModal.classList.remove('show'); startLevel();
 });
 document.getElementById('btnReview').addEventListener('click', () => {
@@ -2305,9 +2358,8 @@ document.getElementById('btnReview').addEventListener('click', () => {
 document.getElementById('btnReviewWrong').addEventListener('click', () => {
   levelModal.classList.remove('show'); openNotebook('wrong');
 });
-
 btnRestart.addEventListener('click', () => {
-  if (!confirm('重新开始这一局？当前进度会丢失。')) return;
+  if (!confirm(displayHanzi('重新开始这一局？当前进度会丢失。'))) return;
   clearSession();
   state.level = 1; state.score = 0; lastTier = null;
   levelModal.classList.remove('show'); startLevel();
@@ -2318,7 +2370,7 @@ btnProgress.addEventListener('click', openProgress);
 
 topicSelect.addEventListener('change', () => {
   if (!state.gameOver && state.matched > 0) {
-    if (!confirm('切换主题会放弃当前这一局，确定吗？')) {
+    if (!confirm(displayHanzi('切换主题会放弃当前这一局，确定吗？'))) {
       topicSelect.value = state.topic;
       return;
     }
@@ -2329,10 +2381,14 @@ topicSelect.addEventListener('change', () => {
   levelModal.classList.remove('show'); startLevel();
 });
 
+document.querySelectorAll('[data-char]').forEach(btn => {
+  btn.addEventListener('click', () => switchCharMode(btn.dataset.char));
+});
+
 document.querySelectorAll('[data-level]').forEach(btn => {
   btn.addEventListener('click', () => {
     if (!state.gameOver && state.matched > 0) {
-      if (!confirm('切换层级会放弃当前这一局，确定吗？')) return;
+      if (!confirm(displayHanzi('切换层级会放弃当前这一局，确定吗？'))) return;
     }
     state.levelFilter = btn.dataset.level;
     document.querySelectorAll('[data-level]').forEach(b => {
@@ -2349,19 +2405,14 @@ document.querySelectorAll('[data-mode]').forEach(btn => {
   btn.addEventListener('click', () => {
     state.mode = btn.dataset.mode;
     document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b === btn));
-    if (state.matched > 0) {
-      // 已开始的局，切换模式后需要重绘卡片正面
-      renderBoard();
-    } else {
-      startLevel();
-    }
+    if (state.matched > 0) renderBoard();
+    else startLevel();
   });
 });
 document.querySelectorAll('[data-speed]').forEach(btn => {
   btn.addEventListener('click', () => {
     state.speechRate = Number(btn.dataset.speed);
     document.querySelectorAll('[data-speed]').forEach(b => b.classList.toggle('on', b === btn));
-    // 试读一次
     speakCantonese('你好');
   });
 });
@@ -2382,10 +2433,15 @@ btnHint.addEventListener('click', useHint);
 btnPause.addEventListener('click', togglePause);
 
 document.getElementById('nbClose').addEventListener('click', () => notebookModal.classList.remove('show'));
-document.getElementById('dtClose').addEventListener('click', () => detailModal.classList.remove('show'));
+document.getElementById('dtClose').addEventListener('click', () => { detailModal.classList.remove('show'); state.currentDetailWord = null; });
 document.getElementById('pmClose').addEventListener('click', () => progressModal.classList.remove('show'));
+
+document.getElementById('dtSpeak').addEventListener('click', () => {
+  if (state.currentDetailWord) speakCantonese(state.currentDetailWord.hanzi);
+});
+
 document.getElementById('pmClear').addEventListener('click', () => {
-  if (!confirm('确定清空所有进度吗？\n\n包括：最佳关卡、单词本、错题本、主题掌握度。\n此操作不可恢复。')) return;
+  if (!confirm(displayHanzi('确定清空所有进度吗？此操作不可恢复。'))) return;
   clearAllProgress();
   state.bestLevel = 1;
   state.notebook = [];
@@ -2394,55 +2450,53 @@ document.getElementById('pmClear').addEventListener('click', () => {
   state.stats = { games:0, totalTime:0 };
   bestLevelEl.textContent = '1';
   progressModal.classList.remove('show');
-  alert('✅ 所有进度已清空');
+  alert(displayHanzi('✅ 所有进度已清空'));
 });
 
 document.getElementById('nbTabLearned').onclick = () => {
   nbCurrentTab = 'learned';
   document.getElementById('nbTabLearned').classList.add('on');
   document.getElementById('nbTabWrong').classList.remove('on');
-  renderNotebookList(document.getElementById('nbList'));
+  renderNotebookList();
 };
 document.getElementById('nbTabWrong').onclick = () => {
   nbCurrentTab = 'wrong';
   document.getElementById('nbTabWrong').classList.add('on');
   document.getElementById('nbTabLearned').classList.remove('on');
-  renderNotebookList(document.getElementById('nbList'));
+  renderNotebookList();
 };
 document.getElementById('nbPracticeLearned').onclick = () => {
-  if (!state.notebook.length) { alert('还没有学过的单词'); return; }
+  if (!state.notebook.length) { alert(displayHanzi('还没有学过的单词')); return; }
   notebookModal.classList.remove('show');
   startPractice(state.notebook, '复习已学');
 };
 document.getElementById('nbPracticeWrong').onclick = () => {
-  if (!state.wrongbook.length) { alert('还没有错题'); return; }
+  if (!state.wrongbook.length) { alert(displayHanzi('还没有错题')); return; }
   notebookModal.classList.remove('show');
   startPractice(state.wrongbook, '复习错题');
 };
 document.getElementById('nbClearWrong').onclick = () => {
-  if (!state.wrongbook.length) { alert('错题本已经是空的'); return; }
-  if (!confirm('清空错题本？')) return;
+  if (!state.wrongbook.length) { alert(displayHanzi('错题本已经是空的')); return; }
+  if (!confirm(displayHanzi('清空错题本？'))) return;
   state.wrongbook = [];
   saveProgress();
-  renderNotebookList(document.getElementById('nbList'));
+  renderNotebookList();
   document.getElementById('nbCountWrong').textContent = '0';
 };
 
-/* 从单词本 / 错题本开始练习 */
 function startPractice(wordList, title){
   const tier = getTier(state.level);
   const count = Math.min(tier.pairs, wordList.length);
   if (count === 0) return;
   const words = shuffle(wordList.slice()).slice(0, count);
-
   state.cards = []; state.flipped = [];
   state.matched = 0; state.mistakes = 0;
   state.combo = 0; state.maxCombo = 0; state.hintUsed = 0;
   state.locked = false; state.gameOver = false; state.paused = false;
   state.totalPausedTime = 0; state.startTime = Date.now();
-  btnHint.disabled = false; btnHint.textContent = '💡 提示';
+  btnHint.disabled = false;
+  btnHint.innerHTML = '💡 <span data-t="提示">' + displayHanzi('提示') + '</span> <span class="kbd">H</span>';
   btnPause.classList.remove('on');
-
   state.totalPairs = words.length;
   let nextId = 0;
   words.forEach((word, pairId) => {
@@ -2451,7 +2505,6 @@ function startPractice(wordList, title){
   });
   shuffle(state.cards);
   state.cards.forEach((c, i) => { c.id = i; });
-
   renderBoard();
   updateStats();
   updateProgress();
@@ -2465,6 +2518,7 @@ document.addEventListener('keydown', e => {
     notebookModal.classList.remove('show');
     detailModal.classList.remove('show');
     progressModal.classList.remove('show');
+    state.currentDetailWord = null;
     return;
   }
   const k = e.key.toLowerCase();
@@ -2473,20 +2527,19 @@ document.addEventListener('keydown', e => {
   else if (k === 'w') openNotebook('wrong');
   else if (k === ' ' || e.code === 'Space') { e.preventDefault(); togglePause(); }
   else if (k === 'r') {
-    if (!confirm('重新开始？')) return;
+    if (!confirm(displayHanzi('重新开始？'))) return;
     clearSession();
     state.level = 1; state.score = 0; lastTier = null;
     levelModal.classList.remove('show'); startLevel();
   }
 });
 
-/* ============================================================
-   初始化
-   ============================================================ */
 function init(){
+  updateCharModeUI();
+  refreshStaticText();
   buildTopicSelect();
   bestLevelEl.textContent = String(state.bestLevel);
-  checkResume(); // 检查是否有未完成的局
+  checkResume();
 }
 init();
 </script>
