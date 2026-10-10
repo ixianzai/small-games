@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 浏览器标签页的名字 -->
     <title>粤语小游戏厅 | Cantonese Mini Game Hub</title>
     <style>
         body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding-top: 50px; margin: 0; }
@@ -15,31 +14,114 @@
         .game-card span { font-size: 13px; color: #888; font-weight: normal; margin-top: 8px; }
         .subtitle { color: #666; }
         .subtitle span { font-size: 0.9em; color: #888; display: block; margin-top: 4px; }
+
+        /* 密码锁界面的样式 */
+        #password-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f9;
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 999;
+        }
+        #password-screen h1 { font-size: 24px; color: #333; }
+        #password-screen p { color: #666; margin-bottom: 20px; }
+        #password-input {
+            padding: 12px 20px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            width: 200px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        #password-input:focus { border-color: #0366d6; }
+        #password-btn {
+            padding: 10px 30px;
+            font-size: 16px;
+            background-color: #0366d6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #password-btn:hover { background-color: #024ea4; }
+        #error-msg { color: red; font-size: 14px; margin-top: 10px; display: none; }
+        
+        /* 默认隐藏主内容，密码正确后显示 */
+        #main-content { display: none; }
     </style>
 </head>
 <body>
-    <h1>
-        🎮 粤语小游戏厅
-        <span>Cantonese Mini Game Hub</span>
-    </h1>
-    <p class="subtitle">
-        请选择你想玩的粤语游戏：
-        <span>Please select a Cantonese game to play:</span>
-    </p>
-    <div class="game-list">
-        <a href="match.html" class="game-card">
-            粤语宝宝消消乐
-            <span>Baby Matching Game</span>
-        </a>
-        <a href="dim.html" class="game-card">
-            <!-- 这里修改了名字 -->
-            粤语俚语与俗语
-            <span>Slang & Proverbs</span>
-        </a>
-        <a href="match3.html" class="game-card">
-            粤语词汇消消乐
-            <span>Vocabulary Match 3</span>
-        </a>
+
+    <!-- 密码验证界面 -->
+    <div id="password-screen">
+        <h1>🔒 请输入访问密码</h1>
+        <p>Please enter the password to continue</p>
+        <input type="password" id="password-input" placeholder="输入密码" autocomplete="off">
+        <button id="password-btn" onclick="checkPassword()">进入游戏厅</button>
+        <div id="error-msg">密码错误，请重新输入！</div>
     </div>
+
+    <!-- 真正的游戏大厅内容 (一开始是隐藏的) -->
+    <div id="main-content">
+        <h1>
+            🎮 粤语小游戏厅
+            <span>Cantonese Mini Game Hub</span>
+        </h1>
+        <p class="subtitle">
+            请选择你想玩的粤语游戏：
+            <span>Please select a Cantonese game to play:</span>
+        </p>
+        <div class="game-list">
+            <a href="match.html" class="game-card">
+                粤语宝宝消消乐
+                <span>Baby Matching Game</span>
+            </a>
+            <a href="dim.html" class="game-card">
+                粤语俚语与俗语
+                <span>Slang & Proverbs</span>
+            </a>
+            <a href="match3.html" class="game-card">
+                粤语词汇消消乐
+                <span>Vocabulary Match 3</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 控制密码显示的 JavaScript 脚本 -->
+    <script>
+        // 【重要】在这里设置你的密码，你可以随意修改！
+        const CORRECT_PASSWORD = "jyut2026"; 
+
+        // 检查密码的函数
+        function checkPassword() {
+            const inputVal = document.getElementById('password-input').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (inputVal === CORRECT_PASSWORD) {
+                // 密码正确，隐藏密码界面，显示游戏大厅
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                // 密码错误，提示错误
+                errorMsg.style.display = 'block';
+                // 清空输入框，方便重新输入
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        // 允许按回车键直接提交密码
+        document.getElementById('password-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
 </body>
 </html>
