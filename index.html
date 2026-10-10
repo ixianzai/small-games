@@ -3,24 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的游戏厅</title>
+    <title>我的游戏厅 | My Game Hub</title>
     <style>
         body { font-family: sans-serif; text-align: center; background: #f4f4f9; padding-top: 50px; margin: 0; }
-        h1 { color: #333; }
+        h1 { color: #333; margin-bottom: 10px; }
+        h1 span { font-size: 0.5em; color: #666; font-weight: normal; display: block; margin-top: 5px; }
         .game-list { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; padding: 0 20px; }
-        .game-card { background: white; padding: 20px 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-decoration: none; color: #0366d6; font-size: 20px; font-weight: bold; transition: transform 0.2s; }
+        .game-card { background: white; padding: 15px 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-decoration: none; color: #0366d6; font-size: 20px; font-weight: bold; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 120px; }
         .game-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .game-card span { font-size: 13px; color: #888; font-weight: normal; margin-top: 8px; }
+        .subtitle { color: #666; }
+        .subtitle span { font-size: 0.9em; color: #888; display: block; margin-top: 4px; }
     </style>
 </head>
 <body>
-    <!-- 这里可以改成你想要的名字 -->
-    <h1>🎮 我的小游戏厅</h1>
-    <p style="color: #666;">请选择你想玩的游戏：</p>
+    <h1>
+        🎮 我的小游戏厅
+        <span>My Mini Game Hub</span>
+    </h1>
+    <p class="subtitle">
+        请选择你想玩的游戏：
+        <span>Please select a game to play:</span>
+    </p>
     <div class="game-list">
-        <!-- 下面是你现有的三个游戏，按钮文字可以随意改 -->
-        <a href="match.html" class="game-card">Match 游戏</a>
-        <a href="dim.html" class="game-card">Dim 游戏</a>
-        <a href="match3.html" class="game-card">Match 3 游戏</a>
+        <a href="match.html" class="game-card">
+            Match 游戏
+            <span>Match Game</span>
+        </a>
+        <a href="dim.html" class="game-card">
+            Dim 游戏
+            <span>Dim Game</span>
+        </a>
+        <a href="match3.html" class="game-card">
+            Match 3 游戏
+            <span>Match 3 Game</span>
+        </a>
     </div>
 </body>
 </html>
