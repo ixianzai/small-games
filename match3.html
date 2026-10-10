@@ -1488,8 +1488,7 @@ const state = {
   soundOn:true, speechOn:true, combo:0, maxCombo:0, hintUsed:0,
   bestLevel:1, tipShown:false, notebook:[], wrongbook:[],
   topicMastery:{}, stats:{games:0, totalTime:0},
-  currentDetailWord: null,
-  levelCompletePending: false
+  currentDetailWord: null
 };
 
 function loadProgress(){
@@ -2004,7 +2003,6 @@ function startLevel(){
   state.matched = 0; state.mistakes = 0;
   state.combo = 0; state.maxCombo = 0; state.hintUsed = 0;
   state.locked = false; state.gameOver = false; state.paused = false;
-  state.levelCompletePending = false;
   state.totalPausedTime = 0; state.startTime = Date.now();
   btnHint.disabled = false;
   btnHint.innerHTML = '💡 <span data-t="提示">' + displayHanzi('提示') + '</span> <span class="kbd">H</span>';
@@ -2096,17 +2094,11 @@ function togglePause(){
 
 function onLevelComplete(){
   state.gameOver = true;
-  state.levelCompletePending = true;
   sfx('win');
   launchConfetti();
-
-  boardEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 12px;color:#64748b;font-weight:800;font-size:14px;">' +
-    displayHanzi('🎉 本关已完成！点「下一关」继续，或打开单词本复习。') + '</div>';
-
   const tier = getTier(state.level);
   const elapsed = Math.floor((Date.now() - state.startTime - state.totalPausedTime) / 1000);
   let stars = 3;
-  ...
   if (tier.timeTarget) {
     if (state.mistakes <= 1 && elapsed <= tier.timeTarget) stars = 3;
     else if (state.mistakes <= 3 && elapsed <= tier.timeTarget * 1.5) stars = 2;
@@ -2433,12 +2425,7 @@ btnSpeech.addEventListener('click', () => {
 btnHint.addEventListener('click', useHint);
 btnPause.addEventListener('click', togglePause);
 
-document.getElementById('nbClose').addEventListener('click', () => {
-  notebookModal.classList.remove('show');
-  if (state.levelCompletePending) {
-    levelModal.classList.add('show');
-  }
-});
+document.getElementById('nbClose').addEventListener('click', () => notebookModal.classList.remove('show'));
 document.getElementById('dtClose').addEventListener('click', () => { detailModal.classList.remove('show'); state.currentDetailWord = null; });
 document.getElementById('pmClose').addEventListener('click', () => progressModal.classList.remove('show'));
 
@@ -2535,7 +2522,6 @@ function startPractice(wordList, title){
   state.matched = 0; state.mistakes = 0;
   state.combo = 0; state.maxCombo = 0; state.hintUsed = 0;
   state.locked = false; state.gameOver = false; state.paused = false;
-  state.levelCompletePending = false;
   state.totalPausedTime = 0; state.startTime = Date.now();
   btnHint.disabled = false;
   btnHint.innerHTML = '💡 <span data-t="提示">' + displayHanzi('提示') + '</span> <span class="kbd">H</span>';
