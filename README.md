@@ -10,7 +10,7 @@ Whether you are a parent introducing Cantonese to your child, a teacher looking 
 
 *(Tip: If the page doesn't update, please press `Ctrl + F5` to hard refresh.)*
 
-### 🕹️ Games & Target Audience
+## 🕹️ Games & Target Audience
 
 Currently includes the following games (more to come!):
 
@@ -31,6 +31,24 @@ Currently includes the following games (more to come!):
 *   **👩‍🏫 Great Teaching Assistant**: Perfect for teachers to use as a warm-up or review activity in class, and great for parents doing parent-child Cantonese enlightenment.
 *   **✨ Bilingual Interface**: The Game Hub features English and Chinese text, making it easy for players from different backgrounds to get started.
 
+## 🔒 Password Protection
+
+To keep the game hub private, a simple password is required to enter.
+
+*   **Default Password:** `jyut2026`
+*   Once unlocked, the same device will stay unlocked for **30 days** by default.
+
+### How to Change the Password
+Open `index.html` and edit the following line:
+```javascript
+const CORRECT_PASSWORD = "jyut2026";
+```
+After changing the password, it is recommended to update the auth key version, for example from `v1` to `v2`:
+```javascript
+const AUTH_KEY = "cantoHubUnlocked_v1";
+```
+This forces devices that previously remembered the old login state to verify the new password.
+
 ## 📖 How to Use
 
 ### 👨‍👩‍👧‍👦 For Parents & Kids:
@@ -48,6 +66,7 @@ Currently includes the following games (more to come!):
 *   HTML5
 *   CSS3
 *   Vanilla JavaScript
+*   `localStorage` for remembered login state
 
 ## 💻 Local Development
 
