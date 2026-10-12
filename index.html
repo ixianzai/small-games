@@ -15,7 +15,7 @@
         .subtitle { color: #666; }
         .subtitle span { font-size: 0.9em; color: #888; display: block; margin-top: 4px; }
 
-        /* 密码锁界面的样式 */
+        /* 密码锁界面 */
         #password-screen {
             display: flex;
             flex-direction: column;
@@ -29,17 +29,37 @@
         }
         #password-screen h1 { font-size: 24px; color: #333; }
         #password-screen p { color: #666; margin-bottom: 20px; }
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
         #password-input {
-            padding: 12px 20px;
+            padding: 12px 45px 12px 20px;
             font-size: 18px;
             border: 2px solid #ccc;
             border-radius: 8px;
             text-align: center;
             width: 200px;
-            margin-bottom: 15px;
             outline: none;
+            transition: border-color 0.3s;
         }
         #password-input:focus { border-color: #0366d6; }
+        #toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #888;
+            padding: 0;
+            line-height: 1;
+        }
+        #toggle-password:hover { color: #333; }
+
         #password-btn {
             padding: 10px 30px;
             font-size: 16px;
@@ -52,9 +72,35 @@
         }
         #password-btn:hover { background-color: #024ea4; }
         #error-msg { color: red; font-size: 14px; margin-top: 10px; display: none; }
-        
-        /* 默认隐藏主内容，密码正确后显示 */
+
+        /* 错误抖动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+        .shake { animation: shake 0.4s ease; }
+
+        /* 主内容默认隐藏 */
         #main-content { display: none; }
+
+        /* 退出按钮 */
+        #logout-btn {
+            position: fixed;
+            top: 15px; right: 15px;
+            padding: 6px 14px;
+            font-size: 13px;
+            color: #666;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+            transition: background 0.2s;
+        }
+        #logout-btn:hover { background: #eee; color: #333; }
     </style>
 </head>
 <body>
@@ -63,12 +109,15 @@
     <div id="password-screen">
         <h1>🔒 请输入访问密码</h1>
         <p>Please enter the password to continue</p>
-        <input type="password" id="password-input" placeholder="输入密码" autocomplete="off">
-        <button id="password-btn" onclick="checkPassword()">进入游戏厅</button>
+        <div class="input-wrapper">
+            <input type="password" id="password-input" placeholder="输入密码" autocomplete="off" aria-label="访问密码">
+            <button id="toggle-password" type="button" aria-label="显示/隐藏密码">👁️</button>
+        </div>
+        <button id="password-btn" type="button">进入游戏厅</button>
         <div id="error-msg">密码错误，请重新输入！</div>
     </div>
 
-    <!-- 真正的游戏大厅内容 (一开始是隐藏的) -->
+    <!-- 游戏大厅 -->
     <div id="main-content">
         <h1>
             🎮 粤语小游戏厅
@@ -94,34 +143,126 @@
         </div>
     </div>
 
-    <!-- 控制密码显示的 JavaScript 脚本 -->
-    <script>
-        // 【重要】在这里设置你的密码，你可以随意修改！
-        const CORRECT_PASSWORD = "jyut2026"; 
+    <!-- 退出登录按钮 -->
+    <button id="logout-btn" type="button" aria-label="退出登录">🔓 退出登录</button>
 
-        // 检查密码的函数
+    <script>
+        // ====== 配置 ======
+        const CORRECT_PASSWORD = "jyut2026";        // 修改密码就在这里
+        const AUTH_KEY = "cantoHubUnlocked_v1";     // 存储键名，修改密码后建议改版本号
+        const REMEMBER_DAYS = 30;                   // 记住多少天，设为 0 则永久记住
+
+        // ====== DOM 引用 ======
+        const passwordScreen = document.getElementById('password-screen');
+        const mainContent = document.getElementById('main-content');
+        const logoutBtn = document.getElementById('logout-btn');
+        const passwordInput = document.getElementById('password-input');
+        const passwordBtn = document.getElementById('password-btn');
+        const togglePassword = document.getElementById('toggle-password');
+        const errorMsg = document.getElementById('error-msg');
+
+        // ====== 显示游戏大厅 ======
+        function unlock() {
+            passwordScreen.style.display = 'none';
+            mainContent.style.display = 'block';
+            logoutBtn.style.display = 'block';
+        }
+
+        // ====== 检查密码 ======
         function checkPassword() {
-            const inputVal = document.getElementById('password-input').value.trim();
-            const errorMsg = document.getElementById('error-msg');
-            
+            const inputVal = passwordInput.value.trim();
+
             if (inputVal === CORRECT_PASSWORD) {
-                // 密码正确，隐藏密码界面，显示游戏大厅
-                document.getElementById('password-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
+                saveUnlockState();
+                unlock();
             } else {
-                // 密码错误，提示错误
                 errorMsg.style.display = 'block';
-                // 清空输入框，方便重新输入
-                document.getElementById('password-input').value = '';
+                passwordInput.value = '';
+                passwordInput.focus();
+
+                // 抖动动画
+                passwordInput.classList.add('shake');
+                setTimeout(() => passwordInput.classList.remove('shake'), 400);
             }
         }
 
-        // 允许按回车键直接提交密码
-        document.getElementById('password-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                checkPassword();
+        // ====== 保存解锁状态（带有效期） ======
+        function saveUnlockState() {
+            try {
+                const data = {
+                    unlocked: true,
+                    expire: REMEMBER_DAYS > 0
+                        ? Date.now() + REMEMBER_DAYS * 24 * 60 * 60 * 1000
+                        : null
+                };
+                localStorage.setItem(AUTH_KEY, JSON.stringify(data));
+            } catch (e) {
+                // 隐私模式下 localStorage 可能不可用，忽略即可
             }
-        });
+        }
+
+        // ====== 检查是否已解锁且未过期 ======
+        function isUnlocked() {
+            try {
+                const raw = localStorage.getItem(AUTH_KEY);
+                if (!raw) return false;
+                const data = JSON.parse(raw);
+                if (data.unlocked !== true) return false;
+                // 如果有过期时间且已过期，清除并返回 false
+                if (data.expire && Date.now() > data.expire) {
+                    localStorage.removeItem(AUTH_KEY);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // ====== 退出登录 ======
+        function logout() {
+            try {
+                localStorage.removeItem(AUTH_KEY);
+            } catch (e) {}
+            location.reload();
+        }
+
+        // ====== 初始化 ======
+        function init() {
+            // 如果已解锁，直接进大厅
+            if (isUnlocked()) {
+                unlock();
+                return;
+            }
+
+            // 否则显示密码界面，自动聚焦
+            passwordScreen.style.display = 'flex';
+            passwordInput.focus();
+
+            // 绑定事件
+            passwordBtn.addEventListener('click', checkPassword);
+
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkPassword();
+            });
+
+            // 显示/隐藏密码
+            togglePassword.addEventListener('click', () => {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    togglePassword.textContent = '🙈';
+                } else {
+                    passwordInput.type = 'password';
+                    togglePassword.textContent = '👁️';
+                }
+            });
+
+            // 退出按钮
+            logoutBtn.addEventListener('click', logout);
+        }
+
+        // 启动
+        init();
     </script>
 </body>
 </html>
