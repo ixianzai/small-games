@@ -1,82 +1,130 @@
-# 🎮 Cantonese Learning Mini Games
+# 粤掂 YutDim · Cantonese Learning Mini Games
 
-A collection of lightweight web-based mini-games designed specifically for **Cantonese learners, teachers, and parents**. Built purely with front-end technologies, these games can be played directly in your browser without downloading any software.
+A collection of lightweight web-based mini-games and tools designed specifically for **Cantonese learners, teachers, and parents**. Built purely with front-end technologies, these games can be played directly in your browser without any backend or build tools.
 
-Whether you are a parent introducing Cantonese to your child, a teacher looking for classroom interaction, or a self-learner, you will find a suitable game here!
+> **唔使死背，玩吓就识。**  
+> Don't memorize blindly—learn by playing.
 
-## 🚀 Live Demo
+---
 
-👉 **[Click here to enter the Game Hub](https://ixianzai.github.io/small-games/)**
+## 🎮 Features
 
-*(Tip: If the page doesn't update, please press `Ctrl + F5` to hard refresh.)*
+### Games (遊戲)
+- **Baby Cantonese Match** (`match.html`): Learn words from pictures, starting with animals and fruits. Perfect for beginners and kids.
+- **Cantonese Word Match** (`match3.html`): Learn greetings and daily vocabulary with Jyutping and example sentences.
+- **Cantonese Slang Challenge** (`dim.html`): Challenge yourself with Cantonese slang and idioms through level-based gameplay.
 
-## 🕹️ Games & Target Audience
+### Learning Tools (學習工具)
+- **Jyutping Crash Course** (`jyutping.html`): Initials, finals, and the six tones explained on one page. Essential for absolute beginners.
+- **Tone Trainer** (`tones.html`): Practice distinguishing the six Cantonese tones.
+- **Review List** (`review.html`): Collect questions you got wrong and review them later.
 
-Currently includes the following games (more to come!):
+### Other Features
+- **Traditional/Simplified Chinese Toggle**: Switch between Traditional and Simplified Chinese using the "简" button in the navigation bar.
+- **Responsive Design**: Works on desktop, tablet, and mobile devices.
+- **Pure Static Site**: No server-side code required.
 
-*   🧸 **[Match Game (Cantonese Baby Matching Game)](https://ixianzai.github.io/small-games/match.html)**
-    *   **Target Audience**: Young children, absolute beginners.
-    *   **Description**: Focuses on basic vocabulary matching. Perfect for parents and teachers to guide kids in increasing their basic Cantonese vocabulary in a relaxed, playful atmosphere.
-*   💬 **[Dim Game (Cantonese Slang & Idioms)](https://ixianzai.github.io/small-games/dim.html)**
-    *   **Target Audience**: Learners with some Cantonese foundation, or those interested in Cantonese culture.
-    *   **Description**: Focuses on learning Cantonese slang, proverbs, and idioms. Helps learners master authentic expressions and understand the cultural connotations behind the words.
-*   🧩 **[Match 3 Game (Cantonese Vocabulary Match 3)](https://ixianzai.github.io/small-games/match3.html)**
-    *   **Target Audience**: Suitable for both adults and children.
-    *   **Description**: Combines classic match-3 gameplay with Cantonese vocabulary. Fun for all ages, it subtly reinforces common Cantonese words while you relax and play.
+---
 
-## 🎯 Features
+## 📁 Project Structure
 
-*   **📱 Cross-Platform**: Works on mobile, tablet, and desktop browsers. Play anytime, anywhere.
-*   **🧠 Learning Through Play**: Designed with different difficulty levels for different ages and foundations, saying goodbye to boring rote memorization.
-*   **👩‍🏫 Great Teaching Assistant**: Perfect for teachers to use as a warm-up or review activity in class, and great for parents doing parent-child Cantonese enlightenment.
-*   **✨ Bilingual Interface**: The Game Hub features English and Chinese text, making it easy for players from different backgrounds to get started.
-
-## 🔒 Password Protection
-
-To keep the game hub private, a simple password is required to enter.
-
-*   **Default Password:** `jyut2026`
-*   Once unlocked, the same device will stay unlocked for **30 days** by default.
-
-### How to Change the Password
-Open `index.html` and edit the following line:
-```javascript
-const CORRECT_PASSWORD = "jyut2026";
+```text
+.
+├── index.html          # Homepage / Entry point
+├── match.html          # Baby Cantonese Match (Games)
+├── match3.html         # Cantonese Word Match (Games)
+├── dim.html            # Cantonese Slang Challenge (Games)
+├── jyutping.html       # Jyutping Crash Course (Tools)
+├── tones.html          # Tone Trainer (Tools)
+├── review.html         # Review List (Tools)
+└── assets/
+    ├── style.css       # Global styles and CSS variables
+    └── app.js          # Core logic and utility functions
 ```
-After changing the password, it is recommended to update the auth key version, for example from `v1` to `v2`:
-```javascript
-const AUTH_KEY = "cantoHubUnlocked_v1";
+
+---
+
+## 🚀 Quick Start
+
+### Option 1: Open Locally
+No dependencies needed. Simply clone the repository and open `index.html` in your browser:
+
+```bash
+git clone https://github.com/ixianzai/small-games.git
+cd small-games
+open index.html   # macOS
+# or
+start index.html  # Windows
 ```
-This forces devices that previously remembered the old login state to verify the new password.
 
-## 📖 How to Use
+### Option 2: Run a Local Server
+For the best experience (especially if loading assets), you can run a lightweight local server:
 
-### 👨‍👩‍👧‍👦 For Parents & Kids:
-1. Click the **Live Demo** link above to enter the Game Hub.
-2. Start with the **Match Game** for basic vocabulary enlightenment.
-3. Play together with your child, reading the words on the screen aloud in Cantonese to reinforce memory.
+```bash
+python3 -m http.server 8080
+```
 
-### 👩‍🏫 For Cantonese Teachers:
-1. Open the main link in class as a warm-up or review session.
-2. For advanced students, use the **Dim Game** for cultural teaching of slang and idioms.
-3. Have students take turns playing, or organize group competitions to liven up the classroom.
+Then visit `http://localhost:8080` in your browser.
 
-## 🛠️ Tech Stack
+---
 
-*   HTML5
-*   CSS3
-*   Vanilla JavaScript
-*   `localStorage` for remembered login state
+## 🌐 Deployment (GitHub Pages)
 
-## 💻 Local Development
+This project is hosted on GitHub Pages. To deploy your own version:
 
-If you want to run or modify these games locally:
-1. Click the green `Code` button at the top right of this page and select `Download ZIP`.
-2. Extract the downloaded file.
-3. Double-click `index.html` to play in your local browser.
+1. Push your code to a GitHub repository.
+2. Go to **Settings** > **Pages**.
+3. Under **Build and deployment**, select `Deploy from a branch`.
+4. Choose the `main` branch and `/ (root)` folder.
+5. Click **Save**. Your site will be live at `https://<your-username>.github.io/<repository-name>/`.
 
-## 🤝 Feedback
+---
 
-If you find any bugs or have interesting ideas for Cantonese learning games, feel free to open an [Issue](https://github.com/ixianzai/small-games/issues) or contact me directly!
+## 🛠️ Implementation Notes
 
-If this project helps with your Cantonese learning or teaching, please give it a ⭐️ **Star** to show your support!
+### Navigation & Links
+The homepage (`index.html`) uses English file names to avoid URL encoding issues with Chinese characters:
+- Baby Match → `match.html`
+- Word Match → `match3.html`
+- Slang Challenge → `dim.html`
+
+### Traditional/Simplified Toggle
+Elements with a `data-sc` attribute store their Simplified Chinese text. The navigation button toggles display mode via:
+
+```html
+<button
+  class="lang-toggle"
+  type="button"
+  onclick="YutDim.setCharMode(YutDim.charMode()==='tc'?'sc':'tc')"
+>
+  简
+</button>
+```
+
+### Theming
+Colors and typography are controlled via CSS variables in `assets/style.css` (e.g., `--paper`, `--ink`, `--neon-red`, `--neon-gold`).
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Whether you want to add new vocabulary, fix a bug, or improve the UI, feel free to open an Issue or submit a Pull Request.
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/amazing-feature`).
+3. Commit your changes (`git commit -m 'Add some amazing feature'`).
+4. Push to the branch (`git push origin feature/amazing-feature`).
+5. Open a Pull Request.
+
+---
+
+## 📄 License
+
+This project is currently unlicensed. If you plan to open-source it, consider adding an MIT License.
+
+---
+
+## 🙏 Acknowledgements
+
+Built with ❤️ for Cantonese learners around the world.  
+粤掂 · 為粤語學習者而做。
