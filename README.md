@@ -1,4 +1,4 @@
-# 粤掂 YutDim · Cantonese Learning Mini Games
+# 粤掂 YutDim · Cantonese Learning Playground
 
 A collection of lightweight web-based mini-games and tools designed specifically for **Cantonese learners, teachers, and parents**. Built purely with front-end technologies, these games can be played directly in your browser without any backend or build tools.
 
@@ -10,9 +10,9 @@ A collection of lightweight web-based mini-games and tools designed specifically
 ## 🎮 Features
 
 ### Games (遊戲)
-- **Baby Cantonese Match** (`match.html`): Learn words from pictures, starting with animals and fruits. Perfect for beginners and kids.
-- **Cantonese Word Match** (`match3.html`): Learn greetings and daily vocabulary with Jyutping and example sentences.
-- **Cantonese Slang Challenge** (`dim.html`): Challenge yourself with Cantonese slang and idioms through level-based gameplay.
+- **Baby Cantonese Match** (`粤语宝宝消消乐.html`): Learn words from pictures, starting with animals and fruits. Perfect for beginners and kids.
+- **Cantonese Word Match** (`粤语词汇消消乐.html`): Learn greetings and daily vocabulary with Jyutping and example sentences.
+- **Cantonese Slang Challenge** (`粤闯粤掂.html`): Challenge yourself with Cantonese slang and idioms through level-based gameplay.
 
 ### Learning Tools (學習工具)
 - **Jyutping Crash Course** (`jyutping.html`): Initials, finals, and the six tones explained on one page. Essential for absolute beginners.
@@ -30,16 +30,16 @@ A collection of lightweight web-based mini-games and tools designed specifically
 
 ```text
 .
-├── index.html          # Homepage / Entry point
-├── match.html          # Baby Cantonese Match (Games)
-├── match3.html         # Cantonese Word Match (Games)
-├── dim.html            # Cantonese Slang Challenge (Games)
-├── jyutping.html       # Jyutping Crash Course (Tools)
-├── tones.html          # Tone Trainer (Tools)
-├── review.html         # Review List (Tools)
+├── index.html                # Homepage / Entry point
+├── 粤语宝宝消消乐.html       # Baby Cantonese Match (Games)
+├── 粤语词汇消消乐.html       # Cantonese Word Match (Games)
+├── 粤闯粤掂.html             # Cantonese Slang Challenge (Games)
+├── jyutping.html             # Jyutping Crash Course (Tools)
+├── tones.html                # Tone Trainer (Tools)
+├── review.html               # Review List (Tools)
 └── assets/
-    ├── style.css       # Global styles and CSS variables
-    └── app.js          # Core logic and utility functions
+    ├── style.css             # Global styles and CSS variables
+    └── app.js                # Core logic and utility functions
 ```
 
 ---
@@ -78,15 +78,17 @@ This project is hosted on GitHub Pages. To deploy your own version:
 4. Choose the `main` branch and `/ (root)` folder.
 5. Click **Save**. Your site will be live at `https://<your-username>.github.io/<repository-name>/`.
 
+> **Note**: Some file names in this project contain Chinese characters. GitHub Pages usually handles them well, but if you encounter 404 errors in certain browsers or environments, consider renaming the files to English (e.g., `match.html`, `match3.html`, `dim.html`) and updating the links in `index.html`.
+
 ---
 
 ## 🛠️ Implementation Notes
 
 ### Navigation & Links
-The homepage (`index.html`) uses English file names to avoid URL encoding issues with Chinese characters:
-- Baby Match → `match.html`
-- Word Match → `match3.html`
-- Slang Challenge → `dim.html`
+The homepage (`index.html`) links to the game pages using their Chinese file names:
+- Baby Match → `粤语宝宝消消乐.html`
+- Word Match → `粤语词汇消消乐.html`
+- Slang Challenge → `粤闯粤掂.html`
 
 ### Traditional/Simplified Toggle
 Elements with a `data-sc` attribute store their Simplified Chinese text. The navigation button toggles display mode via:
