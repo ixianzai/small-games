@@ -410,6 +410,28 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
   font-family:ui-monospace,monospace;}
 .footer-note .highlight{color:#4D96FF;font-weight:900;}
 </style>
+<style>
+/* 粤掂 · 电车绿皮肤（只换颜色，不改玩法） */
+:root{
+  --primary:#006938; --ink:#232323; --muted:#8a8578; --line:#dfd8c8;
+  --correct:#1f8a54; --wrong:#b03028; --gold:#c9a24a; --danger:#b03028;
+  --hanzi-1:#fbf8f1; --hanzi-2:#f2ecdc; --hanzi-border:#d8d0bc;
+  --jyut-1:#e4efe7; --jyut-2:#c2dcc9; --jyut-border:#7aa88a;
+  --shadow-sm:0 2px 6px rgba(35,35,35,.05);
+  --shadow-md:0 10px 30px rgba(35,35,35,.08);
+}
+body{ background:
+  radial-gradient(1100px 600px at 8% -8%, rgba(0,105,56,.08) 0%, transparent 60%),
+  radial-gradient(900px 640px at 50% 118%, rgba(0,105,56,.05) 0%, transparent 62%),
+  #f5f0e6; }
+.brand h1{ background:none; -webkit-background-clip:initial; background-clip:initial; color:var(--primary); -webkit-text-fill-color:var(--primary); font-family:"Songti SC","STSong","Noto Serif CJK SC","SimSun",serif; }
+.card-back{ background:linear-gradient(150deg,#006938,#004a27); }
+.progress-fill{ background:linear-gradient(90deg,#006938,#1f8a54); }
+.stat.s-time::before{ background:var(--primary); }
+.card-front.hanzi .card-tag{ background:rgba(0,105,56,.10); color:#004a27; }
+.card-front.jyutping .card-tag{ background:rgba(0,74,39,.14); color:#004a27; }
+</style>
+<script src="assets/app.js"></script>
 </head>
 <body>
 
@@ -684,8 +706,7 @@ const S2T = {
   '罢':'罷','摆':'擺','败':'敗','颁':'頒','绊':'絆','绑':'綁','镑':'鎊','剥':'剝','饱':'飽','鲍':'鮑','辈':'輩','钡':'鋇','狈':'狽','惫':'憊','绷':'繃','笔':'筆','闭':'閉','毙':'斃','编':'編','贬':'貶','辩':'辯','辫':'辮','镖':'鏢','飙':'飆','鳖':'鱉','濒':'瀕','摈':'擯','钵':'缽','铂':'鉑','驳':'駁','钹':'鈸','卜':'蔔',
   '厕':'廁','侧':'側','测':'測','恻':'惻','搀':'攙','谗':'讒','馋':'饞','缠':'纏','铲':'鏟','阐':'闡','颤':'顫','场':'場','厂':'廠','畅':'暢','钞':'鈔','掣':'掣','撑':'撐','诚':'誠','驰':'馳','齿':'齒','耻':'恥','炽':'熾','宠':'寵','绸':'綢','橱':'櫥','厨':'廚','锄':'鋤','雏':'雛','储':'儲','疮':'瘡','闯':'闖','创':'創','锤':'錘','纯':'純','绰':'綽','词':'詞','赐':'賜','从':'從','窜':'竄','错':'錯',
   '贷':'貸','殚':'殫','挡':'擋','荡':'蕩','颠':'顛','垫':'墊','雕':'雕','鲷':'鯛','钓':'釣','调':'調','栋':'棟','赌':'賭','贰':'貳',
-  '钙':'鈣','赶':'趕','钩':'鉤','刽':'劊','辊':'輥','滚':'滾','锅':'鍋','铪':'鉿','辉':'輝',
-  '万':'萬','键':'鍵','误':'誤','汇':'彙','览':'覽'
+  '钙':'鈣','赶':'趕','钩':'鉤','刽':'劊','辊':'輥','滚':'滾','锅':'鍋','铪':'鉿','辉':'輝'
 };
 
 const T2S = {};
@@ -1823,7 +1844,10 @@ function renderBoard(){
   if (state.flipped.length === 1) {
     const f = state.flipped[0];
     const el = document.querySelector('.card[data-id="' + f.card.id + '"]');
-    if (el) el.classList.add('pending');
+    if (el) {
+      el.classList.add('pending');
+      f.el = el; // 更新引用，避免指向已移除的旧元素
+    }
   }
 }
 
@@ -1869,6 +1893,7 @@ function onCardClick(el){
     state.score += gained;
 
     const word = a.card.word;
+    if (window.YutDim) YutDim.progress.record(word.hanzi, true, word.jyutping);
     if (!state.notebook.some(w => w.hanzi === word.hanzi)) state.notebook.push(word);
     const topicKey = word._topic || state.topic;
     if (!state.topicMastery[topicKey]) state.topicMastery[topicKey] = { learned:0 };
@@ -1903,6 +1928,7 @@ function onCardClick(el){
     state.mistakes++;
     state.combo = 0;
     sfx('wrong');
+    if (window.YutDim) YutDim.progress.record(a.card.word.hanzi, false, a.card.word.jyutping);
     a.el.classList.add('wrong'); b.el.classList.add('wrong');
     const w1 = a.card.word;
     if (!state.wrongbook.some(w => w.hanzi === w1.hanzi)) state.wrongbook.push(w1);
@@ -2097,6 +2123,8 @@ function togglePause(){
 function onLevelComplete(){
   state.gameOver = true;
   state.levelCompletePending = true;
+  // 停止计时器，避免关卡完成后时间继续走
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   sfx('win');
   launchConfetti();
 
@@ -2197,7 +2225,7 @@ function openDetail(w){
   document.getElementById('dtJyut').textContent = w.jyutping;
   document.getElementById('dtEn').textContent = w.en;
 
-  const levelMap = { basic:['🌱 基础','basic'], common:['🌿 常用','common'], native:['🔥 地道','native'] };
+  const levelMap = { basic:['🌱 ' + displayHanzi('基础'),'basic'], common:['🌿 ' + displayHanzi('常用'),'common'], native:['🔥 ' + displayHanzi('地道'),'native'] };
   const lv = levelMap[w.level] || levelMap.basic;
   document.getElementById('dtLevelTag').innerHTML =
     '<span class="dt-level-tag ' + lv[1] + '">' + displayHanzi(lv[0]) + '</span>';
@@ -2258,7 +2286,7 @@ function checkResume(){
     refreshStaticText();
   }
   const info = document.getElementById('resumeInfo');
-  const topicLabel = s.topic === 'mixed' ? displayHanzi('混合') : (BANK[s.topic]?.icon + ' ' + displayHanzi(BANK[s.topic]?.label) || s.topic);
+  const topicLabel = s.topic === 'mixed' ? displayHanzi('混合') : (BANK[s.topic] ? BANK[s.topic].icon + ' ' + displayHanzi(BANK[s.topic].label) : s.topic);
   const levelLabel = { basic:'🌱 ' + displayHanzi('基础'), common:'🌿 ' + displayHanzi('常用'), native:'🔥 ' + displayHanzi('地道') }[s.levelFilter] || '';
   info.innerHTML =
     '<div class="info-item"><div class="info-label">Level ' + displayHanzi('关卡') + '</div><div class="info-value">' + displayHanzi('第') + ' ' + s.level + ' ' + displayHanzi('关') + '</div></div>' +
@@ -2334,7 +2362,8 @@ function switchCharMode(mode){
   updateCharModeUI();
   refreshStaticText();
   buildTopicSelect();
-  renderBoard();
+  // 游戏结束或动画进行中时不碰棋盘（完成消息会被覆盖）
+  if (!state.gameOver && !state.locked && state.cards.length > 0) renderBoard();
   updateStats();
   updateProgress();
   saveProgress();
@@ -2403,10 +2432,14 @@ document.querySelectorAll('[data-level]').forEach(btn => {
 });
 document.querySelectorAll('[data-mode]').forEach(btn => {
   btn.addEventListener('click', () => {
+    if (btn.dataset.mode === state.mode) return;
     state.mode = btn.dataset.mode;
     document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b === btn));
-    if (state.matched > 0) renderBoard();
-    else startLevel();
+    // 模式只是显示切换（学习模式显示提示，挑战模式隐藏提示）
+    // 游戏结束或动画进行中时不碰棋盘
+    if (state.gameOver || state.locked) return;
+    // 重新渲染棋盘以更新显示
+    if (state.cards.length > 0) renderBoard();
   });
 });
 document.querySelectorAll('[data-speed]').forEach(btn => {
@@ -2539,6 +2572,7 @@ function startPractice(wordList, title){
   btnHint.disabled = false;
   btnHint.innerHTML = '💡 <span data-t="提示">' + displayHanzi('提示') + '</span> <span class="kbd">H</span>';
   btnPause.classList.remove('on');
+  boardEl.style.filter = ''; boardEl.style.pointerEvents = '';
   state.totalPairs = words.length;
   let nextId = 0;
   words.forEach((word, pairId) => {
@@ -2557,10 +2591,21 @@ function startPractice(wordList, title){
 document.addEventListener('keydown', e => {
   if (e.target.matches('input, textarea, select')) return;
   if (e.key === 'Escape') {
-    notebookModal.classList.remove('show');
-    detailModal.classList.remove('show');
-    progressModal.classList.remove('show');
-    state.currentDetailWord = null;
+    // 逐层关闭弹窗：先关详情，再关单词本，最后关进度
+    if (detailModal.classList.contains('show')) {
+      detailModal.classList.remove('show');
+      state.currentDetailWord = null;
+      return;
+    }
+    if (notebookModal.classList.contains('show')) {
+      notebookModal.classList.remove('show');
+      if (state.levelCompletePending) levelModal.classList.add('show');
+      return;
+    }
+    if (progressModal.classList.contains('show')) {
+      progressModal.classList.remove('show');
+      return;
+    }
     return;
   }
   const k = e.key.toLowerCase();
