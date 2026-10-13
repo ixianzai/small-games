@@ -617,6 +617,33 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 }
 .footer-tip b{color:#8B6BFF;}
 </style>
+<style>
+/* 粤掂 · 电车绿皮肤（只换颜色，不改玩法） */
+:root{
+  --pink:#e08a80; --pink-light:#f2d6cf;
+  --purple:#006938; --purple-deep:#004a27;
+  --ink:#232323; --muted:#8a8578; --line:#dfd8c8;
+  --shadow-soft:0 6px 18px rgba(60,50,30,.10);
+  --shadow-card:0 8px 22px rgba(60,50,30,.14);
+}
+body{ background:
+  radial-gradient(900px 500px at 10% 0%, rgba(0,105,56,.07) 0%, transparent 60%),
+  radial-gradient(800px 600px at 50% 110%, rgba(0,105,56,.05) 0%, transparent 60%),
+  #f5f0e6; }
+.header h1{ color:var(--purple-deep); text-shadow:none; font-family:"Songti SC","STSong","Noto Serif CJK SC","SimSun",serif; }
+.header .sub b{ color:var(--purple); }
+.font-btn.on{ background:linear-gradient(150deg,var(--purple),var(--purple-deep)); border-color:var(--purple); }
+.topic-btn.on{ border-color:var(--purple); background:linear-gradient(160deg,#e9f2ec,#d9e8df); }
+.topic-btn.on .label{ color:var(--purple-deep); }
+.progress-bar{ background:#e7e1d3; }
+.progress-fill{ background:linear-gradient(90deg,#006938,#1f8a54); }
+.progress-text b{ color:var(--purple-deep); }
+.card-back{ background:linear-gradient(150deg,#006938,#004a27); }
+.card.wrong .card-front{ background:linear-gradient(160deg,#fbe3de,#f3c7bf); border-color:#e08a80; }
+.card.matched .card-front{ background:linear-gradient(160deg,#dcefe2,#bfe0cc); border-color:#7aa88a; }
+.card.matched::after{ color:#1f8a54; }
+</style>
+<script src="assets/app.js"></script>
 </head>
 <body>
 
@@ -1351,6 +1378,7 @@ function onCardClick(el){
     if (isPair) {
       gameState.matched++;
       sfx('correct');
+      if (window.YutDim) YutDim.progress.record(a.card.word, true, a.card.jyutping);
       burstStars(a.el);
       burstStars(b.el);
 
@@ -1371,6 +1399,7 @@ function onCardClick(el){
     } else {
       gameState.mistakes++;
       sfx('wrong');
+      if (window.YutDim) YutDim.progress.record(a.card.word, false, a.card.jyutping);
       a.el.classList.add('wrong');
       b.el.classList.add('wrong');
 
