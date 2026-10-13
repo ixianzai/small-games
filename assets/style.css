@@ -1,0 +1,242 @@
+/* ============================================================
+   粤掂 YutDim · 站点级设计系统（电车绿·怀旧极简）
+   - 只含：设计变量、顶部导航、站点页面组件（首页/粤拼/声调/复习）
+   - 类名带 .site-nav / .page 前缀，避免污染游戏内部样式
+   ============================================================ */
+
+:root{
+  --site-nav-h: 52px;
+
+  /* 电车绿·怀旧极简 色板 */
+  --neon-red:      #006938;   /* 电车绿（主色） */
+  --neon-red-deep: #004a27;   /* 深绿 */
+  --tea-green:     #1f8a54;   /* 答对绿 */
+  --neon-gold:     #c9a24a;   /* 金（奖励点缀） */
+  --danger:        #b03028;   /* 答错红 */
+  --ink:           #232323;   /* 墨黑 */
+  --ink-soft:      #4a4740;
+  --paper:         #f5f0e6;   /* 米白 */
+  --paper-warm:    #ece6d6;
+  --paper-card:    #fbf8f1;
+  --line:          #dfd8c8;
+  --muted:         #8a8578;
+  --green-soft:    #d9e8df;
+
+  /* 字体 */
+  --font-display: "Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --font-body: "PingFang SC","PingFang TC","Noto Sans CJK TC","Microsoft YaHei",sans-serif;
+
+  /* 阴影（极简，无霓虹光晕） */
+  --glow-red:  0 2px 10px rgba(0,105,56,.18);
+  --glow-gold: 0 2px 10px rgba(201,162,74,.20);
+}
+
+/* ============================================================
+   顶部导航（电车绿站牌）
+   ============================================================ */
+.site-nav{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--site-nav-h);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 14px;
+  background: var(--neon-red);
+  border-bottom: 1px solid var(--neon-red-deep);
+  box-shadow: 0 2px 10px rgba(0,74,39,.18);
+  font-family: var(--font-body);
+  box-sizing: border-box;
+}
+
+.site-nav__brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fbf8f1;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 3px;
+  white-space: nowrap;
+}
+.site-nav__brand:hover{ color: #fff; }
+
+.site-nav__brand .seal{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: #fbf8f1;
+  color: var(--neon-red);
+  border-radius: 7px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 900;
+  box-shadow: inset 0 0 0 1px rgba(0,74,39,.15);
+}
+
+.site-nav__links{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.site-nav__links::-webkit-scrollbar{ display: none; }
+
+.site-nav__links a{
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: rgba(251,248,241,.88);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: .5px;
+  transition: background .18s ease, color .18s ease;
+}
+.site-nav__links a:hover{ background: rgba(255,255,255,.16); color: #fff; }
+.site-nav__links a.is-active{
+  background: #fbf8f1;
+  color: var(--neon-red);
+}
+
+/* 简繁切换（仅站点页面显示） */
+.site-nav .lang-toggle{
+  display: inline-flex; align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(251,248,241,.6);
+  color: #fbf8f1;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .18s ease, color .18s ease;
+}
+.site-nav .lang-toggle:hover{ background: #fbf8f1; color: var(--neon-red); }
+
+/* 顶栏占位 */
+.site-nav-spacer{ height: var(--site-nav-h); }
+
+/* ============================================================
+   站点页面通用（首页 / 粤拼 / 声调 / 复习 共用）
+   ============================================================ */
+.site-page{
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+.site-page *{ box-sizing: border-box; }
+
+.page{
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px 56px;
+}
+
+/* 标题 */
+.neon-title{
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--neon-red);
+  margin: 0;
+}
+.neon-sub{
+  font-family: var(--font-display);
+  color: var(--neon-red-deep);
+  letter-spacing: 2px;
+}
+
+/* 绿方块印章 */
+.stamp{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  background: var(--neon-red);
+  color: #fbf8f1;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 900;
+}
+
+/* 通用按钮 */
+.btn{
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 11px 22px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper-card);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(35,35,35,.12); }
+.btn--neon{
+  background: var(--neon-red);
+  border-color: transparent;
+  color: #fbf8f1;
+  box-shadow: var(--glow-red);
+}
+.btn--neon:hover{ background: var(--neon-red-deep); }
+.btn--gold{
+  background: var(--neon-gold);
+  border-color: transparent;
+  color: #3a2c00;
+}
+.btn:disabled{ opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* TTS 降级提示条 */
+.tts-banner{
+  display: none;
+  margin: 14px auto 0;
+  max-width: 960px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(176,48,40,.4);
+  background: rgba(176,48,40,.07);
+  color: #8b1e1e;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.tts-banner.show{ display: block; }
+.tts-banner b{ color: #8b1e1e; }
+
+/* 纸卡片 */
+.panel{
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 2px 8px rgba(35,35,35,.06);
+}
+
+/* 页脚 */
+.site-footer{
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--line);
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 响应式 */
+@media (max-width: 720px){
+  .site-nav__brand{ font-size: 17px; letter-spacing: 2px; }
+  .page{ padding: 0 16px 40px; }
+}
