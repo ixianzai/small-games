@@ -53,7 +53,7 @@ body{font-family:"PingFang HK","PingFang TC","PingFang SC","Noto Sans CJK TC","M
 .level-card:active:not(.locked){transform:scale(.97)}
 .level-card.locked{opacity:.42;cursor:not-allowed}
 .level-card.boss{border-color:#f5d6a0;background:linear-gradient(160deg,var(--gold-bg),#fff)}
-.level-card.boss::after{content:'👑';position:absolute;top:8px;right:10px;font-size:14px}
+.level-card.boss::after{content:'';position:absolute;top:8px;right:10px;width:14px;height:14px;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='%23d4a017'%20stroke='%23b8860b'%20stroke-width='1.2'%20stroke-linejoin='round'%3E%3Cpath%20d='M3%208l4%204%205-7%205%207%204-4v9H3z'/%3E%3Crect%20x='3'%20y='17'%20width='18'%20height='3'%20fill='%23d4a017'%20stroke='none'/%3E%3C/svg%3E") no-repeat center/contain}
 .level-card.cleared{border-color:#d4edda}
 .level-card.in-progress{border-color:#2ecc71;box-shadow:0 0 0 3px rgba(46,204,113,.15)}
 .level-card.in-progress::before{content:'⏸';position:absolute;top:6px;left:10px;font-size:12px}
@@ -66,10 +66,16 @@ body{font-family:"PingFang HK","PingFang TC","PingFang SC","Noto Sans CJK TC","M
 .level-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .level-count{font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--border);border-radius:999px;padding:1px 8px;white-space:nowrap;font-weight:600;letter-spacing:0}
 .level-learned{font-size:11px;color:var(--gray);margin-top:6px;font-weight:600;letter-spacing:0;white-space:nowrap}
-.level-dimsum{position:absolute;top:6px;right:10px;font-size:16px;opacity:.35;filter:grayscale(1);transition:all .3s}
+.level-dimsum{position:absolute;top:5px;right:8px;width:22px;height:22px;opacity:.35;filter:grayscale(1);transition:all .3s}
 .level-card.cleared .level-dimsum{opacity:1;filter:none;animation:dimsumGlow 2.4s ease-in-out infinite}
 .level-card.boss .level-dimsum{display:none}
 @keyframes dimsumGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+/* 点心 SVG 图标：12 款自制图形，尺寸由各容器决定（原来的 emoji 是靠 font-size 撑大小） */
+.dsi{display:block;width:100%;height:100%}
+.level-dimsum .dsi{width:100%;height:100%}
+.table-item .dsi{width:84%;height:84%}
+.bamboo-item .dsi{width:80%;height:80%}
+.dimsum-slot .dsi{width:78%;height:78%}
 .dim-sum-section{background:linear-gradient(135deg,#fff9ee,#fff);border-radius:20px;padding:16px 16px 20px;margin-bottom:22px;box-shadow:var(--shadow);border:1px solid #f5e6cf;text-align:center}
 .dim-sum-header{margin-bottom:10px}
 .dim-sum-header-title{font-size:12px;color:var(--gray);letter-spacing:3px;margin-bottom:2px}
@@ -93,13 +99,13 @@ body{font-family:"PingFang HK","PingFang TC","PingFang SC","Noto Sans CJK TC","M
 .bamboo-item{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f5e6cf,#e8d5b7);border:2.5px solid #d4c4a8;position:relative;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:inset 0 -2px 4px rgba(160,120,80,.1)}
 .bamboo-item.done{background:radial-gradient(circle at 30% 30%,#f5d6a0,#e0b040);border-color:#b8935a;box-shadow:0 0 10px rgba(212,160,23,.55),inset 0 -2px 4px rgba(139,90,0,.2);animation:bambooPop .45s cubic-bezier(.68,-0.55,.27,1.55)}
 .bamboo-item.wrong{background:radial-gradient(circle at 30% 30%,#e8e8e8,#d0d0d0);border-color:#b0b0b0}
-.bamboo-item.wrong::after{content:'✕';color:#999;font-weight:900;font-size:16px;position:absolute}
+.bamboo-item.wrong::after{content:'';position:absolute;width:16px;height:16px;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23999'%20stroke-width='2.6'%20stroke-linecap='round'%3E%3Cpath%20d='M6%206l12%2012M18%206L6%2018'/%3E%3C/svg%3E") no-repeat center/contain}
 .bamboo-item.current{border-color:var(--red);background:radial-gradient(circle at 30% 30%,#fff,#f5e6cf);animation:bambooPulse 1.6s ease-in-out infinite}
 @keyframes bambooPop{0%{transform:scale(1)}50%{transform:scale(1.35) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
 @keyframes bambooPulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.5)}50%{box-shadow:0 0 0 8px rgba(192,57,43,0)}}
 .dimsum-basket{width:260px;height:260px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#f5e6cf 0%,#e8d5b7 60%,#d4a017 100%);border:6px solid #b8935a;position:relative;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(160,120,80,.25),inset 0 0 30px rgba(184,147,90,.3);animation:basketIn .5s cubic-bezier(.68,-0.55,.27,1.55) backwards}
 .dimsum-basket::before{content:'';position:absolute;inset:14px;border-radius:50%;border:2px dashed rgba(184,147,90,.5);pointer-events:none}
-.dimsum-basket::after{content:'♨';position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:26px;color:#c0392b;opacity:.65;animation:steamFloat 2.2s ease-in-out infinite}
+.dimsum-basket::after{content:'';position:absolute;top:-24px;left:50%;transform:translateX(-50%);width:26px;height:26px;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23c0392b'%20stroke-width='1.8'%20stroke-linecap='round'%3E%3Cpath%20d='M8%2021c0-3%203-3%203-6s-3-3-3-6'/%3E%3Cpath%20d='M12%2021c0-3%203-3%203-6s-3-3-3-6'/%3E%3Cpath%20d='M16%2021c0-3%203-3%203-6s-3-3-3-6'/%3E%3C/svg%3E") no-repeat center/contain;color:#c0392b;opacity:.65;animation:steamFloat 2.2s ease-in-out infinite}
 @keyframes basketIn{from{transform:scale(.6) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
 @keyframes steamFloat{0%,100%{transform:translateX(-50%) translateY(0);opacity:.4}50%{transform:translateX(-50%) translateY(-6px);opacity:.85}}
 .dimsum-grid{display:grid;gap:8px;width:180px;height:180px}
@@ -131,6 +137,26 @@ body{font-family:"PingFang HK","PingFang TC","PingFang SC","Noto Sans CJK TC","M
 .opt.correct{background:var(--green-bg);border-color:var(--green);color:var(--green-d);font-weight:700}
 .opt.wrong{background:var(--red-bg);border-color:#e74c3c;color:#a93226;animation:shake .4s}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}60%{transform:translateX(6px)}}
+.tf-term{font-size:34px;font-weight:800;color:var(--red);letter-spacing:2px;line-height:1.4;word-break:break-word}
+.tf-stmt{font-size:19px;font-weight:600;color:var(--text);margin-top:14px;line-height:1.6;padding-top:14px;border-top:1px dashed var(--border);word-break:break-word}
+.options-tf{flex-direction:row;gap:14px}
+.options-tf .opt-tf{text-align:center;font-size:19px;font-weight:700;padding:18px 10px}
+/* ── 粤拼填空（第三章 3-1） ── */
+.jp-term{font-size:30px;font-weight:800;color:var(--red);letter-spacing:2px;line-height:1.4;word-break:break-word}
+.jp-meaning{font-size:14px;color:var(--gray);margin-top:8px;line-height:1.5}
+.jp-line{margin-top:16px;padding-top:14px;border-top:1px dashed var(--border);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
+.jp-syl,.jp-blank{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;font-size:19px;font-weight:700;padding:7px 12px;border-radius:10px;line-height:1.2}
+.jp-syl{background:#fdf6ec;border:1px solid var(--border);color:#5a4a3a}
+.jp-blank{background:var(--red-bg);border:1px dashed var(--red);color:var(--red);letter-spacing:2px}
+.jp-gap{display:inline-block;width:2px}
+.options-jp{flex-direction:row;flex-wrap:wrap;gap:12px}
+.options-jp .opt-jp{width:calc(50% - 6px);text-align:center;font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;font-size:20px;font-weight:700;letter-spacing:1px;padding:16px 10px}
+.boss-timer{display:flex;align-items:center;gap:10px;margin:10px 18px 0}
+.boss-timer-bar{flex:1;height:10px;background:#f0e4d0;border-radius:999px;overflow:hidden}
+.boss-timer-fill{height:100%;width:100%;background:linear-gradient(90deg,#27ae60,#2ecc71);border-radius:999px;transition:width .1s linear}
+.boss-timer-fill.low{background:linear-gradient(90deg,#e74c3c,#c0392b)}
+.boss-timer-num{font-size:13px;font-weight:800;color:var(--sub);min-width:26px;text-align:right;font-family:ui-monospace,Menlo,monospace}
+.combo-chip{display:inline-block;margin:10px 18px 0;background:linear-gradient(135deg,#fff4d6,#ffe6b0);border:1px solid #f0c060;color:#8a5a1e;font-size:13px;font-weight:800;padding:5px 14px;border-radius:999px;box-shadow:0 2px 6px rgba(212,160,23,.2)}
 .feedback{margin-top:18px;background:var(--card);border-radius:18px;padding:20px;box-shadow:var(--shadow);border-top:4px solid var(--green);animation:slideUp .3s}
 .feedback.no{border-top-color:#e74c3c}
 @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
@@ -182,7 +208,7 @@ body{font-family:"PingFang HK","PingFang TC","PingFang SC","Noto Sans CJK TC","M
 .placement-chapters{display:grid;gap:12px;margin:20px 0}
 .placement-chapter-card{background:var(--card);border-radius:16px;padding:18px;text-align:center;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:transform .12s}
 .placement-chapter-card:active{transform:scale(.97)}
-.placement-chapter-emoji{font-size:36px;margin-bottom:8px}
+.placement-chapter-emoji{width:52px;height:52px;margin:0 auto 8px}
 .placement-chapter-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px}
 .placement-chapter-desc{font-size:12px;color:var(--gray);margin-bottom:8px}
 .placement-chapter-level{font-size:13px;color:var(--sub);font-weight:600;margin-bottom:12px}
@@ -210,6 +236,9 @@ body{font-family:"PingFang HK","PingFang TC","PingFang SC","Noto Sans CJK TC","M
     .q-prompt.big {
         font-size: 36px !important;
     }
+    .jp-term { font-size: 24px !important; }
+    .jp-syl, .jp-blank { font-size: 16px !important; padding: 6px 9px !important; }
+    .options-jp .opt-jp { font-size: 17px !important; padding: 14px 8px !important; }
     h1 { font-size: 20px !important; }
 }
 </style>
@@ -281,8 +310,8 @@ const WORDS=[
 {id:"zung_ji",type:"slang",level:1,term:"钟意",jyutping:"zung1 ji3",meaning:"对人或事物有好感",mandarin:"喜欢",example:"我钟意食叉烧。",scene:"表达喜好",emoji:"❤️😍",tags:["俚语","情感"]},
 {id:"hou_zeng",type:"slang",level:1,term:"好正",jyutping:"hou2 zeng3",meaning:"非常好、很棒",mandarin:"很棒",example:"呢首歌好正！",scene:"赞美",emoji:"👍✨",tags:["俚语","评价"]},
 {id:"mou_ngaan_tai",type:"slang",level:1,term:"冇眼睇",jyutping:"mou5 ngaan5 tai2",meaning:"唔想睇，觉得太差",mandarin:"看不下去",example:"佢哋吵成咁，我真系冇眼睇。",scene:"对某事失望",emoji:"🙈",tags:["俚语","情感"]},
-{id:"gai_tung_aap_gong",type:"idiom",level:1,term:"鸡同鸭讲",jyutping:"gai1 tung4 aap3 gong2",meaning:"沟通唔到，各讲各",mandarin:"对牛弹琴",example:"你同佢讲嘢简直鸡同鸭讲。",scene:"沟通失败",emoji:"🐔🦆🗣️",tags:["成语","沟通"]},
-{id:"cat_gwok_gam_lyun",type:"idiom",level:1,term:"七国咁乱",jyutping:"cat1 gwok3 gam3 lyun6",meaning:"非常混乱",mandarin:"乱七八糟",example:"间房七国咁乱。",scene:"形容混乱",emoji:"🌪️🏠",tags:["成语","状态"]},
+{id:"gai_tung_aap_gong",type:"proverb",level:1,term:"鸡同鸭讲",jyutping:"gai1 tung4 aap3 gong2",meaning:"沟通唔到，各讲各",mandarin:"对牛弹琴",example:"你同佢讲嘢简直鸡同鸭讲。",scene:"沟通失败",emoji:"🐔🦆🗣️",tags:["俗语","沟通"]},
+{id:"cat_gwok_gam_lyun",type:"proverb",level:1,term:"七国咁乱",jyutping:"cat1 gwok3 gam3 lyun6",meaning:"非常混乱",mandarin:"乱七八糟",example:"间房七国咁乱。",scene:"形容混乱",emoji:"🌪️🏠",tags:["俗语","状态"]},
 {id:"caau_jau_jyu",type:"slang",level:1,term:"炒鱿鱼",jyutping:"caau2 jau4 jyu2",meaning:"被解雇",mandarin:"被开除",example:"佢畀公司炒鱿鱼。",scene:"被解雇",emoji:"🍳🦑",tags:["俚语","职场"]},
 {id:"m_hou_ji_si",type:"slang",level:1,term:"唔好意思",jyutping:"m4 hou2 ji3 si1",meaning:"对唔住、失礼",mandarin:"不好意思",example:"唔好意思，迟咗少少。",scene:"你迟到咗，想同对方讲声对唔住",emoji:"😅",tags:["俚语","礼貌"]},
 {id:"do_ze",type:"slang",level:1,term:"多谢",jyutping:"do1 ze6",meaning:"感谢（收到礼物时用）",mandarin:"谢谢",example:"多谢你份礼物！",scene:"收到礼物或恩惠",emoji:"🎁🙏",tags:["俚语","礼貌"]},
@@ -400,7 +429,7 @@ const WORDS=[
 {id:"maa_sei_lok_dei",type:"proverb",level:2,term:"马死落地行",jyutping:"maa5 sei2 lok6 dei6 haang4",meaning:"失去依靠后仍要自己走下去",mandarin:"自立自强",example:"公司执笠，马死落地行，自己搵路啦。",scene:"失去依靠",emoji:"🐴💀🚶",tags:["俗语","处世"]},
 {id:"sou_zau_gwo_hau",type:"proverb",level:2,term:"苏州过后无艇搭",jyutping:"sou1 zau1 gwo3 hau6 mou4 teng5 daap3",meaning:"错过机会就冇",mandarin:"错过就没机会",example:"快啲决定，苏州过后无艇搭㗎。",scene:"提醒把握机会",emoji:"🚢⏰❌",tags:["俗语","处世"]},
 {id:"laan_syun_saam_gan",type:"proverb",level:2,term:"烂船都有三斤钉",jyutping:"laan6 syun4 dou1 jau5 saam1 gan1 deng1",meaning:"再差都有底子",mandarin:"瘦死骆驼比马大",example:"佢虽然输咗，但烂船都有三斤钉。",scene:"低估某人",emoji:"🚢🔩",tags:["俗语","处世"]},
-{id:"sau_tin_mou_jan",type:"proverb",level:2,term:"瘦田无人耕，耕开有人争",jyutping:"sau3 tin4 mou4 jan4 gaang1, gaang1 hoi1 jau5 jan4 zaang1",meaning:"冇人要嘅嘢一旦有人争就变抢手",mandarin:"从众心理",example:"呢个铺位之前冇人租，而家个个争。",scene:"资源被争抢",emoji:"🌾👀",tags:["俗语","社会"]},
+{id:"sau_tin_mou_jan",type:"proverb",level:2,term:"瘦田无人耕，耕开有人争",jyutping:"sau3 tin4 mou4 jan4 gaang1 gaang1 hoi1 jau5 jan4 zaang1",meaning:"冇人要嘅嘢一旦有人争就变抢手",mandarin:"从众心理",example:"呢个铺位之前冇人租，而家个个争。",scene:"资源被争抢",emoji:"🌾👀",tags:["俗语","社会"]},
 {id:"zam_m_gik_dou_juk",type:"proverb",level:2,term:"针唔拮到肉唔知痛",jyutping:"zam1 m4 gik1 dou3 juk6 m4 zi1 tung3",meaning:"唔亲身经历就唔知痛",mandarin:"无法感同身受",example:"你未试过，针唔拮到肉唔知痛。",scene:"缺乏同理心",emoji:"💉😖",tags:["俗语","情感"]},
 {id:"gaa_cau_m_ho_ngo",type:"proverb",level:2,term:"家丑不出外传",jyutping:"gaa1 cau2 bat1 ceot1 ngoi6 cyun4",meaning:"家里不好的事不要到处说",mandarin:"家丑不可外扬",example:"家丑不出外传，自己解决啦。",scene:"劝人保密",emoji:"🤐",tags:["俗语","家庭"]},
 {id:"maau_ci_dim_dang",type:"xiehouyu",level:2,term:"茅厕点灯",jyutping:"maau4 ci3 dim2 dang1",meaning:"找屎（找死）",mandarin:"自找麻烦",example:"你咁做即系茅厕点灯。",scene:"自找麻烦",emoji:"🚽💡",tags:["歇后语","谐音"]},
@@ -408,7 +437,7 @@ const WORDS=[
 {id:"sau_sing_gung_diu_geng",type:"xiehouyu",level:2,term:"寿星公吊颈",jyutping:"sau6 sing1 gung1 diu3 geng2",meaning:"嫌命长",mandarin:"自寻死路",example:"你咁搏命，寿星公吊颈咩！",scene:"冒险",emoji:"👴🪢",tags:["歇后语","比喻"]},
 {id:"deng_ngaang_seong",type:"slang",level:2,term:"顶硬上",jyutping:"ding2 ngaang6 soeng5",meaning:"明知困难都要顶住去做",mandarin:"硬着头皮上",example:"冇办法啦，顶硬上啦。",scene:"冇办法，明知难都要硬住头皮上",emoji:"💪😤",tags:["俚语","处世"]},
 {id:"jat_wok_pou",type:"slang",level:2,term:"一镬泡",jyutping:"jat1 wok6 pou5",meaning:"事情被搞到乱七八糟",mandarin:"一塌糊涂",example:"单嘢搞到一镬泡。",scene:"事情被搞砸",emoji:"🍲💥",tags:["俚语","状态"]},
-{id:"laap_laap_lyun",type:"slang",level:2,term:"立立乱",jyutping:"laap6 laap6 lyun6",meaning:"地方乱到冇秩序",mandarin:"乱七八糟",example:"间房立立乱。",scene:"形容混乱",emoji:"🌀📦",tags:["俚语","状态"]},
+{id:"laap_laap_lyun",type:"slang",level:2,term:"立立乱",jyutping:"laap6 laap6 lyun6",meaning:"地方乱到冇秩序",mandarin:"乱七八糟",example:"佢搬完屋冇执拾，间房立立乱。",scene:"形容混乱",emoji:"🌀📦",tags:["俚语","状态"]},
 {id:"sik_sei_maau",type:"slang",level:2,term:"食死猫",jyutping:"sik6 sei2 maau1",meaning:"被迫背黑锅",mandarin:"背黑锅",example:"明明唔系我错，点解要我食死猫？",scene:"明明唔系你错，但被迫背黑锅",emoji:"🐱🍽️",tags:["俚语","职场"]},
 {id:"zap_sei_gai",type:"slang",level:2,term:"执死鸡",jyutping:"zap1 sei2 gai1",meaning:"捡到便宜",mandarin:"捡漏",example:"佢执死鸡，买到平嘢。",scene:"捡便宜",emoji:"🐔🤲",tags:["俚语","日常"]},
 {id:"dan_dung_gu",type:"slang",level:2,term:"炖冬菇",jyutping:"dan6 dung1 gu1",meaning:"被解雇、被冷落",mandarin:"被炒/坐冷板凳",example:"佢做错嘢，畀老板炖冬菇。",scene:"被冷落",emoji:"🍲🍄",tags:["俚语","职场"]},
@@ -453,7 +482,7 @@ const WORDS=[
 {id:"zo_ji_jap",type:"proverb",level:2,term:"左耳入右耳出",jyutping:"zo2 ji5 jap6 jau6 ji5 ceot1",meaning:"听过就唔记得",mandarin:"左耳进右耳出",example:"你讲嘅嘢，佢左耳入右耳出。",scene:"唔听教",emoji:"👂",tags:["俗语","沟通"]},
 {id:"hou_sam_zoek_leoi",type:"proverb",level:2,term:"好心着雷劈",jyutping:"hou2 sam1 zoek6 leoi4 pik1",meaning:"好心冇好报",mandarin:"好心没好报",example:"我帮佢反而畀佢闹，好心着雷劈。",scene:"好心被误解",emoji:"💔",tags:["俗语","情感"]},
 {id:"gau_ngaau_leoi_dung",type:"proverb",level:2,term:"狗咬吕洞宾",jyutping:"gau2 ngaau5 leoi5 dung6 ban1",meaning:"唔识好人心",mandarin:"狗咬吕洞宾",example:"你真系狗咬吕洞宾，唔识好人心。",scene:"唔领情",emoji:"🐕",tags:["俗语","人际"]},
-{id:"saam_go_wo_seong",type:"proverb",level:2,term:"三个和尚冇水食",jyutping:"saam1 go3 wo4 soeng2 mou5 seoi2 sik6",meaning:"人多反而冇人做",mandarin:"三个和尚没水吃",example:"你哋三个和尚冇水食。",scene:"人多推卸",emoji:"🧘",tags:["俗语","社会"]},
+{id:"saam_go_wo_seong",type:"proverb",level:2,term:"三个和尚冇水食",jyutping:"saam1 go3 wo4 soeng2 mou5 seoi2 sik6",meaning:"人多反而冇人做",mandarin:"三个和尚没水吃",example:"个个都唔肯做，三个和尚冇水食。",scene:"人多推卸",emoji:"🧘",tags:["俗语","社会"]},
 {id:"jat_zuk_gou",type:"proverb",level:2,term:"一竹篙打一船人",jyutping:"jat1 zuk1 gou1 daa2 jat1 syun4 jan4",meaning:"一竹篙打尽所有人",mandarin:"一概而论",example:"你唔好一竹篙打一船人。",scene:"一概而论",emoji:"🚣",tags:["俗语","沟通"]},
 {id:"got_gai_jin_jung",type:"proverb",level:2,term:"割鸡焉用牛刀",jyutping:"got3 gai1 jin1 jung6 ngau4 dou1",meaning:"小事唔使用大阵仗",mandarin:"杀鸡焉用牛刀",example:"呢件小事，割鸡焉用牛刀？",scene:"大材小用",emoji:"🐔🔪",tags:["俗语","处世"]},
 {id:"jau_ze_jau_waan",type:"proverb",level:2,term:"有借有还再借不难",jyutping:"jau5 ze3 jau5 waan4 zoi3 ze3 bat1 naan4",meaning:"借嘢要还，下次先借得到",mandarin:"有借有还，再借不难",example:"你记得还钱啊，有借有还再借不难。",scene:"提醒还钱",emoji:"💰📝",tags:["俗语","处世"]},
@@ -466,7 +495,7 @@ const WORDS=[
 {id:"gong_saan_ji_goi",type:"proverb",level:2,term:"江山易改本性难移",jyutping:"gong1 saan1 ji6 goi2 bun2 sing3 naan4 ji4",meaning:"性格好难改",mandarin:"江山易改，本性难移",example:"江山易改本性难移，佢始终咁。",scene:"性格难改",emoji:"⛰️",tags:["俗语","人品"]},
 {id:"syun_dou_kiu_tau",type:"proverb",level:2,term:"船到桥头自然直",jyutping:"syun4 dou3 kiu4 tau4 zi6 jin4 zik6",meaning:"到时自然有办法",mandarin:"船到桥头自然直",example:"唔使担心，船到桥头自然直。",scene:"劝人别担心",emoji:"🚢",tags:["俗语","处世"]},
 {id:"lau_dak_cing_saan",type:"proverb",level:2,term:"留得青山在哪怕冇柴烧",jyutping:"lau4 dak1 cing1 saan1 zoi6 naa5 paa3 mou5 caai4 siu1",meaning:"保住根本就有将来",mandarin:"留得青山在，不怕没柴烧",example:"留得青山在哪怕冇柴烧，保重身体先。",scene:"保重根本",emoji:"🌲",tags:["俗语","处世"]},
-{id:"tau_gai_m_dou",type:"proverb",level:2,term:"偷鸡唔到蚀揸米",jyutping:"tau1 gai1 m4 dou3 sit6 zaa1 mai5",meaning:"想占便宜反而蚀底",mandarin:"偷鸡不成蚀把米",example:"今次偷鸡唔到蚀揸米。",scene:"想占便宜反吃亏",emoji:"🐔🍚",tags:["俗语","社会"]},
+{id:"tau_gai_m_dou",type:"proverb",level:2,term:"偷鸡唔到蚀揸米",jyutping:"tau1 gai1 m4 dou3 sit6 zaa1 mai5",meaning:"想占便宜反而蚀底",mandarin:"偷鸡不成蚀把米",example:"想占便宜点知衰咗，今次偷鸡唔到蚀揸米。",scene:"想占便宜反吃亏",emoji:"🐔🍚",tags:["俗语","社会"]},
 {id:"zap_syu_haang_tau",type:"proverb",level:2,term:"执输行头惨过败家",jyutping:"zap1 syu1 haang4 tau4 caam2 gwo3 baai6 gaa1",meaning:"落后比败家更惨",mandarin:"落后比败家更惨",example:"执输行头惨过败家，快啲行动啦。",scene:"提醒要领先",emoji:"🏃",tags:["俗语","社会"]},
 {id:"hou_tau_hou_mei",type:"proverb",level:2,term:"好头好尾",jyutping:"hou2 tau4 hou2 mei5",meaning:"有始有终",mandarin:"有始有终",example:"做事要好头好尾。",scene:"做事有始有终",emoji:"🎬",tags:["俗语","处世"]},
 {id:"sau_ting_hau_ting",type:"proverb",level:2,term:"手停口停",jyutping:"sau2 ting4 hau2 ting4",meaning:"唔做工就冇饭食",mandarin:"手停口停",example:"手停口停，唔可以偷懒。",scene:"讲生计",emoji:"🍚",tags:["俗语","社会"]},
@@ -483,8 +512,8 @@ const WORDS=[
 {id:"seoi_dik_sek_cyun",type:"proverb",level:2,term:"水滴石穿",jyutping:"seoi2 dik6 sek6 cyun1",meaning:"坚持就成功",mandarin:"水滴石穿",example:"水滴石穿，坚持就会成功。",scene:"鼓励坚持",emoji:"💧",tags:["俗语","鼓励"]},
 {id:"bing_dung_saam_cek",type:"proverb",level:2,term:"冰冻三尺非一日之寒",jyutping:"bing1 dung3 saam1 cek3 fei1 jat1 jat6 zi1 hon4",meaning:"问题系日积月累",mandarin:"冰冻三尺，非一日之寒",example:"冰冻三尺非一日之寒，问题好耐啦。",scene:"讲积弊",emoji:"❄️",tags:["俗语","社会"]},
 {id:"lou_jiu_zi_maa_lik",type:"proverb",level:2,term:"路遥知马力日久见人心",jyutping:"lou6 jiu4 zi1 maa5 lik6 jat6 gau2 gin3 jan4 sam1",meaning:"相处耐先知人品",mandarin:"路遥知马力，日久见人心",example:"路遥知马力日久见人心，唔使急。",scene:"讲认识人",emoji:"🐴",tags:["俗语","人际"]},
-{id:"hoi_jan_zi_sam",type:"proverb",level:2,term:"害人之心不可有防人之心不可无",jyutping:"hoi6 jan4 zi1 sam1 bat1 ho2 jau5 fong4 jan4 zi1 sam1 bat1 ho2 mou4",meaning:"唔可以害人，但要防人",mandarin:"害人之心不可有，防人之心不可无",example:"害人之心不可有防人之心不可无。",scene:"提醒防人",emoji:"🛡️",tags:["俗语","处世"]},
-{id:"jan_jat_si_fung_ping",type:"proverb",level:2,term:"忍一时风平浪静退一步海阔天空",jyutping:"jan2 jat1 si4 fung1 ping4 long6 zing6 teoi3 jat1 bou6 hoi2 fut3 tin1 hung1",meaning:"忍让就会无事",mandarin:"忍一时风平浪静，退一步海阔天空",example:"忍一时风平浪静退一步海阔天空。",scene:"劝人忍让",emoji:"🌊",tags:["俗语","处世"]},
+{id:"hoi_jan_zi_sam",type:"proverb",level:2,term:"害人之心不可有防人之心不可无",jyutping:"hoi6 jan4 zi1 sam1 bat1 ho2 jau5 fong4 jan4 zi1 sam1 bat1 ho2 mou4",meaning:"唔可以害人，但要防人",mandarin:"害人之心不可有，防人之心不可无",example:"做人要记住，害人之心不可有防人之心不可无。",scene:"提醒防人",emoji:"🛡️",tags:["俗语","处世"]},
+{id:"jan_jat_si_fung_ping",type:"proverb",level:2,term:"忍一时风平浪静退一步海阔天空",jyutping:"jan2 jat1 si4 fung1 ping4 long6 zing6 teoi3 jat1 bou6 hoi2 fut3 tin1 hung1",meaning:"忍让就会无事",mandarin:"忍一时风平浪静，退一步海阔天空",example:"唔好同佢嘈，忍一时风平浪静退一步海阔天空。",scene:"劝人忍让",emoji:"🌊",tags:["俗语","处世"]},
 {id:"gaa_wo_maan_si_hing",type:"proverb",level:2,term:"家和万事兴",jyutping:"gaa1 wo4 maan6 si6 hing1",meaning:"家庭和睦就万事顺利",mandarin:"家和万事兴",example:"家和万事兴，唔好吵啦。",scene:"劝家庭和睦",emoji:"🏠",tags:["俗语","家庭"]},
 {id:"sik_gwo_faan_cam_mei",type:"slang",level:2,term:"食过返寻味",jyutping:"sik6 gwo3 faan1 cam4 mei6",meaning:"食过好味嘅嘢之后仲想再食",mandarin:"回味无穷",example:"呢间糖水铺嘅芝麻糊，真系食过返寻味。",scene:"形容食物好味到令人回味",emoji:"🍜😋",tags:["俚语","饮食"]},
 {id:"sik_bat_jin_cam",type:"proverb",level:2,term:"食不言寝不语",jyutping:"sik6 bat1 jin4 cam2 bat1 jyu5",meaning:"食饭瞓觉唔好讲嘢",mandarin:"食不言，寝不语",example:"食不言寝不语，专心食饭。",scene:"教规矩",emoji:"🍽️",tags:["俗语","礼仪"]},
@@ -518,23 +547,23 @@ const WORDS=[
 {id:"bun_tin_diu",type:"slang",level:2,term:"半天吊",jyutping:"bun3 tin1 diu3",meaning:"悬而未决",mandarin:"悬而未决",example:"件事半天吊，唔知点算。",scene:"事情未定",emoji:"🎣",tags:["俚语","状态"]},
 
 /* ========== 高级 Level 3（120条） ========== */
-{id:"zyu_pang_gau_jau",type:"idiom",level:3,term:"猪朋狗友",jyutping:"zyu1 pang4 gau2 jau5",meaning:"坏朋友",mandarin:"狐朋狗友",example:"佢成日同班猪朋狗友出去。",scene:"交友不慎",emoji:"🐷🐶",tags:["成语","人际"]},
-{id:"se_tau_syu_ngaan",type:"idiom",level:3,term:"蛇头鼠眼",jyutping:"se4 tau4 syu2 ngaan5",meaning:"样貌猥琐",mandarin:"獐头鼠目",example:"嗰个人蛇头鼠眼，小心啲。",scene:"形容外貌可疑",emoji:"🐍🐭👀",tags:["成语","外貌"]},
-{id:"mei_zing_ngaan_kei",type:"idiom",level:3,term:"眉精眼企",jyutping:"mei4 zing1 ngaan5 kei5",meaning:"醒目、精明",mandarin:"机灵",example:"佢做嘢眉精眼企，好少出错。",scene:"形容精明",emoji:"👁️✨",tags:["成语","性格"]},
-{id:"gai_sau_aap_goek",type:"idiom",level:3,term:"鸡手鸭脚",jyutping:"gai1 sau2 aap3 goek3",meaning:"手脚笨拙",mandarin:"笨手笨脚",example:"你鸡手鸭脚，等我嚟啦。",scene:"形容笨拙",emoji:"🐔✋🦆🦶",tags:["成语","动作"]},
+{id:"zyu_pang_gau_jau",type:"slang",level:3,term:"猪朋狗友",jyutping:"zyu1 pang4 gau2 jau5",meaning:"坏朋友",mandarin:"狐朋狗友",example:"佢成日同班猪朋狗友出去。",scene:"交友不慎",emoji:"🐷🐶",tags:["俚语","人际"]},
+{id:"se_tau_syu_ngaan",type:"slang",level:3,term:"蛇头鼠眼",jyutping:"se4 tau4 syu2 ngaan5",meaning:"样貌猥琐",mandarin:"獐头鼠目",example:"嗰个人蛇头鼠眼，小心啲。",scene:"形容外貌可疑",emoji:"🐍🐭👀",tags:["俚语","外貌"]},
+{id:"mei_zing_ngaan_kei",type:"slang",level:3,term:"眉精眼企",jyutping:"mei4 zing1 ngaan5 kei5",meaning:"醒目、精明",mandarin:"机灵",example:"佢做嘢眉精眼企，好少出错。",scene:"形容精明",emoji:"👁️✨",tags:["俚语","性格"]},
+{id:"gai_sau_aap_goek",type:"slang",level:3,term:"鸡手鸭脚",jyutping:"gai1 sau2 aap3 goek3",meaning:"手脚笨拙",mandarin:"笨手笨脚",example:"你鸡手鸭脚，等我嚟啦。",scene:"形容笨拙",emoji:"🐔✋🦆🦶",tags:["俚语","动作"]},
 {id:"saam_gu_luk_po",type:"idiom",level:3,term:"三姑六婆",jyutping:"saam1 gu1 luk6 po4",meaning:"钟意讲是非嘅妇女",mandarin:"三姑六婆",example:"嗰班三姑六婆成日讲是非。",scene:"爱讲八卦",emoji:"👵",tags:["成语","人际"]},
-{id:"jat_tau_mou_seoi",type:"idiom",level:3,term:"一头雾水",jyutping:"jat1 tau4 mou6 seoi2",meaning:"完全唔明白",mandarin:"一头雾水",example:"听完佢讲，我一头雾水。",scene:"完全不明白",emoji:"🌫️",tags:["成语","状态"]},
-{id:"jat_tou_hei",type:"idiom",level:3,term:"一肚气",jyutping:"jat1 tou5 hei3",meaning:"满肚子气",mandarin:"一肚子气",example:"佢返嚟一肚气。",scene:"非常生气",emoji:"😤",tags:["成语","情感"]},
-{id:"jat_san_ngai",type:"idiom",level:3,term:"一身蚁",jyutping:"jat1 san1 ngai5",meaning:"惹上麻烦",mandarin:"惹麻烦上身",example:"你咁做会一身蚁。",scene:"惹麻烦",emoji:"🐜",tags:["成语","状态"]},
-{id:"jat_cam_baak_caai",type:"idiom",level:3,term:"一沉百踩",jyutping:"jat1 cam4 baak3 caai2",meaning:"失势后人人踩",mandarin:"墙倒众人推",example:"佢一沉百踩，好惨。",scene:"失势被踩",emoji:"👞",tags:["成语","社会"]},
-{id:"jat_ngaak_hon",type:"idiom",level:3,term:"一额汗",jyutping:"jat1 ngaak6 hon6",meaning:"非常紧张",mandarin:"一头汗",example:"吓到我成额汗。",scene:"紧张受惊",emoji:"😅",tags:["成语","情感"]},
+{id:"jat_tau_mou_seoi",type:"slang",level:3,term:"一头雾水",jyutping:"jat1 tau4 mou6 seoi2",meaning:"完全唔明白",mandarin:"一头雾水",example:"听完佢讲，我一头雾水。",scene:"完全不明白",emoji:"🌫️",tags:["俚语","状态"]},
+{id:"jat_tou_hei",type:"slang",level:3,term:"一肚气",jyutping:"jat1 tou5 hei3",meaning:"满肚子气",mandarin:"一肚子气",example:"佢返嚟一肚气。",scene:"非常生气",emoji:"😤",tags:["俚语","情感"]},
+{id:"jat_san_ngai",type:"slang",level:3,term:"一身蚁",jyutping:"jat1 san1 ngai5",meaning:"惹上麻烦",mandarin:"惹麻烦上身",example:"你咁做会一身蚁。",scene:"惹麻烦",emoji:"🐜",tags:["俚语","状态"]},
+{id:"jat_cam_baak_caai",type:"proverb",level:3,term:"一沉百踩",jyutping:"jat1 cam4 baak3 caai2",meaning:"失势后人人踩",mandarin:"墙倒众人推",example:"佢一沉百踩，好惨。",scene:"失势被踩",emoji:"👞",tags:["俗语","社会"]},
+{id:"jat_ngaak_hon",type:"slang",level:3,term:"一额汗",jyutping:"jat1 ngaak6 hon6",meaning:"非常紧张",mandarin:"一头汗",example:"吓到我成额汗。",scene:"紧张受惊",emoji:"😅",tags:["俚语","情感"]},
 {id:"mou_go_joeng_zing",type:"slang",level:3,term:"冇嗰样整嗰样",jyutping:"mou5 go2 joeng2 zing2 go2 joeng2",meaning:"无中生有",mandarin:"无事生非",example:"你唔好冇嗰样整嗰样。",scene:"无中生有",emoji:"🤷",tags:["俚语","人品"]},
 {id:"mou_mei_fei_to",type:"slang",level:3,term:"冇尾飞堶",jyutping:"mou5 mei5 fei1 to4",meaning:"有头无尾",mandarin:"有头无尾",example:"佢做嘢冇尾飞堶。",scene:"做事有头无尾",emoji:"🪁",tags:["俚语","人品"]},
 {id:"jau_tau_wai",type:"slang",level:3,term:"有头威冇尾阵",jyutping:"jau5 tau4 wai1 mou5 mei5 zan6",meaning:"开头威后面冇力",mandarin:"虎头蛇尾",example:"你唔好有头威冇尾阵。",scene:"虎头蛇尾",emoji:"🐯",tags:["俚语","人品"]},
-{id:"jau_zi_sai",type:"slang",level:3,term:"有姿势冇实际",jyutping:"jau5 zi1 sai3 mou5 sat6 zai3",meaning:"得个样冇实力",mandarin:"花架子",example:"佢有姿势冇实际。",scene:"空有其表",emoji:"💃",tags:["俚语","评价"]},
-{id:"hou_sik_laan_zou",type:"idiom",level:3,term:"好食懒做",jyutping:"hou2 sik6 laan5 zou6",meaning:"钟意食但唔做嘢",mandarin:"好吃懒做",example:"你唔好成日好食懒做。",scene:"指人懒",emoji:"🍔",tags:["成语","人品"]},
-{id:"sau_baan_ngaan",type:"idiom",level:3,term:"手板眼见功夫",jyutping:"sau2 baan2 ngaan5 gin3 gung1 fu1",meaning:"好简单嘅技能",mandarin:"一眼就会",example:"呢啲手板眼见功夫，好易。",scene:"形容简单",emoji:"✋",tags:["成语","技能"]},
-{id:"jat_ngaan_gwaan_cat",type:"idiom",level:3,term:"一眼关七",jyutping:"jat1 ngaan5 gwaan1 cat1",meaning:"一眼睇住好多嘢",mandarin:"眼观六路",example:"做收银要一眼关七。",scene:"形容眼利",emoji:"👀",tags:["成语","技能"]},
+{id:"jau_zi_sai",type:"slang",level:3,term:"有姿势冇实际",jyutping:"jau5 zi1 sai3 mou5 sat6 zai3",meaning:"得个样冇实力",mandarin:"花架子",example:"佢打波动作好靓，可惜有姿势冇实际。",scene:"空有其表",emoji:"💃",tags:["俚语","评价"]},
+{id:"hou_sik_laan_zou",type:"slang",level:3,term:"好食懒做",jyutping:"hou2 sik6 laan5 zou6",meaning:"钟意食但唔做嘢",mandarin:"好吃懒做",example:"你唔好成日好食懒做。",scene:"指人懒",emoji:"🍔",tags:["俚语","人品"]},
+{id:"sau_baan_ngaan",type:"proverb",level:3,term:"手板眼见功夫",jyutping:"sau2 baan2 ngaan5 gin3 gung1 fu1",meaning:"好简单嘅技能",mandarin:"一眼就会",example:"呢啲手板眼见功夫，好易。",scene:"形容简单",emoji:"✋",tags:["俗语","技能"]},
+{id:"jat_ngaan_gwaan_cat",type:"proverb",level:3,term:"一眼关七",jyutping:"jat1 ngaan5 gwaan1 cat1",meaning:"一眼睇住好多嘢",mandarin:"眼观六路",example:"做收银要一眼关七。",scene:"形容眼利",emoji:"👀",tags:["俗语","技能"]},
 {id:"sam_seoi_cing",type:"slang",level:3,term:"心水清",jyutping:"sam1 seoi2 cing1",meaning:"心里明白",mandarin:"心里有数",example:"佢心水清，唔使讲。",scene:"心里清楚",emoji:"💧",tags:["俚语","情感"]},
 {id:"sam_daai_sam_sai",type:"slang",level:3,term:"心大心细",jyutping:"sam1 daai6 sam1 sai3",meaning:"心大心细，拿唔定主意",mandarin:"三心二意",example:"你唔好心大心细啦。",scene:"指人犹豫",emoji:"🤔",tags:["俚语","情感"]},
 {id:"sam_si_si",type:"slang",level:3,term:"心思思",jyutping:"sam1 si1 si1",meaning:"心里一直想",mandarin:"心痒痒",example:"我心思思好想去旅行。",scene:"心里挂住",emoji:"💭",tags:["俚语","情感"]},
@@ -617,7 +646,7 @@ const WORDS=[
 {id:"jat_ming_ging_jan",type:"idiom",level:3,term:"一鸣惊人",jyutping:"jat1 ming4 ging1 jan4",meaning:"一出声就震惊所有人",mandarin:"一鸣惊人",example:"佢平时唔出声，今次一鸣惊人。",scene:"突然成功",emoji:"📢",tags:["成语","成功"]},
 {id:"jat_si_tung_jan",type:"idiom",level:3,term:"一视同仁",jyutping:"jat1 si6 tung4 jan4",meaning:"对所有人一样",mandarin:"一视同仁",example:"老师一视同仁，唔偏心。",scene:"平等对待",emoji:"⚖️",tags:["成语","处世"]},
 {id:"jat_nok_cin_gam",type:"idiom",level:3,term:"一诺千金",jyutping:"jat1 nok6 cin1 gam1",meaning:"讲出口嘅承诺好值钱",mandarin:"一诺千金",example:"佢一诺千金，讲得出做得到。",scene:"守信用",emoji:"🤝",tags:["成语","人品"]},
-{id:"jat_gaan_fung_seon",type:"idiom",level:3,term:"一帆风顺",jyutping:"jat1 faan4 fung1 seon6",meaning:"顺利无阻",mandarin:"一帆风顺",example:"祝你一帆风顺！",scene:"祝福",emoji:"⛵",tags:["成语","祝福"]},
+{id:"jat_gaan_fung_seon",type:"idiom",level:3,term:"一帆风顺",jyutping:"jat1 faan4 fung1 seon6",meaning:"顺利无阻",mandarin:"一帆风顺",example:"你听日出海，祝你一帆风顺！",scene:"祝福",emoji:"⛵",tags:["成语","祝福"]},
 {id:"jat_cing_ji_co",type:"idiom",level:3,term:"一清二楚",jyutping:"jat1 cing1 ji6 co2",meaning:"非常清楚",mandarin:"一清二楚",example:"件事一清二楚，唔使再讲。",scene:"清楚明白",emoji:"🔍",tags:["成语","状态"]},
 {id:"jat_mong_daa_zeon",type:"idiom",level:3,term:"一网打尽",jyutping:"jat1 mong5 daa2 zeon6",meaning:"一次过全部捉晒",mandarin:"一网打尽",example:"警方一网打尽，全部捉晒。",scene:"全部捕获",emoji:"🕸️",tags:["成语","策略"]},
 {id:"jat_cuk_zik_faat",type:"idiom",level:3,term:"一触即发",jyutping:"jat1 cuk1 zik1 faat3",meaning:"一触就爆发",mandarin:"一触即发",example:"形势一触即发，好紧张。",scene:"局势紧张",emoji:"💥",tags:["成语","处境"]},
@@ -633,7 +662,7 @@ const WORDS=[
 {id:"jat_jing_geoi_cyun",type:"idiom",level:3,term:"一应俱全",jyutping:"jat1 jing3 geoi6 cyun4",meaning:"全部都有齐",mandarin:"一应俱全",example:"呢度设施一应俱全。",scene:"样样齐全",emoji:"✅",tags:["成语","状态"]},
 {id:"jat_kyut_bat_zan",type:"idiom",level:3,term:"一蹶不振",jyutping:"jat1 kyut3 bat1 zan3",meaning:"受挫后再起唔到",mandarin:"一蹶不振",example:"佢输咗之后一蹶不振。",scene:"失败后消沉",emoji:"😔",tags:["成语","状态"]},
 {id:"jat_jat_cin_lei",type:"idiom",level:3,term:"一日千里",jyutping:"jat1 jat6 cin1 lei5",meaning:"进步神速",mandarin:"一日千里",example:"佢学习一日千里。",scene:"进步快",emoji:"🚀",tags:["成语","成功"]},
-{id:"jat_can_bat_jim",type:"idiom",level:3,term:"一尘不染",jyutping:"jat1 can4 bat1 jim5",meaning:"非常干净",mandarin:"一尘不染",example:"间屋一尘不染。",scene:"非常干净",emoji:"✨",tags:["成语","状态"]},
+{id:"jat_can_bat_jim",type:"idiom",level:3,term:"一尘不染",jyutping:"jat1 can4 bat1 jim5",meaning:"非常干净",mandarin:"一尘不染",example:"佢打扫完，成间屋一尘不染。",scene:"非常干净",emoji:"✨",tags:["成语","状态"]},
 {id:"jat_jau_zi_haap",type:"idiom",level:3,term:"一丘之貉",jyutping:"jat1 jau1 zi1 haap6",meaning:"同一类坏人",mandarin:"一丘之貉",example:"佢哋两个一丘之貉。",scene:"同类坏人",emoji:"🦝",tags:["成语","人品"]},
 {id:"jat_coeng_jat_wo",type:"idiom",level:3,term:"一唱一和",jyutping:"jat1 coeng3 jat1 wo6",meaning:"互相配合",mandarin:"一唱一和",example:"佢哋一唱一和，好合拍。",scene:"配合默契",emoji:"🎭",tags:["成语","人际"]},
 {id:"jat_dou_loeng_dyun",type:"idiom",level:3,term:"一刀两断",jyutping:"jat1 dou1 loeng5 dyun6",meaning:"彻底断绝关系",mandarin:"一刀两断",example:"我同佢一刀两断。",scene:"断绝关系",emoji:"✂️",tags:["成语","人际"]},
@@ -641,21 +670,129 @@ const WORDS=[
 ];
 
 /* =========================================================
+   判断题「微改释义」表（第三章）
+   用于第三章判断题（3-4 大Boss 混合关）：错误题面 = 在正确释义上微改而来的错释义。
+   键为词条 term；仅第三章词条使用。
+   ========================================================= */
+const FALSE_MEANING={
+"猪朋狗友":"一班好好嘅朋友","蛇头鼠眼":"样貌英俊","眉精眼企":"迟钝、笨拙","鸡手鸭脚":"手脚灵活",
+"三姑六婆":"钟意帮人嘅妇女","一头雾水":"完全明白","一肚气":"心情舒畅","一身蚁":"一身轻松",
+"一沉百踩":"得势后人人赞","一额汗":"非常轻松","冇嗰样整嗰样":"实事求是","冇尾飞堶":"有始有终",
+"有头威冇尾阵":"开头弱后面好劲","有姿势冇实际":"又有样又有实力","好食懒做":"勤力做嘢","手板眼见功夫":"好难学嘅技能",
+"一眼关七":"一眼只睇一样嘢","心水清":"心里混乱","心大心细":"好快就拿定主意","心思思":"心里完全冇想",
+"心悒":"心里好舒服","面懵懵":"一脸精明","面红面绿":"面不改容","面青口唇白":"非常镇定",
+"口窒窒":"讲话好流畅","口轻轻":"唔肯答应人","口多多":"收口唔讲嘢","口疏":"守得住秘密",
+"口密":"守唔住秘密","耳仔软":"好难被人说服","眼利":"眼拙","眼浅":"唔容易喊",
+"眼阔肚窄":"叫得少食得晒","眼火爆":"看到就开心","眼冤":"看到就欢喜","头耷耷":"精神奕奕",
+"头岳岳":"垂头丧气","手指拗出唔拗入":"帮自己人唔帮外人","手瓜起腱":"骨瘦如柴","手长衫袖短":"能力好强",
+"食嘢唔做嘢":"只顾做嘢唔食","做嘢打烂嘢":"做事好利落","大癫大废":"斯斯文文","大模斯样":"偷偷摸摸",
+"大安旨意":"好担心","大把世界":"机会少","大鸡唔食细米":"大人物乜都肯做","好行夹唔送":"留低唔好走",
+"好声好气":"语气粗暴","好衰唔衰":"好彩、咁啱","衰到贴地":"好到极点","威到尽":"冇面到极点",
+"掂过碌蔗":"非常唔顺利","劲到爆":"渣到极点","靓到爆镜":"丑到极点","贵到飞起":"非常便宜",
+"快过打针":"非常慢","慢过蚁躝":"非常快","大把":"很少","唔记得":"记得好清楚",
+"事过境迁":"事情同环境都冇变过","一五一十":"求求其其讲两句","三心二意":"好快就决定","四面楚歌":"四方都有贵人帮手",
+"五颜六色":"颜色单调","六神无主":"非常镇定","七上八落":"心情好平静","八面玲珑":"为人固执，得罪人多",
+"九牛一毛":"举足轻重","十全十美":"处处有缺点","百发百中":"次次都唔中","千军万马":"势单力薄",
+"万众一心":"各有各做","画龙点睛":"画蛇添足多此一举","对牛弹琴":"同知音人倾偈","掩耳盗铃":"呃到全世界",
+"亡羊补牢":"出事前已经放弃","守株待兔":"主动去争取","刻舟求剑":"好识变通","叶公好龙":"真心钟意到不得了",
+"井底之蛙":"见识广博","杯弓蛇影":"胆大包天","草木皆兵":"非常放松","打草惊蛇":"行动完全冇惊动对方",
+"声东击西":"光明正大直接进攻","调虎离山":"同对方正面硬碰","抛砖引玉":"用最好嘅嘢收尾","一箭双雕":"顾此失彼",
+"指鹿为马":"实事求是","望梅止渴":"脚踏实地解决问题","卧薪尝胆":"得势就即刻报仇","破釜沉舟":"留定后路",
+"背水一战":"进退自如","三顾草庐":"请一次就算","鞠躬尽瘁":"得过且过","死而后已":"半途而废",
+"一鸣惊人":"一出声就畀人笑","一视同仁":"大细超，偏心","一诺千金":"讲嘢唔算数","一帆风顺":"处处碰壁",
+"一清二楚":"非常模糊","一网打尽":"走甩咗大部分","一触即发":"好难先爆发","一劳永逸":"做极都做唔完",
+"一意孤行":"从善如流","一鼓作气":"做到一半就放弃","一落千丈":"地位生意一路飙升","一塌糊涂":"场面井然有序",
+"一丝不苟":"做事求求其其","一败涂地":"大获全胜","一脉相承":"各自独立冇关系","一相情愿":"双方都同意",
+"一应俱全":"缺东缺西","一蹶不振":"受挫后越战越勇","一日千里":"停滞不前","一尘不染":"污糟邋遢",
+"一丘之貉":"两种完全唔同嘅人","一唱一和":"各持己见唱对台","一刀两断":"修补返关系","一板一眼":"做事乱咁嚟"
+};
+
+/* =========================================================
+   判断题「微改释义」表（第二章）
+   用于 2-2「俗语判断」：错误题面 = 在正确释义上微改而来的错释义。
+   键为词条 term；仅第二章词条使用。
+   ========================================================= */
+const FALSE_MEANING_L2={
+"食得咸鱼抵得渴":"只享受好处，唔使付出代价","马死落地行":"失去依靠就唯有等别人帮","苏州过后无艇搭":"机会错过咗仲会有下一次",
+"烂船都有三斤钉":"再差就真系一无所有","瘦田无人耕，耕开有人争":"冇人要嘅嘢永远都冇人争","针唔拮到肉唔知痛":"唔使亲身经历都知痛",
+"家丑不出外传":"家里嘅丑事要四围同人讲","茅厕点灯":"贪生怕死","鸡食放光虫":"蒙在鼓里",
+"寿星公吊颈":"想长命百岁","顶硬上":"遇到困难就即刻退缩","一镬泡":"事情被搞得好妥当",
+"立立乱":"地方整齐有序","食死猫":"主动认晒所有错","执死鸡":"蚀咗个大底",
+"炖冬菇":"升职加薪","甩底":"答应咗就一定会准时到","走数":"找清条数，一毫都唔欠",
+"冇口齿":"讲嘢一定算数","车大炮":"句句都系实话","作大":"如实咁讲，唔加唔减",
+"讲大话":"讲真话","出猫":"规规矩矩做人","打斧头":"分文都唔贪",
+"揩油":"自己蚀底畀人","爆煲":"平安大吉","收皮":"鼓励人继续做落去",
+"玩完":"事情仲有得救","冇晒符":"办法多多","食自己":"靠晒别人",
+"一脚踢":"分工合作一齐做","打蛇随棍上":"见好就收，唔再追","打铁趁热":"错过咗时机先嚟做",
+"打开天窗说亮话":"拐弯抹角唔讲明","画公仔画出肠":"讲嘢点到即止","画蛇添足":"做事恰到好处",
+"脱裤放屁":"做事一针见血","食碗面反碗底":"饮水思源","过桥抽板":"得势之后回报恩人",
+"打完斋唔要和尚":"事成之后重谢帮手","有钱使得鬼推磨":"有钱都做唔到","有钱大晒":"有钱都唔算得乜",
+"穷到燶":"富贵逼人","餐餐清":"餐餐都有剩","水鬼升城隍":"好人有好报",
+"牛皮灯笼":"一点就明","竹织鸭":"好有心肝","老鼠拉龟":"好易就搞得掂",
+"铁公鸡":"疏爽大方","电灯胆":"好识趣","床下底破柴":"实冇问题",
+"鬼画符":"字迹工整","大石责死蟹":"锄强扶弱","顺得哥情失嫂意":"两边都讨好到",
+"左耳入右耳出":"听嘢好入脑","好心着雷劈":"好心有好报","狗咬吕洞宾":"识得珍惜好人",
+"三个和尚冇水食":"人多好办事","一竹篙打一船人":"只针对一个人","割鸡焉用牛刀":"小事都要大阵仗",
+"有借有还再借不难":"借咗唔还都冇所谓","己所不欲勿施于人":"自己唔想嘅嘢就畀别人受","一不做二不休":"做一半就收手",
+"人心不足蛇吞象":"知足常乐","天下乌鸦一般黑":"各处各有各唔同","牛唔饮水唔揿得牛头低":"强逼就一定得",
+"三岁定八十":"大个咗都仲会变","江山易改本性难移":"性格话改就改","船到桥头自然直":"到时就一定冇办法",
+"留得青山在哪怕冇柴烧":"留住根本都冇用","偷鸡唔到蚀揸米":"想占便宜一定有赚","执输行头惨过败家":"落后都唔算得乜",
+"好头好尾":"虎头蛇尾","手停口停":"唔做工都照有饭食","多只香炉多只鬼":"多个人多份帮拖",
+"唔见棺材唔流眼泪":"一早就有警觉","大难不死必有后福":"大难唔死，之后仲会衰","近朱者赤近墨者黑":"同乜人一齐都唔会变",
+"好事不出门丑事传千里":"丑事收得好密实","人怕出名猪怕壮":"出名一定系好事","天下无难事只怕有心人":"有心都做唔到",
+"有志者事竟成":"有决心都唔会成功","一分耕耘一分收获":"唔使耕耘都有收获","万丈高楼从地起":"唔使打基础都可以",
+"水滴石穿":"坚持都冇用","冰冻三尺非一日之寒":"问题系一夜间出现","路遥知马力日久见人心":"一见面就知人品",
+"害人之心不可有防人之心不可无":"可以害人，唔使防人","忍一时风平浪静退一步海阔天空":"忍让只会惹更多麻烦","家和万事兴":"家庭吵吵闹闹先兴旺",
+"食过返寻味":"食过好味嘅嘢就唔想再食","食不言寝不语":"食饭瞓觉要猛咁讲嘢","早起三朝当一工":"瞓晏啲都可以做多啲",
+"一日之计在于晨":"一日最重要系夜晚","一年之计在于春":"一年最重要系秋天","一寸光阴一寸金":"时间一啲都唔值钱",
+"一石二鸟":"一举两失","话头醒尾":"讲极都唔明","一眼睇晒":"睇极都睇唔透",
+"唔三唔四":"四四正正","三更半夜":"日头中午","两头唔到岸":"两头都到岸",
+"借咗聋耳陈":"耳仔好灵","大出血":"悭咗好多钱","死撑":"识得及时放弃",
+"烂尾":"有头有尾做到底","打回原形":"完全脱胎换骨","冇得救":"情况仲有得救",
+"一样米养百样人":"同一环境养出一样嘅人","天跌落嚟当被冚":"天跌落下嚟就慌到死","笑骑骑放毒蛇":"笑口常开，心地善良",
+"煲冇米粥":"实打实有料到","阿崩叫狗":"一叫就埋嚟","食咗豹子胆":"胆小如鼠",
+"冇雷公咁远":"近在咫尺","一雷天下响":"寂寂无闻","好天斩埋落雨柴":"临急先嚟抱佛脚",
+"执到金都唔识笑":"一有好运就笑到见牙唔见眼","冇爪蟛蜞":"好易就入手","半天吊":"已经尘埃落定"
+};
+
+/* =========================================================
+   茶楼点心图标：12 款自制 SVG（viewBox 0 0 120 120）
+   —— 按「名称」索引：用 dimSum.name 直接取图，图案同名字天然绑定，
+      结构上唔可能再出现「图同字对唔上」嘅情况。
+   ========================================================= */
+const DIMSUM_ART={
+"虾饺":"<ellipse cx=\"60\" cy=\"101\" rx=\"38\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M18 82 C20 52 38 38 60 38 C82 38 100 52 102 82 C88 92 32 92 18 82 Z\" fill=\"#FFE0C4\" stroke=\"#8D6E63\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/><path d=\"M30 56 Q36 46 42 56\" fill=\"none\" stroke=\"#D9A47C\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M45 48 Q51 38 57 48\" fill=\"none\" stroke=\"#D9A47C\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M63 48 Q69 38 75 48\" fill=\"none\" stroke=\"#D9A47C\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M78 56 Q84 46 90 56\" fill=\"none\" stroke=\"#D9A47C\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M30 80 C32 68 46 60 62 62 C74 64 82 71 79 79 C70 85 42 85 30 80 Z\" fill=\"#FF8A50\" stroke=\"#C63D0F\" stroke-width=\"2\" stroke-linejoin=\"round\"/><path d=\"M48 63 Q50 72 45 82\" fill=\"none\" stroke=\"#C63D0F\" stroke-width=\"1.6\" opacity=\"0.65\"/><path d=\"M62 63 Q64 72 59 83\" fill=\"none\" stroke=\"#C63D0F\" stroke-width=\"1.6\" opacity=\"0.65\"/><path d=\"M74 66 Q76 73 72 81\" fill=\"none\" stroke=\"#C63D0F\" stroke-width=\"1.6\" opacity=\"0.65\"/>",
+"干蒸烧卖":"<ellipse cx=\"60\" cy=\"101\" rx=\"36\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M26 86 L34 52 Q60 44 86 52 L94 86 Q60 96 26 86 Z\" fill=\"#FFC93C\" stroke=\"#8D6E63\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/><path d=\"M36 56 Q40 68 46 58\" fill=\"none\" stroke=\"#E0A020\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M74 58 Q80 68 84 56\" fill=\"none\" stroke=\"#E0A020\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><ellipse cx=\"60\" cy=\"52\" rx=\"26\" ry=\"11\" fill=\"#B5793C\" stroke=\"#8D6E63\" stroke-width=\"2.6\"/><ellipse cx=\"60\" cy=\"49\" rx=\"20\" ry=\"8\" fill=\"#CE8B45\"/><circle cx=\"50\" cy=\"45\" r=\"4.5\" fill=\"#E64A19\"/><circle cx=\"60\" cy=\"42\" r=\"4.5\" fill=\"#E64A19\"/><circle cx=\"70\" cy=\"45\" r=\"4.5\" fill=\"#E64A19\"/>",
+"叉烧包":"<ellipse cx=\"60\" cy=\"101\" rx=\"38\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M16 84 C14 50 34 34 60 34 C86 34 106 50 104 84 C88 94 32 94 16 84 Z\" fill=\"#FFE6C4\" stroke=\"#8D6E63\" stroke-width=\"4.2\" stroke-linejoin=\"round\"/><path d=\"M42 46 Q60 30 78 46 Q60 58 42 46 Z\" fill=\"#D32F2F\" stroke=\"#8D6E63\" stroke-width=\"2.6\" stroke-linejoin=\"round\"/><path d=\"M50 46 Q60 40 70 46\" fill=\"none\" stroke=\"#FFF0DA\" stroke-width=\"2.4\" stroke-linecap=\"round\"/><ellipse cx=\"38\" cy=\"70\" rx=\"10\" ry=\"5\" fill=\"#FFFFFF\" opacity=\"0.5\"/>",
+"蛋挞":"<ellipse cx=\"60\" cy=\"101\" rx=\"38\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M16 78 C16 44 36 32 60 32 C84 32 104 44 104 78 C88 90 32 90 16 78 Z\" fill=\"#C98A4B\" stroke=\"#8D6E63\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/><path d=\"M18 74 Q23 64 28 74 Q33 64 38 74 Q43 64 48 74 Q53 64 58 74 Q63 64 68 74 Q73 64 78 74 Q83 64 88 74 Q93 64 98 74\" fill=\"none\" stroke=\"#8D4A0F\" stroke-width=\"2.4\" stroke-linejoin=\"round\" opacity=\"0.75\"/><ellipse cx=\"60\" cy=\"58\" rx=\"31\" ry=\"19\" fill=\"#FFC93C\" stroke=\"#8D6E63\" stroke-width=\"2.6\"/><circle cx=\"48\" cy=\"56\" r=\"2.6\" fill=\"#A0522D\"/><circle cx=\"70\" cy=\"60\" r=\"2.6\" fill=\"#A0522D\"/><circle cx=\"59\" cy=\"50\" r=\"2.6\" fill=\"#A0522D\"/>",
+"豉汁凤爪":"<ellipse cx=\"60\" cy=\"101\" rx=\"36\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M56 46 Q57 28 60 16 Q63 28 64 46 Z\" fill=\"#8D4E2A\" stroke=\"#5D3319\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M55 48 Q41 64 30 86 Q38 93 45 88 Q56 70 62 52 Z\" fill=\"#8D4E2A\" stroke=\"#5D3319\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M57 50 Q55 72 56 94 Q63 94 65 72 Q65 56 64 48 Z\" fill=\"#8D4E2A\" stroke=\"#5D3319\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M65 48 Q79 64 90 86 Q82 93 75 88 Q64 70 58 52 Z\" fill=\"#8D4E2A\" stroke=\"#5D3319\" stroke-width=\"3\" stroke-linejoin=\"round\"/><circle cx=\"60\" cy=\"50\" r=\"2.6\" fill=\"#3E2411\"/>",
+"肠粉":"<ellipse cx=\"60\" cy=\"101\" rx=\"40\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><rect x=\"22\" y=\"44\" width=\"76\" height=\"26\" rx=\"13\" fill=\"#EFDCC6\" stroke=\"#8D6E63\" stroke-width=\"3.2\"/><rect x=\"16\" y=\"62\" width=\"88\" height=\"30\" rx=\"15\" fill=\"#FFF6EA\" stroke=\"#8D6E63\" stroke-width=\"3.4\"/><path d=\"M34 62 Q44 76 34 92\" fill=\"none\" stroke=\"#D9C4AC\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M62 62 Q72 76 62 92\" fill=\"none\" stroke=\"#D9C4AC\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M90 62 Q100 76 90 92\" fill=\"none\" stroke=\"#D9C4AC\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M22 79 Q60 90 98 79\" fill=\"none\" stroke=\"#5D4037\" stroke-width=\"5\" stroke-linecap=\"round\" opacity=\"0.75\"/><circle cx=\"42\" cy=\"71\" r=\"3\" fill=\"#43A047\"/><circle cx=\"66\" cy=\"69\" r=\"3\" fill=\"#43A047\"/><circle cx=\"84\" cy=\"73\" r=\"3\" fill=\"#43A047\"/>",
+"糯米鸡":"<ellipse cx=\"60\" cy=\"101\" rx=\"38\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M14 84 C14 46 36 28 60 28 C84 28 106 46 106 84 C88 96 32 96 14 84 Z\" fill=\"#4CAF50\" stroke=\"#2E6B32\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/><path d=\"M60 30 Q48 58 40 88\" fill=\"none\" stroke=\"#2E6B32\" stroke-width=\"2.2\" opacity=\"0.7\"/><path d=\"M60 30 Q72 58 80 88\" fill=\"none\" stroke=\"#2E6B32\" stroke-width=\"2.2\" opacity=\"0.7\"/><path d=\"M42 66 Q60 54 78 66 Q74 82 42 82 Z\" fill=\"#FFF3E0\" stroke=\"#8D6E63\" stroke-width=\"2.6\" stroke-linejoin=\"round\"/><circle cx=\"54\" cy=\"70\" r=\"2.6\" fill=\"#FFFDF8\"/><circle cx=\"66\" cy=\"72\" r=\"2.6\" fill=\"#FFFDF8\"/><circle cx=\"60\" cy=\"76\" r=\"2.6\" fill=\"#FFFDF8\"/><circle cx=\"57\" cy=\"68\" r=\"2.6\" fill=\"#C0392B\"/><circle cx=\"68\" cy=\"70\" r=\"2.6\" fill=\"#C0392B\"/>",
+"流沙包":"<ellipse cx=\"60\" cy=\"101\" rx=\"38\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M16 84 C14 50 34 34 60 34 C86 34 106 50 104 84 C88 94 32 94 16 84 Z\" fill=\"#FFE6C4\" stroke=\"#8D6E63\" stroke-width=\"4.2\" stroke-linejoin=\"round\"/><path d=\"M44 46 Q60 32 76 46 Q60 54 44 46 Z\" fill=\"#FFB300\" stroke=\"#C77800\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><path d=\"M60 50 C66 58 67 70 62 82 C59 87 55 86 54 80 C52 68 54 58 60 50 Z\" fill=\"#FFB300\" stroke=\"#C77800\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/><circle cx=\"58\" cy=\"86\" r=\"5\" fill=\"#FFB300\" stroke=\"#C77800\" stroke-width=\"2\"/><ellipse cx=\"36\" cy=\"70\" rx=\"9\" ry=\"5\" fill=\"#FFFFFF\" opacity=\"0.55\"/>",
+"萝卜糕":"<ellipse cx=\"60\" cy=\"101\" rx=\"40\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M18 52 L102 52 L96 92 L24 92 Z\" fill=\"#FFF4CE\" stroke=\"#8D6E63\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/><path d=\"M18 52 L102 52 L100 62 L20 62 Z\" fill=\"#E8A33D\" stroke=\"#8D6E63\" stroke-width=\"2.6\" stroke-linejoin=\"round\"/><path d=\"M24 92 L96 92 L94 82 L26 82 Z\" fill=\"#E8A33D\" stroke=\"#8D6E63\" stroke-width=\"2.6\" stroke-linejoin=\"round\"/><circle cx=\"40\" cy=\"72\" r=\"3.4\" fill=\"#C0392B\"/><circle cx=\"58\" cy=\"76\" r=\"3.4\" fill=\"#C0392B\"/><circle cx=\"76\" cy=\"71\" r=\"3.4\" fill=\"#C0392B\"/><circle cx=\"66\" cy=\"66\" r=\"3\" fill=\"#C0392B\"/><circle cx=\"48\" cy=\"66\" r=\"2.6\" fill=\"#43A047\"/><circle cx=\"84\" cy=\"78\" r=\"2.6\" fill=\"#43A047\"/>",
+"春卷":"<ellipse cx=\"60\" cy=\"101\" rx=\"40\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><rect x=\"14\" y=\"56\" width=\"92\" height=\"36\" rx=\"18\" fill=\"#E8952B\" stroke=\"#8D4A0F\" stroke-width=\"3.5\"/><path d=\"M32 56 L44 92\" stroke=\"#B86A0A\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M52 56 L64 92\" stroke=\"#B86A0A\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M72 56 L84 92\" stroke=\"#B86A0A\" stroke-width=\"3\" stroke-linecap=\"round\"/><ellipse cx=\"40\" cy=\"66\" rx=\"12\" ry=\"4\" fill=\"#FFD9A0\" opacity=\"0.6\"/>",
+"马拉糕":"<ellipse cx=\"60\" cy=\"101\" rx=\"38\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><path d=\"M26 44 L94 44 L94 92 L26 92 Z\" fill=\"#D9A05B\" stroke=\"#7A4A1E\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/><path d=\"M26 44 L94 44 L86 34 L34 34 Z\" fill=\"#EBC188\" stroke=\"#7A4A1E\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/><circle cx=\"40\" cy=\"56\" r=\"3.4\" fill=\"#B87D3A\"/><circle cx=\"58\" cy=\"52\" r=\"3.4\" fill=\"#B87D3A\"/><circle cx=\"76\" cy=\"58\" r=\"3.4\" fill=\"#B87D3A\"/><circle cx=\"48\" cy=\"70\" r=\"3.4\" fill=\"#B87D3A\"/><circle cx=\"68\" cy=\"68\" r=\"3.4\" fill=\"#B87D3A\"/><circle cx=\"36\" cy=\"82\" r=\"3.4\" fill=\"#B87D3A\"/><circle cx=\"58\" cy=\"84\" r=\"3.4\" fill=\"#B87D3A\"/><circle cx=\"80\" cy=\"80\" r=\"3.4\" fill=\"#B87D3A\"/>",
+"煎堆":"<ellipse cx=\"60\" cy=\"101\" rx=\"38\" ry=\"8\" fill=\"#C9A87C\" opacity=\"0.22\"/><circle cx=\"60\" cy=\"62\" r=\"34\" fill=\"#E8952B\" stroke=\"#8D4A0F\" stroke-width=\"3.5\"/><circle cx=\"44\" cy=\"50\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"56\" cy=\"42\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"72\" cy=\"46\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"82\" cy=\"60\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"76\" cy=\"76\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"60\" cy=\"84\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"42\" cy=\"74\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"34\" cy=\"60\" r=\"2.8\" fill=\"#FFF8F0\"/><circle cx=\"60\" cy=\"62\" r=\"2.8\" fill=\"#FFF8F0\"/><ellipse cx=\"46\" cy=\"46\" rx=\"10\" ry=\"7\" fill=\"#FFD9A0\" opacity=\"0.55\"/>"
+};
+/* 生成点心图标：外层统一带 class="dsi"，实际尺寸由 CSS 控制（各容器不同） */
+function dimSumIcon(name){const art=DIMSUM_ART[name];if(!art)return '';return `<svg class="dsi" viewBox="0 0 120 120" aria-hidden="true" focusable="false">${art}</svg>`}
+
+/* =========================================================
    关卡配置
    ========================================================= */
 const LEVELS=[
-{id:"1-1",chapter:1,title:"俚语选择题",kind:"choice",level:1,count:6,pass:4,slots:6,dimSum:{emoji:"🥟",name:"虾饺"}},
-{id:"1-2",chapter:1,title:"看图猜俚语",kind:"emoji",level:1,count:6,pass:4,slots:6,dimSum:{emoji:"🍤",name:"烧卖"}},
-{id:"1-3",chapter:1,title:"粤普配对",kind:"match",level:1,pairs:5,count:1,pass:1,slots:5,dimSum:{emoji:"🥠",name:"叉烧包"}},
-{id:"1-4",chapter:1,title:"情境选词",kind:"scene",level:1,count:5,pass:4,slots:5,dimSum:{emoji:"🍗",name:"凤爪"},boss:true},
-{id:"2-1",chapter:2,title:"俗语填空",kind:"fill",level:2,count:6,pass:4,slots:6,dimSum:{emoji:"🥧",name:"蛋挞"}},
-{id:"2-2",chapter:2,title:"俗语选择题",kind:"choice",level:2,count:6,pass:4,slots:6,dimSum:{emoji:"🍜",name:"肠粉"}},
-{id:"2-3",chapter:2,title:"俗语连线",kind:"match",level:2,pairs:5,count:1,pass:1,slots:5,dimSum:{emoji:"🍙",name:"糯米鸡"}},
-{id:"2-4",chapter:2,title:"情境配俗语",kind:"scene",level:2,count:5,pass:4,slots:5,dimSum:{emoji:"🍡",name:"牛肉丸"},boss:true},
-{id:"3-1",chapter:3,title:"释义判断",kind:"choice",level:3,count:6,pass:4,slots:6,dimSum:{emoji:"🍖",name:"叉烧"}},
-{id:"3-2",chapter:3,title:"粤拼填字",kind:"fill",level:3,count:6,pass:4,slots:6,dimSum:{emoji:"🦆",name:"烧鹅"}},
-{id:"3-3",chapter:3,title:"成语连线",kind:"match",level:3,pairs:5,count:1,pass:1,slots:5,dimSum:{emoji:"🍮",name:"流沙包"}},
-{id:"3-4",chapter:3,title:"大Boss挑战",kind:"scene",level:3,count:8,pass:6,slots:8,dimSum:{emoji:"🥮",name:"大满足"},boss:true}
+{id:"1-1",chapter:1,title:"俚语选择题",kind:"choice",level:1,count:6,pass:4,slots:6,dimSum:{name:"虾饺"}},
+{id:"1-2",chapter:1,title:"看图猜俚语",kind:"emoji",level:1,count:6,pass:4,slots:6,dimSum:{name:"干蒸烧卖"}},
+{id:"1-3",chapter:1,title:"粤普配对",kind:"match",level:1,pairs:5,count:1,pass:1,slots:5,rightField:"mandarin",dimSum:{name:"叉烧包"}},
+{id:"1-4",chapter:1,title:"情境选词",kind:"scene",level:1,count:5,pass:4,slots:5,dimSum:{name:"豉汁凤爪"},boss:true},
+{id:"2-1",chapter:2,title:"俗语填空",kind:"fill",level:2,count:6,pass:4,slots:6,keepFill:true,dimSum:{name:"蛋挞"}},
+{id:"2-2",chapter:2,title:"俗语判断",kind:"truefalse",level:2,count:6,pass:4,slots:6,falseTable:"L2",dimSum:{name:"肠粉"}},
+{id:"2-3",chapter:2,title:"俗语连线",kind:"match",level:2,pairs:5,count:1,pass:1,slots:5,dimSum:{name:"糯米鸡"}},
+{id:"2-4",chapter:2,title:"情境配俗语",kind:"scene",level:2,count:5,pass:4,slots:5,dimSum:{name:"萝卜糕"},boss:true},
+{id:"3-1",chapter:3,title:"粤拼填空",kind:"jyutping",level:3,count:6,pass:4,slots:6,dimSum:{name:"春卷"}},
+{id:"3-2",chapter:3,title:"例句填词",kind:"fill",level:3,count:6,pass:4,slots:6,keepFill:true,dimSum:{name:"马拉糕"}},
+{id:"3-3",chapter:3,title:"成语连线",kind:"match",level:3,pairs:5,count:1,pass:1,slots:5,onlyTag:"成语",dimSum:{name:"流沙包"}},
+{id:"3-4",chapter:3,title:"大Boss挑战",kind:"mixed",level:3,count:8,pass:6,slots:8,timeLimit:20,dimSum:{name:"煎堆"},boss:true}
 ];
 const CHAPTERS={1:{name:'第一章 · 街坊入门'},2:{name:'第二章 · 茶楼进阶'},3:{name:'第三章 · 老广高手'}};
 
@@ -1648,6 +1785,8 @@ function initConverters(){
 const STORAGE_KEY='canto_game_progress_v6',SOUND_KEY='canto_game_sound';
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
+// 按某字段取值唯一地抽 n 条（用于连线右栏，避免出现两个一模一样的右栏项）
+function pickUniqueByField(arr,field,n){const seen=new Set(),out=[];for(const w of shuffle(arr)){const v=String(w[field]||'').trim();if(!v||seen.has(v))continue;seen.add(v);out.push(w);if(out.length===n)break}return out}
 // 过滤掉「意思等于词条 / 意思包含词条」的脏词
 function cleanPool(pool){
   return pool.filter(w => {
@@ -1950,15 +2089,126 @@ function buildFill(qWords, pool) {
   });
 }
 
+/* 判断题：显示「词 + 一个释义」，玩家点 ✓ / ✗。
+   错误题面 = 错释义表里在正确释义上微改嘅错释义。
+   table 不传时默认用第三章 FALSE_MEANING（大 Boss 混合关用）。 */
+function buildTrueFalse(qWords, table) {
+  const FM = table || (typeof FALSE_MEANING !== 'undefined' ? FALSE_MEANING : {});
+  return qWords.map(w => {
+    const hasFM = !!FM[w.term];
+    const isTrue = hasFM ? Math.random() < 0.5 : true;
+    const statement = isTrue ? w.meaning : FM[w.term];
+    return {
+      kind: 'truefalse',
+      word: w,
+      prompt: w.term,
+      statement: statement,
+      sub: '呢个释义啱唔啱？',
+      options: ['✓ 啱', '✗ 唔啱'],
+      answer: isTrue ? '✓ 啱' : '✗ 唔啱'
+    };
+  });
+}
+
+/* ── 粤拼音节拆解：声母 + 韵母（用来拣「近似音」干扰项） ── */
+const JP_INITIALS = ['gw','kw','ng','b','p','m','f','d','t','n','l','g','k','h','w','z','c','s','j'];
+function splitJyutping(syl) {
+  const body = String(syl || '').replace(/[0-9]+$/, '');
+  for (const ini of JP_INITIALS) {
+    if (body.indexOf(ini) === 0) return { ini: ini, fin: body.slice(ini.length) };
+  }
+  return { ini: '', fin: body };
+}
+function jpTone(syl) { return parseInt(String(syl || '').replace(/^[a-z]+/, ''), 10); }
+
+/* 粤拼填空（第三章）：显示词条 + 释义 + 整句粤拼，挖空其中「一个音节」。
+   挖空优先拣「喺呢个词里只出现一次」嘅音节，避免歧义。
+   干扰项规则：
+     ① 3 个干扰项里随机出 1～2 个「同声调」，其余为异声调；
+     ② 同声调位一律优先挑「同声母 或 同韵母」嘅近似音（有就用，冇就退回普通同调）；
+     ③ 任何干扰项都唔会等于答案，亦唔会系本题已经出现嘅音节。 */
+function buildJyutping(qWords, pool) {
+  const src = Array.isArray(pool) && pool.length ? pool : qWords;
+  /* 音节库存：同级别全部词条嘅音节 */
+  const inventory = [];
+  const seenSyl = new Set();
+  src.forEach(w => {
+    String(w.jyutping || '').split(/\s+/).forEach(s => {
+      if (s && !seenSyl.has(s)) { seenSyl.add(s); inventory.push(s); }
+    });
+  });
+  return qWords.map(w => {
+    const syls = String(w.jyutping || '').split(/\s+/).filter(Boolean);
+    if (!syls.length) return null;
+    /* 计数：优先拣唔重复嘅音节 */
+    const cnt = {};
+    syls.forEach(s => { cnt[s] = (cnt[s] || 0) + 1; });
+    const uniqueIdx = [];
+    syls.forEach((s, i) => { if (cnt[s] === 1) uniqueIdx.push(i); });
+    const blankIdx = uniqueIdx.length
+      ? uniqueIdx[Math.floor(Math.random() * uniqueIdx.length)]
+      : Math.floor(Math.random() * syls.length);
+    const correct = syls[blankIdx];
+    /* 剔除答案本身同本题已出现嘅音节 */
+    const selfSyl = new Set(syls);
+    const cTone = jpTone(correct), cP = splitJyutping(correct);
+    const sameTone = [], otherTone = [];
+    inventory.forEach(s => {
+      if (s === correct || selfSyl.has(s)) return;
+      (jpTone(s) === cTone ? sameTone : otherTone).push(s);
+    });
+    /* 同调池：近似音（同声母 或 同韵母）排前面，其余排后面 */
+    const isClose = s => {
+      const p = splitJyutping(s);
+      return (p.ini && cP.ini && p.ini === cP.ini) || (p.fin && cP.fin && p.fin === cP.fin);
+    };
+    const closeSame = shuffle(sameTone.filter(isClose));
+    const plainSame = shuffle(sameTone.filter(s => !isClose(s)));
+    /* 随机 1～2 个同调位；同调位一律优先近似音 */
+    const sameCount = Math.random() < 0.5 ? 1 : 2;
+    const samePicked = closeSame.concat(plainSame).slice(0, sameCount);
+    const wrongs = samePicked.concat(shuffle(otherTone).slice(0, 3 - samePicked.length));
+    /* 题面：音节逐个渲染，挖空位显示 ＿＿＿＿ */
+    const parts = syls.map((s, i) =>
+      i === blankIdx
+        ? '<span class="jp-blank">＿＿＿＿</span>'
+        : `<span class="jp-syl">${esc(s)}</span>`
+    );
+    return {
+      kind: 'jyutping',
+      word: w,
+      prompt: w.term,
+      jyutpingHtml: parts.join('<span class="jp-gap"></span>'),
+      sub: '呢个词嘅粤拼，挖空嗰个音节系边个？',
+      options: makeOptions(correct, wrongs),
+      answer: correct
+    };
+  }).filter(Boolean);
+}
+
+/* 大Boss混合关：判断 + 情境 + 填词 + 选释义，各 2 题，共 8 题 */
+function buildMixed(level, pool) {
+  const cp = cleanPool(pool);
+  const sp = pool.filter(w => w.scene && !w.scene.includes(w.term));
+  const fp = pool.filter(w => w.example && w.example.indexOf(w.term) !== -1);
+  const q = [];
+  q.push(...buildTrueFalse(pick(cp, 2)));
+  q.push(...buildScene(pick(sp, 2), sp));
+  q.push(...buildFill(pick(fp, 2), fp));
+  q.push(...buildChoice(pick(cp, 2), cp));
+  return shuffle(q);
+}
+
 function generateQuestions(level){
   let actualKind = level.kind;
   let targetLevel = level.level;
 
-  if(gameDifficulty === 'novice' && actualKind === 'fill') {
+  if(gameDifficulty === 'novice' && actualKind === 'fill' && !level.keepFill) {
      actualKind = 'choice';
   }
 
   let pool = WORDS.filter(w => w.level === targetLevel);
+  if(level.onlyTag) pool = pool.filter(w => Array.isArray(w.tags) && w.tags.includes(level.onlyTag));
 
   if(gameDifficulty === 'advanced' && targetLevel === 1) {
      pool = WORDS.filter(w => w.level === 1 || w.level === 2);
@@ -1974,11 +2224,22 @@ function generateQuestions(level){
     return buildScene(pick(sp, level.count), sp);
   }
   if(actualKind === 'fill') { const fp = pool.filter(w => w.example && w.example.indexOf(w.term) !== -1); return buildFill(pick(fp, Math.min(level.count, fp.length)), fp) }
+  if(actualKind === 'truefalse') {
+    const cp = cleanPool(pool);
+    const table = level.falseTable === 'L2' ? FALSE_MEANING_L2 : FALSE_MEANING;
+    return buildTrueFalse(pick(cp, level.count), table);
+  }
+  if(actualKind === 'jyutping') {
+    /* 只取「粤拼完整 + 释义唔含词条本身」嘅词，题面更干净 */
+    const jp = cleanPool(pool).filter(w => w.jyutping && String(w.jyutping).trim().split(/\s+/).length >= 2);
+    return buildJyutping(pick(jp, Math.min(level.count, jp.length)), pool);
+  }
+  if(actualKind === 'mixed') { return buildMixed(level, pool) }
   return []
 }
 
 const state={screen:'home',result:null};
-const game={level:null,questions:[],index:0,correct:0,answered:false,lastCorrect:false,selectedIdx:null,wrongIds:[],match:null,combo:0,results:[]};
+const game={level:null,questions:[],index:0,correct:0,answered:false,lastCorrect:false,selectedIdx:null,wrongIds:[],match:null,combo:0,results:[],timeLeft:0};
 
 const app=document.getElementById('app');
 /* 简繁切换分段控件：与「看图配配对」「词句连连拼」保持同一套外观。
@@ -1986,7 +2247,7 @@ const app=document.getElementById('app');
 function fontSegHTML(extra){return `<span class="font-seg${extra?' '+extra:''}" role="group" aria-label="字体"><button class="font-seg__btn${fontMode==='tc'?' on':''}" data-action="set-font" data-font="tc">繁</button><button class="font-seg__btn${fontMode==='sc'?' on':''}" data-action="set-font" data-font="sc">&#x7B80;</button></span>`}
 /* 页脚「返回首页」在 #app 之外，不经过 convertHTML，这里跟着 fontMode 手动同步 */
 function syncFooterFont(){const a=document.getElementById('homeLink');if(a)a.textContent=fontMode==='tc'?'⌂ 返回首頁':'⌂ 返回首页'}
-function render(){let html='';if(state.screen==='home')html=renderHome();else if(state.screen==='map')html=renderMap();else if(state.screen==='game')html=renderGame();else if(state.screen==='result')html=renderResult();else if(state.screen==='wrongbook')html=renderWrongBook();else if(state.screen==='placement-intro')html=renderPlacementIntro();html=convertHTML(html);app.innerHTML=html;hasRendered=true;window.scrollTo({top:0,behavior:'auto'});syncFooterFont()}
+function render(){let html='';if(state.screen==='home')html=renderHome();else if(state.screen==='map')html=renderMap();else if(state.screen==='game')html=renderGame();else if(state.screen==='result')html=renderResult();else if(state.screen==='wrongbook')html=renderWrongBook();else if(state.screen==='placement-intro')html=renderPlacementIntro();html=convertHTML(html);app.innerHTML=html;hasRendered=true;window.scrollTo({top:0,behavior:'auto'});syncFooterFont();if(state.screen==='game')startBossTimer();else stopBossTimer()}
 
 function renderHome(){const stars=totalStars(),cleared=clearedCount();const saved=getSavedGame();let savedLevel=null,savedInfo='';if(saved){savedLevel=LEVELS.find(l=>l.id===saved.levelId);if(savedLevel){const total=savedLevel.kind==='match'?1:savedLevel.count;savedInfo=`${savedLevel.title} · 第${(saved.index||0)+1}/${saved.questions?saved.questions.length:total}题`}}
 return`
@@ -2005,7 +2266,7 @@ ${fontSegHTML('font-seg--home')}
 <div class="home-btns">
 ${savedLevel?`<button class="btn btn-continue" data-action="continue-game">▶ 继续学习<span class="continue-info">${esc(savedInfo)}</span></button>`:''}
 <button class="btn btn-primary" data-action="map">开始闯关</button>
-<button class="btn btn-gold" data-action="placement-intro">🎯 测试我的水平</button>
+<button class="btn btn-gold" data-action="placement-intro"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg> 测试我的水平</button>
 <button class="btn btn-secondary" data-action="wrongbook">错题本</button>
 <button class="btn btn-secondary" data-action="reset">清除进度</button>
 </div>
@@ -2014,9 +2275,9 @@ ${savedLevel?`<button class="btn btn-continue" data-action="continue-game">▶ �
 function renderPlacementIntro(){
   const p=loadProgress();
   const chapters=[
-    {n:1,name:'街坊入门',level:1,emoji:'🥟',desc:'俚语、日常用语'},
-    {n:2,name:'茶楼进阶',level:2,emoji:'🍜',desc:'俗语、歇后语'},
-    {n:3,name:'老广高手',level:3,emoji:'🦆',desc:'成语、高难度词'}
+    {n:1,name:'街坊入门',level:1,dimsum:'虾饺',desc:'俚语、日常用语'},
+    {n:2,name:'茶楼进阶',level:2,dimsum:'干蒸烧卖',desc:'俗语、歇后语'},
+    {n:3,name:'老广高手',level:3,dimsum:'肠粉',desc:'成语、高难度词'}
   ];
   let cards='';
   chapters.forEach(ch=>{
@@ -2024,7 +2285,7 @@ function renderPlacementIntro(){
     const levelText=rec?`上次成绩：${rec.level} · ${rec.correct}/${rec.total}`:'未测评';
     cards+=`
       <div class="placement-chapter-card">
-        <div class="placement-chapter-emoji">${ch.emoji}</div>
+        <div class="placement-chapter-emoji">${dimSumIcon(ch.dimsum)}</div>
         <div class="placement-chapter-name">第 ${ch.n} 章 · ${esc(ch.name)}</div>
         <div class="placement-chapter-desc">${esc(ch.desc)}</div>
         <div class="placement-chapter-level">${levelText}</div>
@@ -2035,7 +2296,7 @@ function renderPlacementIntro(){
     <div class="screen">
       <div class="topbar"><button class="back-btn" data-action="home">‹</button><div class="topbar-title">水平测试</div>${fontSegHTML()}<div class="topbar-right">每章 8 题</div></div>
       <div class="placement-intro">
-        <h2>🎯 测试你嘅粤语水平</h2>
+        <h2><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg> 测试你嘅粤语水平</h2>
         <p>唔想由第一关开始？逐章测评，直接解锁对应等级嘅关卡！</p>
         <div class="placement-chapters">${cards}</div>
         <button class="btn btn-secondary" data-action="home">返去首页</button>
@@ -2056,10 +2317,10 @@ function renderMap(){
     const y=tableCy+Math.sin(angle)*tableR-15;
     const stars=p.stars[l.id]||0;
     const cleared=stars>=2;
-    const dimSum=l.dimSum||{emoji:'🥟'};
+    const dimSum=l.dimSum||{name:'虾饺'};
     let cls='table-item';
     let content='';
-    if(cleared){cls+=` unlocked star-${stars}`;content=dimSum.emoji}
+    if(cleared){cls+=` unlocked star-${stars}`;content=dimSumIcon(dimSum.name)}
     else{cls+=' locked';content='·'}
     tableItemsHtml+=`<div class="${cls}" style="left:${x}px;top:${y}px;animation-delay:${(i*0.05).toFixed(2)}s" title="${esc(l.title)}">${content}</div>`;
   });
@@ -2075,7 +2336,7 @@ function renderMap(){
         <div class="yue-seal">粤</div>
         ${tableItemsHtml}
       </div>
-      ${allCleared?'<div class="dim-sum-complete">🏆 一 盅 两 件 · 叹 世 界</div>':''}
+      ${allCleared?'<div class="dim-sum-complete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="#d4a017" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/><path d="M12 14v4M8 20h8M9 20l1-2h4l1 2"/></svg> 一 盅 两 件 · 叹 世 界</div>':''}
     </div>
   `;
   let html=`
@@ -2099,11 +2360,11 @@ function renderMap(){
       const cleared=stars>=2;
       const inProgress=saved&&saved.levelId===l.id;
       const sh='★'.repeat(stars)+'<span class="dim">'+'★'.repeat(3-stars)+'</span>';
-      const ds=l.dimSum?`<div class="level-dimsum">${l.dimSum.emoji}</div>`:'';
+      const ds=l.dimSum?`<div class="level-dimsum">${dimSumIcon(l.dimSum.name)}</div>`:'';
       const poolL=WORDS.filter(w=>w.level===l.level);
       const learnedL=learnedCount(poolL);
       const isPlaced=!cleared&&p.placed&&p.placed.indexOf(l.id)!==-1;
-      html+=`<div class="level-card ${unlocked?'':'locked'} ${l.boss?'boss':''} ${cleared?'cleared':''} ${inProgress?'in-progress':''} ${isPlaced?'placed':''}" ${unlocked?`data-action="level" data-id="${l.id}"`:''}>${ds}<div class="level-id">${l.id}${isPlaced?'<span class="level-placed"> · 🎯 已解锁</span>':''}</div><div class="level-name">${esc(l.title)}</div><div class="level-meta"><div class="level-stars">${sh}</div><div class="level-count">${levelQLabel(l)}</div></div><div class="level-learned">已学 ${learnedL} / ${poolL.length} 词</div></div>`;
+      html+=`<div class="level-card ${unlocked?'':'locked'} ${l.boss?'boss':''} ${cleared?'cleared':''} ${inProgress?'in-progress':''} ${isPlaced?'placed':''}" ${unlocked?`data-action="level" data-id="${l.id}"`:''}>${ds}<div class="level-id">${l.id}${isPlaced?'<span class="level-placed"> · <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg> 已解锁</span>':''}</div><div class="level-name">${esc(l.title)}</div><div class="level-meta"><div class="level-stars">${sh}</div><div class="level-count">${levelQLabel(l)}</div></div><div class="level-learned">已学 ${learnedL} / ${poolL.length} 词</div></div>`;
     });
     html+=`</div></div>`;
   });
@@ -2111,16 +2372,18 @@ function renderMap(){
   return html;
 }
 
-function renderGame(){const level=game.level,q=game.questions[game.index],total=game.questions.length;let body='';if(q.kind==='match')body=renderMatchBody();else body=renderChoiceBody(q);return`
+function renderGame(){const level=game.level,q=game.questions[game.index],total=game.questions.length;let body='';if(q.kind==='match')body=renderMatchBody();else body=renderChoiceBody(q);const showTimer=level.boss&&level.timeLimit&&q.kind!=='match'&&!game.answered;return`
 <div class="screen">
 <div class="topbar"><button class="back-btn" data-action="map">‹</button><div class="topbar-title">${esc(level.title)}</div>${fontSegHTML()}<div class="topbar-right">${game.index+1} / ${total}</div></div>
 ${renderBambooBar()}
+${showTimer?`<div class="boss-timer"><div class="boss-timer-bar"><div class="boss-timer-fill" id="bossTimerBar" style="width:100%"></div></div><span class="boss-timer-num" id="bossTimerNum">${level.timeLimit}</span></div>`:''}
+${game.combo>=2?`<div class="combo-chip">🔥 连击 ×${game.combo}</div>`:''}
 <div class="game-body">${body}</div>
 </div>`}
 
 function renderBambooBar(){
   const level=game.level;
-  const dimSum=level.dimSum||{emoji:'🥟',name:'点心'};
+  const dimSum=level.dimSum||{name:'虾饺'};
   const slots=level.slots||(level.kind==='match'?level.pairs:game.questions.length);
   let items='';
   if(level.kind==='match'){
@@ -2129,7 +2392,7 @@ function renderBambooBar(){
       let cls='bamboo-item';
       if(i<matched)cls+=' done';
       else if(i===matched&&!game.answered)cls+=' current';
-      const content=i<matched?dimSum.emoji:'';
+      const content=i<matched?dimSumIcon(dimSum.name):'';
       items+=`<div class="${cls}">${content}</div>`;
     }
   }else{
@@ -2139,7 +2402,7 @@ function renderBambooBar(){
       if(r===true)cls+=' done';
       else if(r===false)cls+=' wrong';
       else if(i===game.index)cls+=' current';
-      const content=r===true?dimSum.emoji:'';
+      const content=r===true?dimSumIcon(dimSum.name):'';
       items+=`<div class="${cls}">${content}</div>`;
     }
   }
@@ -2150,14 +2413,23 @@ function renderChoiceBody(q){
   const answered=game.answered;
   let pc='q-prompt';
   if(q.kind==='emoji')pc+=' big';
+  const isTF=q.kind==='truefalse';
+  const isJP=q.kind==='jyutping';
   const opts=q.options.map((opt,i)=>{
     let cls='opt';
+    if(isTF)cls+=' opt-tf';
+    if(isJP)cls+=' opt-jp';
     if(answered){if(opt===q.answer)cls+=' correct';else if(game.selectedIdx===i)cls+=' wrong'}
     return`<button class="${cls}" data-action="option" data-idx="${i}" ${answered?'disabled':''}>${esc(opt)}</button>`
   }).join('');
+  const promptHtml=isTF
+    ?`<div class="tf-term">${esc(q.prompt)}</div><div class="tf-stmt">${esc(q.statement)}</div>`
+    :isJP
+    ?`<div class="jp-term">${esc(q.prompt)}</div><div class="jp-meaning">${esc(q.word.meaning)}</div><div class="jp-line">${q.jyutpingHtml}</div>`
+    :`<div class="${pc}">${esc(q.prompt)}</div>`;
   return`
-<div class="q-card"><div class="${pc}">${esc(q.prompt)}</div><div class="q-sub">${esc(q.sub)}</div></div>
-<div class="options">${opts}</div>
+<div class="q-card">${promptHtml}<div class="q-sub">${esc(q.sub)}</div></div>
+<div class="options${isTF?' options-tf':''}${isJP?' options-jp':''}">${opts}</div>
 ${answered?renderFeedback(q):''}`}
 
 function renderFeedback(q){const w=q.word,ok=game.lastCorrect,isLast=game.index+1>=game.questions.length;return`
@@ -2172,7 +2444,7 @@ ${w.mandarin?`<div class="fb-row"><span class="fb-label">普通话</span>${esc(w
 </div>`}
 
 function renderMatchBody(){const m=game.match,done=m.matchedIds.length>=m.total;const lh=m.left.map(it=>{const matched=m.matchedIds.indexOf(it.id)!==-1,selected=m.selectedSide==='left'&&m.selectedId===it.id,shaking=m.wrongPair&&m.wrongPair.leftId===it.id;let cls='match-item';if(matched)cls+=' matched';if(selected)cls+=' selected';if(shaking)cls+=' shake';return`<button class="${cls}" data-action="match" data-side="left" data-id="${it.id}" ${matched?'disabled':''}>${esc(it.text)}</button>`}).join('');const rh=m.right.map(it=>{const matched=m.matchedIds.indexOf(it.id)!==-1,selected=m.selectedSide==='right'&&m.selectedId===it.id,shaking=m.wrongPair&&m.wrongPair.rightId===it.id;let cls='match-item';if(matched)cls+=' matched';if(selected)cls+=' selected';if(shaking)cls+=' shake';return`<button class="${cls}" data-action="match" data-side="right" data-id="${it.id}" ${matched?'disabled':''}>${esc(it.text)}</button>`}).join('');return`
-<div class="match-hint">点左边嘅粤语词，再点右边嘅意思<br>配对成功会变绿 ✓　已配对 ${m.matchedIds.length} / ${m.total}</div>
+<div class="match-hint">点左边嘅粤语词，再点右边嘅${game.level&&game.level.rightField==='mandarin'?'普通话':'意思'}<br>配对成功会变绿 ✓　已配对 ${m.matchedIds.length} / ${m.total}</div>
 <div class="match-wrap"><div class="match-col">${lh}</div><div class="match-col">${rh}</div></div>
 ${done?`<div class="feedback match-done"><div class="fb-title">🎉 全部配对成功！</div><button class="btn btn-primary fb-next" data-action="next">睇结果 →</button></div>`:''}`}
 
@@ -2202,7 +2474,7 @@ function renderResult(){
   }
   const level=r.level;
   const stars=r.stars;
-  const dimSum=level.dimSum||{emoji:'🥟',name:'点心'};
+  const dimSum=level.dimSum||{name:'虾饺'};
   const slots=level.slots||(level.kind==='match'?level.pairs:r.total);
   let filledCount;
   if(stars>=3)filledCount=slots;
@@ -2215,7 +2487,7 @@ function renderResult(){
   let slotsHtml='';
   for(let i=0;i<slots;i++){
     const filled=i<filledCount;
-    slotsHtml+=`<div class="dimsum-slot ${filled?'filled':'empty'}">${filled?dimSum.emoji:'·'}</div>`;
+    slotsHtml+=`<div class="dimsum-slot ${filled?'filled':'empty'}">${filled?dimSumIcon(dimSum.name):'·'}</div>`;
   }
   const wrongWords=game.wrongIds.map(id=>WORDS.find(w=>w.id===id)).filter(Boolean).filter((w,i,a)=>a.findIndex(x=>x.id===w.id)===i);
   const passed=stars>=2;
@@ -2292,12 +2564,15 @@ if(saved&&saved.levelId===id){
     continueSavedGame();return;
   }
 }
-const pool=WORDS.filter(w=>w.level===level.level);game.level=level;game.index=0;game.correct=0;game.answered=false;game.lastCorrect=false;game.selectedIdx=null;game.wrongIds=[];game.match=null;game.combo=0;game.results=[];
+const pool0=WORDS.filter(w=>w.level===level.level);const pool=level.onlyTag?pool0.filter(w=>Array.isArray(w.tags)&&w.tags.includes(level.onlyTag)):pool0;game.level=level;game.index=0;game.correct=0;game.answered=false;game.lastCorrect=false;game.selectedIdx=null;game.wrongIds=[];game.match=null;game.combo=0;game.results=[];game.timeLeft=level.timeLimit||0;
 if(level.kind==='match'){
   game.questions=[{kind:'match'}];
-  const matchPool = cleanPool(pool);
-  const picked = pick(matchPool, level.pairs);
-  game.match={left:picked.map(w=>({id:w.id,text:w.term})),right:shuffle(picked.map(w=>({id:w.id,text:w.meaning}))),selectedSide:null,selectedId:null,matchedIds:[],total:picked.length,wrongPair:null,locked:false}}
+  const rf = level.rightField || 'meaning';
+  let matchPool = cleanPool(pool);
+  /* 指定右栏字段时（如粤普配对用 mandarin），剔除「词=右栏」及空值，避免无效/重复配对 */
+  if(level.rightField) matchPool = matchPool.filter(w => { const v = String(w[rf]||'').trim(); return v && v !== String(w.term).trim(); });
+  const picked = pickUniqueByField(matchPool, rf, level.pairs);
+  game.match={left:picked.map(w=>({id:w.id,text:w.term})),right:shuffle(picked.map(w=>({id:w.id,text:w[rf]}))),selectedSide:null,selectedId:null,matchedIds:[],total:picked.length,wrongPair:null,locked:false}}
 else{game.questions=generateQuestions(level)}
 state.screen='game';render();saveCurrentGame()}
 
@@ -2327,9 +2602,47 @@ function startPlacementTest(chapter){
 
 function handleOption(idx){if(game.answered)return;const q=game.questions[game.index],opt=q.options[idx];game.answered=true;game.selectedIdx=idx;const correct=opt===q.answer;game.lastCorrect=correct;game.results[game.index]=correct;if(correct){game.correct++;game.combo++;playCorrect();recordTerm(q.word.id,true)}else{game.combo=0;if(game.wrongIds.indexOf(q.word.id)===-1)game.wrongIds.push(q.word.id);addWrongWord(q.word.id);recordTerm(q.word.id,false);playWrong()}render();saveCurrentGame()}
 
-function handleNext(){if(game.index+1>=game.questions.length){if(game.level.id==='placement'||game.level.id.startsWith('placement-'))finishPlacement();else finishLevel()}else{game.index++;game.answered=false;game.lastCorrect=false;game.selectedIdx=null;render();saveCurrentGame()}}
+function handleNext(){if(game.index+1>=game.questions.length){if(game.level.id==='placement'||game.level.id.startsWith('placement-'))finishPlacement();else finishLevel()}else{game.index++;game.answered=false;game.lastCorrect=false;game.selectedIdx=null;game.timeLeft=game.level.timeLimit||0;render();saveCurrentGame()}}
 
 function handleMatch(side,id){const m=game.match;if(!m||m.locked)return;if(m.matchedIds.indexOf(id)!==-1)return;if(m.selectedSide===null){playClick();m.selectedSide=side;m.selectedId=id;render();return}if(m.selectedSide===side){playClick();m.selectedId=id;render();return}if(m.selectedId===id){playCorrect();recordTerm(id,true);m.matchedIds.push(id);m.selectedSide=null;m.selectedId=null;if(m.matchedIds.length>=m.total){game.answered=true;game.lastCorrect=true;game.correct=1}render();saveCurrentGame()}else{playWrong();const leftId=m.selectedSide==='left'?m.selectedId:id,rightId=m.selectedSide==='right'?m.selectedId:id;m.wrongPair={leftId,rightId};m.locked=true;if(game.wrongIds.indexOf(leftId)===-1)game.wrongIds.push(leftId);addWrongWord(leftId);recordTerm(leftId,false);render();saveCurrentGame();setTimeout(()=>{m.wrongPair=null;m.selectedSide=null;m.selectedId=null;m.locked=false;render()},640)}}
+
+/* ── 大Boss限时：每题倒数，超时当答错 ── */
+let bossTimerId=null;
+function stopBossTimer(){if(bossTimerId){clearInterval(bossTimerId);bossTimerId=null}}
+function startBossTimer(){
+  stopBossTimer();
+  if(state.screen!=='game')return;
+  const level=game.level;
+  if(!level||!level.boss||!level.timeLimit)return;
+  const q=game.questions[game.index];
+  if(!q||q.kind==='match'||game.answered)return;
+  if(!game.timeLeft||game.timeLeft<=0)game.timeLeft=level.timeLimit;
+  const total=level.timeLimit;
+  const numEl=document.getElementById('bossTimerNum');
+  const barEl=document.getElementById('bossTimerBar');
+  const upd=()=>{
+    const t=Math.max(0,game.timeLeft);
+    if(numEl)numEl.textContent=Math.ceil(t);
+    if(barEl){barEl.style.width=(t/total*100)+'%';if(t<=5)barEl.classList.add('low');else barEl.classList.remove('low')}
+  };
+  upd();
+  bossTimerId=setInterval(()=>{
+    game.timeLeft-=0.1;
+    if(game.timeLeft<=0){game.timeLeft=0;upd();stopBossTimer();handleTimeout();return}
+    upd();
+  },100);
+}
+function handleTimeout(){
+  if(game.answered)return;
+  const q=game.questions[game.index];
+  game.answered=true;game.selectedIdx=-1;game.lastCorrect=false;
+  game.results[game.index]=false;game.combo=0;
+  if(q&&q.word){
+    if(game.wrongIds.indexOf(q.word.id)===-1)game.wrongIds.push(q.word.id);
+    addWrongWord(q.word.id);recordTerm(q.word.id,false);
+  }
+  playWrong();render();saveCurrentGame();
+}
 
 function finishLevel(){
   const level=game.level;
