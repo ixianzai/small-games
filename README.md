@@ -1,132 +1,96 @@
-# 粤掂 YutDim · Cantonese Learning Playground
+# YutDim (粵掂) — Cantonese Learning Playground
 
-A collection of lightweight web-based mini-games and tools designed specifically for **Cantonese learners, teachers, and parents**. Built purely with front-end technologies, these games can be played directly in your browser without any backend or build tools.
+> Don’t just memorize—play your way to Cantonese.  
+> 唔使死背，玩吓就識 · jyut6 dim6
 
-> **唔使死背，玩吓就识。**  
-> Don't memorize blindly—learn by playing.
+YutDim is a lightweight, static website for learning Cantonese through mini-games, Jyutping practice, tone training, and mistake review. The homepage acts as a hub linking to all learning activities. It uses Traditional Chinese by default and includes a one-click Traditional/Simplified Chinese toggle.
 
----
+## Features
 
-## 🎮 Features
+- 🎮 Three Cantonese mini-games, from beginner to challenge level
+- 📖 Jyutping crash course covering initials, finals, and tones
+- 🎵 Six-tone trainer for practising Cantonese tones
+- 🔁 Review list for questions answered incorrectly in games
+- 🌐 Traditional / Simplified Chinese character toggle
+- 📱 Responsive, mobile-friendly layout
+- 🧭 Simple top navigation with card-based homepage
+- 🔍 SEO and Open Graph meta tags for sharing
 
-### Games (遊戲)
-- **Baby Cantonese Match** (`粤语宝宝消消乐.html`): Learn words from pictures, starting with animals and fruits. Perfect for beginners and kids.
-- **Cantonese Word Match** (`粤语词汇消消乐.html`): Learn greetings and daily vocabulary with Jyutping and example sentences.
-- **Cantonese Slang Challenge** (`粤闯粤掂.html`): Challenge yourself with Cantonese slang and idioms through level-based gameplay.
+## Pages & Activities
 
-### Learning Tools (學習工具)
-- **Jyutping Crash Course** (`jyutping.html`): Initials, finals, and the six tones explained on one page. Essential for absolute beginners.
-- **Tone Trainer** (`tones.html`): Practice distinguishing the six Cantonese tones.
-- **Review List** (`review.html`): Collect questions you got wrong and review them later.
+### Games
 
-### Other Features
-- **Traditional/Simplified Chinese Toggle**: Switch between Traditional and Simplified Chinese using the "简" button in the navigation bar.
-- **Responsive Design**: Works on desktop, tablet, and mobile devices.
-- **Pure Static Site**: No server-side code required.
+| Activity | File | English Name | Description |
+|---|---|---|---|
+| 粵語看圖配配對 | `picture-match.html` | Cantonese Picture Match | Beginner-friendly picture-to-word matching. Learn animals, fruits, and everyday vocabulary. |
+| 粵拼詞句連連拼 | `word-match.html` | Cantonese Jyutping Match | Intermediate practice with daily greetings, Jyutping, and example sentences. |
+| 粵闖粵掂 | `slang-challenge.html` | Cantonese Slang Challenge | Challenge levels for Cantonese slang and idioms. Test whether you can really say them. |
 
----
+### Learning Tools
 
-## 📁 Project Structure
+| Tool | File | English Name | Description |
+|---|---|---|---|
+| 粵拼速成 | `jyutping.html` | Jyutping Crash Course | Initials, finals, and the six tones explained in one page. Essential for beginners. |
+| 聲調練習 | `tones.html` | Tone Trainer | The six tones are hard? Practise until you can tell them apart. |
+| 錯題複習 | `review.html` | Review List | Review the questions you got wrong while playing the games. |
+
+## Tech Stack
+
+- Static HTML, CSS, and JavaScript
+- `assets/style.css` — site styling
+- `assets/app.js` — app helpers, including `YutDim.setCharMode()` and `YutDim.charMode()` for the Traditional/Simplified toggle
+- `assets/analytics.js` — analytics script
+- Meta tags in `index.html` for SEO and social sharing
+
+## Getting Started
+
+No build step or dependencies are mentioned. You can open `index.html` directly in a browser, or serve the folder locally:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit:
+
+```text
+http://localhost:8000
+```
+
+## Project Structure
 
 ```text
 .
-├── index.html                # Homepage / Entry point
-├── 粤语宝宝消消乐.html       # Baby Cantonese Match (Games)
-├── 粤语词汇消消乐.html       # Cantonese Word Match (Games)
-├── 粤闯粤掂.html             # Cantonese Slang Challenge (Games)
-├── jyutping.html             # Jyutping Crash Course (Tools)
-├── tones.html                # Tone Trainer (Tools)
-├── review.html               # Review List (Tools)
+├── index.html
+├── picture-match.html
+├── word-match.html
+├── slang-challenge.html
+├── jyutping.html
+├── tones.html
+├── review.html
 └── assets/
-    ├── style.css             # Global styles and CSS variables
-    └── app.js                # Core logic and utility functions
+    ├── style.css
+    ├── app.js
+    └── analytics.js
 ```
 
----
+## Navigation
 
-## 🚀 Quick Start
+- 入門 / Beginner → `picture-match.html`
+- 詞彙 / Vocabulary → `word-match.html`
+- 闖掂 / Challenge → `slang-challenge.html`
+- 粵拼 / Jyutping → `jyutping.html`
+- 聲調 / Tones → `tones.html`
+- 複習 / Review → `review.html`
+- 繁 button → toggles between Traditional and Simplified Chinese
 
-### Option 1: Open Locally
-No dependencies needed. Simply clone the repository and open `index.html` in your browser:
+## Design Notes
 
-```bash
-git clone https://github.com/ixianzai/small-games.git
-cd small-games
-open index.html   # macOS
-# or
-start index.html  # Windows
-```
+- Tram-green minimal aesthetic
+- Card-based homepage layout
+- Red and gold accent colours
+- Traditional Chinese by default, with a Simplified Chinese toggle
+- Footer: “粵掂 · 為粵語學習者而做” / “YutDim · Made for Cantonese learners”
 
-### Option 2: Run a Local Server
-For the best experience (especially if loading assets), you can run a lightweight local server:
+## License
 
-```bash
-python3 -m http.server 8080
-```
-
-Then visit `http://localhost:8080` in your browser.
-
----
-
-## 🌐 Deployment (GitHub Pages)
-
-This project is hosted on GitHub Pages. To deploy your own version:
-
-1. Push your code to a GitHub repository.
-2. Go to **Settings** > **Pages**.
-3. Under **Build and deployment**, select `Deploy from a branch`.
-4. Choose the `main` branch and `/ (root)` folder.
-5. Click **Save**. Your site will be live at `https://<your-username>.github.io/<repository-name>/`.
-
-> **Note**: Some file names in this project contain Chinese characters. GitHub Pages usually handles them well, but if you encounter 404 errors in certain browsers or environments, consider renaming the files to English (e.g., `match.html`, `match3.html`, `dim.html`) and updating the links in `index.html`.
-
----
-
-## 🛠️ Implementation Notes
-
-### Navigation & Links
-The homepage (`index.html`) links to the game pages using their Chinese file names:
-- Baby Match → `粤语宝宝消消乐.html`
-- Word Match → `粤语词汇消消乐.html`
-- Slang Challenge → `粤闯粤掂.html`
-
-### Traditional/Simplified Toggle
-Elements with a `data-sc` attribute store their Simplified Chinese text. The navigation button toggles display mode via:
-
-```html
-<button
-  class="lang-toggle"
-  type="button"
-  onclick="YutDim.setCharMode(YutDim.charMode()==='tc'?'sc':'tc')"
->
-  简
-</button>
-```
-
-### Theming
-Colors and typography are controlled via CSS variables in `assets/style.css` (e.g., `--paper`, `--ink`, `--neon-red`, `--neon-gold`).
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Whether you want to add new vocabulary, fix a bug, or improve the UI, feel free to open an Issue or submit a Pull Request.
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/amazing-feature`).
-3. Commit your changes (`git commit -m 'Add some amazing feature'`).
-4. Push to the branch (`git push origin feature/amazing-feature`).
-5. Open a Pull Request.
-
----
-
-## 📄 License
-
-This project is currently unlicensed. If you plan to open-source it, consider adding an MIT License.
-
----
-
-## 🙏 Acknowledgements
-
-Built with ❤️ for Cantonese learners around the world.  
-粤掂 · 為粤語學習者而做。
+No license is specified in the provided source files. Add a license before distributing or publishing the project.
