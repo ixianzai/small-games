@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>粵拼速成 · 粵掂 YutDim</title>
+<meta name="description" content="粵拼（Jyutping）速成：聲母、韻母、六聲一次講清。零基礎學粵語第一步。">
+<meta property="og:title" content="粵拼速成 · 粵掂 YutDim">
+<meta property="og:description" content="聲母、韻母、六聲一次講清。零基礎學粵語第一步。">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+<script src="assets/analytics.js"></script>
+<style>
+  .site-page{ background: var(--paper); }
+  .page-head{ padding: 30px 0 6px; }
+  .page-head h1{ font-size: clamp(28px,6vw,40px); }
+  .page-head .sub{ margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.8; }
+
+  .block{ margin-top: 30px; }
+  .block h2{
+    display:flex; align-items:center; gap:10px;
+    font-family: var(--font-display);
+    font-size:22px; font-weight:900; letter-spacing:2px;
+    margin:0 0 12px; color:var(--ink);
+  }
+  .block h2 .no{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:8px;
+    background:var(--neon-red); color:#fff; font-size:15px;
+    box-shadow: var(--glow-red);
+  }
+
+  /* 六声 */
+  .tones-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .tone-card{
+    background:var(--paper-card); border:1px solid var(--line);
+    border-radius:14px; padding:14px 16px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .tone-card .big{
+    font-family: var(--font-display); font-size:30px; font-weight:900;
+    color:var(--neon-red); line-height:1;
+  }
+  .tone-card .meta{ flex:1; min-width:0; }
+  .tone-card .name{ font-weight:900; font-size:14.5px; }
+  .tone-card .jyut{ font-size:12.5px; color:var(--muted); font-family:var(--font-mono); }
+  .tone-card .pitch{ font-size:11px; color:var(--tea-green); font-weight:800; }
+  .tone-card svg{ flex:0 0 auto; }
+  .tone-card path, .tone-card polyline{
+    fill:none; stroke:var(--neon-red); stroke-width:2.2;
+    stroke-linecap:round; stroke-linejoin:round;
+  }
+
+  /* 声母/韵母表 */
+  table{
+    width:100%; border-collapse:collapse;
+    background:var(--paper-card); border:1px solid var(--line);
+    border-radius:14px; overflow:hidden; font-size:14px;
+  }
+  th, td{ padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; }
+  th{ background:var(--paper-warm); font-family:var(--font-display); letter-spacing:1px; }
+  tr:last-child td{ border-bottom:none; }
+  .rom{ font-family:var(--font-mono); color:var(--neon-red-deep); font-weight:700; }
+  .ex{ color:var(--ink-soft); }
+  .ex .jy{ color:var(--muted); font-size:12px; font-family:var(--font-mono); }
+
+  .tip{ margin-top:16px; padding:14px 16px; border-left:4px solid var(--neon-gold);
+    background:var(--paper-card); border-radius:0 12px 12px 0; font-size:13.5px; line-height:1.8; color:var(--ink-soft); }
+
+  @media (max-width:720px){
+    .tones-grid{ grid-template-columns:1fr; }
+    th, td{ padding:8px 7px; font-size:13px; }
+  }
+</style>
+</head>
+<body class="site-page">
+
+<nav class="site-nav" aria-label="站点导航">
+  <a class="site-nav__brand" href="index.html"><span class="seal" data-sc="粤">粵</span><span data-sc="粤掂">粵掂</span></a>
+  <div class="site-nav__links">
+    <a href="picture-match.html" data-sc="入门">入門</a>
+    <a href="word-match.html" data-sc="词汇">詞彙</a>
+    <a href="slang-challenge.html" data-sc="闯掂">闖掂</a>
+    <a href="jyutping.html" data-sc="粤拼">粵拼</a>
+    <a href="tones.html" data-sc="声调">聲調</a>
+    <a href="review.html" data-sc="复习">複習</a>
+    <button class="lang-toggle" type="button" onclick="YutDim.setCharMode(YutDim.charMode()==='tc'?'sc':'tc')">繁</button>
+  </div>
+</nav>
+<div class="site-nav-spacer" aria-hidden="true"></div>
+
+<main class="page">
+  <header class="page-head">
+    <h1 class="neon-title" data-sc="粤拼速成">粵拼速成</h1>
+    <p class="sub" data-sc="粤拼（Jyutping）是香港语言学学会的粤语拼音方案，用字母标声母韵母、数字标声调。学会它，看任何粤语字都能读出音。">粤拼（Jyutping）是香港語言學學會的粵語拼音方案，用字母標聲母韻母、數字標聲調。學識佢，睇任何粵語字都讀得出音。</p>
+  </header>
+
+  <section class="block">
+    <h2><span class="no">1</span><span data-sc="六声（最重要）">六聲（最重要）</span></h2>
+    <p style="margin:0 0 12px;color:var(--muted);font-size:13.5px;" data-sc="粤语有六个声调，用「诗史试时市事」六字就能记住。">粵語有六個聲調，用「詩史試時市事」六字就記得住。</p>
+    <div class="tones-grid" id="tonesGrid"></div>
+  </section>
+
+  <section class="block">
+    <h2><span class="no">2</span><span data-sc="声母（19个）">聲母（19 個）</span></h2>
+    <table>
+      <tr><th data-sc="唇音">唇音</th><td><span class="rom">b</span> <span class="ex">爸 <span class="jy">baa1</span></span></td><td><span class="rom">p</span> <span class="ex">怕 <span class="jy">paa3</span></span></td><td><span class="rom">m</span> <span class="ex"><span data-sc="妈">媽</span> <span class="jy">maa1</span></span></td><td><span class="rom">f</span> <span class="ex">花 <span class="jy">faa1</span></span></td></tr>
+      <tr><th data-sc="齿音">齒音</th><td><span class="rom">d</span> <span class="ex">打 <span class="jy">daa2</span></span></td><td><span class="rom">t</span> <span class="ex">他 <span class="jy">taa1</span></span></td><td><span class="rom">n</span> <span class="ex">那 <span class="jy">naa5</span></span></td><td><span class="rom">l</span> <span class="ex">啦 <span class="jy">laa1</span></span></td></tr>
+      <tr><th data-sc="舌根音">舌根音</th><td><span class="rom">g</span> <span class="ex">家 <span class="jy">gaa1</span></span></td><td><span class="rom">k</span> <span class="ex">卡 <span class="jy">kaa1</span></span></td><td><span class="rom">ng</span> <span class="ex">牙 <span class="jy">ngaa4</span></span></td><td><span class="rom">h</span> <span class="ex"><span data-sc="虾">蝦</span> <span class="jy">haa1</span></span></td></tr>
+      <tr><th data-sc="圆唇音">圓唇音</th><td><span class="rom">gw</span> <span class="ex">瓜 <span class="jy">gwaa1</span></span></td><td><span class="rom">kw</span> <span class="ex"><span data-sc="夸">誇</span> <span class="jy">kwaa1</span></span></td><td><span class="rom">w</span> <span class="ex">蛙 <span class="jy">waa1</span></span></td><td></td></tr>
+      <tr><th data-sc="齿龈音">齒齦音</th><td><span class="rom">z</span> <span class="ex">渣 <span class="jy">zaa1</span></span></td><td><span class="rom">c</span> <span class="ex">叉 <span class="jy">caa1</span></span></td><td><span class="rom">s</span> <span class="ex">沙 <span class="jy">saa1</span></span></td><td><span class="rom">j</span> <span class="ex">也 <span class="jy">jaa5</span></span></td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="no">3</span><span data-sc="韵母（常见）">韻母（常見）</span></h2>
+    <table>
+      <tr><th data-sc="单韵母">單韻母</th><td><span class="rom">aa</span> <span class="ex">爸 <span class="jy">baa1</span></span></td><td><span class="rom">e</span> <span class="ex">些 <span class="jy">se1</span></span></td><td><span class="rom">i</span> <span class="ex">是 <span class="jy">si6</span></span></td><td><span class="rom">o</span> <span class="ex"><span data-sc="个">個</span> <span class="jy">go3</span></span></td><td><span class="rom">u</span> <span class="ex">苦 <span class="jy">fu2</span></span></td><td><span class="rom">yu</span> <span class="ex"><span data-sc="猪">豬</span> <span class="jy">zyu1</span></span></td></tr>
+      <tr><th data-sc="复韵母">複韻母</th><td><span class="rom">aai</span> <span class="ex">街 <span class="jy">gaai1</span></span></td><td><span class="rom">aau</span> <span class="ex">包 <span class="jy">baau1</span></span></td><td><span class="rom">ai</span> <span class="ex"><span data-sc="细">細</span> <span class="jy">sai3</span></span></td><td><span class="rom">au</span> <span class="ex">走 <span class="jy">zau2</span></span></td><td><span class="rom">ei</span> <span class="ex"><span data-sc="飞">飛</span> <span class="jy">fei1</span></span></td><td><span class="rom">oi</span> <span class="ex"><span data-sc="爱">愛</span> <span class="jy">oi3</span></span></td></tr>
+      <tr><th data-sc="鼻韵母">鼻韻母</th><td><span class="rom">aam</span> <span class="ex">啱 <span class="jy">ngaam1</span></span></td><td><span class="rom">aan</span> <span class="ex">晏 <span class="jy">aan3</span></span></td><td><span class="rom">aang</span> <span class="ex">硬 <span class="jy">ngaang6</span></span></td><td><span class="rom">am</span> <span class="ex">心 <span class="jy">sam1</span></span></td><td><span class="rom">an</span> <span class="ex">新 <span class="jy">san1</span></span></td><td><span class="rom">ong</span> <span class="ex"><span data-sc="帮">幫</span> <span class="jy">bong1</span></span></td></tr>
+      <tr><th data-sc="入声韵母">入聲韻母</th><td><span class="rom">aap</span> <span class="ex"><span data-sc="鸭">鴨</span> <span class="jy">aap3</span></span></td><td><span class="rom">aat</span> <span class="ex"><span data-sc="压">壓</span> <span class="jy">aat3</span></span></td><td><span class="rom">aak</span> <span class="ex">客 <span class="jy">haak3</span></span></td><td><span class="rom">ap</span> <span class="ex">十 <span class="jy">sap6</span></span></td><td><span class="rom">at</span> <span class="ex">一 <span class="jy">jat1</span></span></td><td><span class="rom">ok</span> <span class="ex"><span data-sc="学">學</span> <span class="jy">hok6</span></span></td></tr>
+      <tr><th data-sc="其他">其他</th><td><span class="rom">eoi</span> <span class="ex">去 <span class="jy">heoi3</span></span></td><td><span class="rom">oe</span> <span class="ex">靴 <span class="jy">hoe1</span></span></td><td><span class="rom">oeng</span> <span class="ex">想 <span class="jy">soeng2</span></span></td><td><span class="rom">eot</span> <span class="ex">出 <span class="jy">ceot1</span></span></td><td><span class="rom">uk</span> <span class="ex">屋 <span class="jy">uk1</span></span></td><td><span class="rom">yut</span> <span class="ex">月 <span class="jy">jyut6</span></span></td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="no">4</span><span data-sc="几点提示">幾點提示</span></h2>
+    <div class="tip" data-sc="声调数字标在音节末尾，如「好 hou2」的 2 表示第二声；jyut6 的 6 表示第六声。入声韵母（以 p、t、k 结尾）只出现在 1、3、6 声。粤拼里的 j、yu 等和普通话拼音发音不同，别照搬普通话拼音。">聲調數字標喺音節末尾，如「好 hou2」嘅 2 表示第二聲；jyut6 嘅 6 表示第六聲。入聲韻母（以 p、t、k 結尾）只出現喺 1、3、6 聲。粵拼入面嘅 j、yu 同普通話拼音發音唔同，唔好照搬普通話拼音。</div>
+  </section>
+
+  <footer class="site-footer">
+    <p data-sc="粤掂 · 为粤语学习者而做">粵掂 · 為粵語學習者而做</p>
+    <a href="index.html" data-sc="⌂ 返回首页">⌂ 返回首頁</a>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var tones = [
+    { no:1, name:'陰平', sc:'阴平', jyut:'si1', word:'詩', pitch:'高平 55', d:'M4,5 L36,5' },
+    { no:2, name:'陰上', sc:'阴上', jyut:'si2', word:'史', pitch:'高升 25', d:'M4,15 L36,5' },
+    { no:3, name:'陰去', sc:'阴去', jyut:'si3', word:'試', pitch:'中平 33', d:'M4,11 L36,11' },
+    { no:4, name:'陽平', sc:'阳平', jyut:'si4', word:'時', pitch:'低降 21', d:'M4,15 L36,20' },
+    { no:5, name:'陽上', sc:'阳上', jyut:'si5', word:'市', pitch:'低升 23', d:'M4,20 L36,11' },
+    { no:6, name:'陽去', sc:'阳去', jyut:'si6', word:'事', pitch:'低平 22', d:'M4,20 L36,20' }
+  ];
+  var grid = document.getElementById('tonesGrid');
+  tones.forEach(function(t){
+    var el = document.createElement('div');
+    el.className = 'tone-card';
+    el.innerHTML =
+      '<div class="big">'+t.no+'</div>' +
+      '<svg width="40" height="24" viewBox="0 0 40 24">' +
+        '<line x1="0" y1="5" x2="0" y2="20" stroke="#e0d2b6" stroke-width="1"/>' +
+        '<line x1="0" y1="11" x2="40" y2="11" stroke="#e0d2b6" stroke-width="1" stroke-dasharray="2 3"/>' +
+        '<path d="'+t.d+'"/>' +
+      '</svg>' +
+      '<div class="meta">' +
+        '<div class="name"><span data-sc="'+t.sc+'">'+t.name+'</span> <span class="jyut">'+t.jyut+'</span></div>' +
+        '<div class="pitch">'+t.pitch+'</div>' +
+      '</div>';
+    grid.appendChild(el);
+  });
+})();
+</script>
+
+</body>
+</html>
