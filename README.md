@@ -1,96 +1,87 @@
-# YutDim (粵掂) — Cantonese Learning Playground
+# JyutDim · Cantonese Learning Playground
 
-> Don’t just memorize—play your way to Cantonese.  
-> 唔使死背，玩吓就識 · jyut6 dim6
+A small website for learning Cantonese by playing games.
 
-YutDim is a lightweight, static website for learning Cantonese through mini-games, Jyutping practice, tone training, and mistake review. The homepage acts as a hub linking to all learning activities. It uses Traditional Chinese by default and includes a one-click Traditional/Simplified Chinese toggle.
+Whether you're starting from zero or already know a bit, JyutDim lets you
+pick up vocabulary, Jyutping, and tones through short, low-pressure games
+instead of rote memorization. Start with pictures and everyday words, then
+work your way up to slang and idioms.
 
-## Features
+## What You Can Do
 
-- 🎮 Three Cantonese mini-games, from beginner to challenge level
-- 📖 Jyutping crash course covering initials, finals, and tones
-- 🎵 Six-tone trainer for practising Cantonese tones
-- 🔁 Review list for questions answered incorrectly in games
-- 🌐 Traditional / Simplified Chinese character toggle
-- 📱 Responsive, mobile-friendly layout
-- 🧭 Simple top navigation with card-based homepage
-- 🔍 SEO and Open Graph meta tags for sharing
+**Play**
+- **Picture Match** — match pictures to Cantonese words. A gentle starting
+  point for beginners.
+- **Jyutping Match** — match everyday greetings and phrases to their Jyutping
+  and example sentences.
+- **Slang Challenge** — work through Cantonese slang and idioms level by
+  level.
 
-## Pages & Activities
+**Study**
+- **Jyutping Crash Course** — initials, finals, and the six tones explained
+  on a single page.
+- **Tone Trainer** — drill the six tones until you can tell them apart.
+- **Review List** — every question you get wrong is collected here, so you
+  can go back and practice it.
 
-### Games
-
-| Activity | File | English Name | Description |
-|---|---|---|---|
-| 粵語看圖配配對 | `picture-match.html` | Cantonese Picture Match | Beginner-friendly picture-to-word matching. Learn animals, fruits, and everyday vocabulary. |
-| 粵拼詞句連連拼 | `word-match.html` | Cantonese Jyutping Match | Intermediate practice with daily greetings, Jyutping, and example sentences. |
-| 粵闖粵掂 | `slang-challenge.html` | Cantonese Slang Challenge | Challenge levels for Cantonese slang and idioms. Test whether you can really say them. |
-
-### Learning Tools
-
-| Tool | File | English Name | Description |
-|---|---|---|---|
-| 粵拼速成 | `jyutping.html` | Jyutping Crash Course | Initials, finals, and the six tones explained in one page. Essential for beginners. |
-| 聲調練習 | `tones.html` | Tone Trainer | The six tones are hard? Practise until you can tell them apart. |
-| 錯題複習 | `review.html` | Review List | Review the questions you got wrong while playing the games. |
-
-## Tech Stack
-
-- Static HTML, CSS, and JavaScript
-- `assets/style.css` — site styling
-- `assets/app.js` — app helpers, including `YutDim.setCharMode()` and `YutDim.charMode()` for the Traditional/Simplified toggle
-- `assets/analytics.js` — analytics script
-- Meta tags in `index.html` for SEO and social sharing
+The whole site can be switched between Traditional and Simplified Chinese
+with one button in the navigation.
 
 ## Getting Started
 
-No build step or dependencies are mentioned. You can open `index.html` directly in a browser, or serve the folder locally:
+No installation or build step is needed. Serve the project folder with any
+static file server:
 
-```bash
+bash
 python3 -m http.server 8000
-```
 
-Then visit:
-
-```text
-http://localhost:8000
-```
+Then open `http://localhost:8000`. Opening `index.html` directly in a browser
+works too.
 
 ## Project Structure
 
-```text
 .
-├── index.html
-├── picture-match.html
-├── word-match.html
-├── slang-challenge.html
-├── jyutping.html
-├── tones.html
-├── review.html
+├── index.html              # Landing page
+├── picture-match.html      # Picture matching game
+├── word-match.html         # Jyutping word matching game
+├── slang-challenge.html    # Slang challenge game
+├── jyutping.html           # Jyutping crash course
+├── tones.html              # Tone trainer
+├── review.html             # Missed-question review
 └── assets/
     ├── style.css
     ├── app.js
+    ├── icons.js
     └── analytics.js
-```
 
-## Navigation
+## Built With
 
-- 入門 / Beginner → `picture-match.html`
-- 詞彙 / Vocabulary → `word-match.html`
-- 闖掂 / Challenge → `slang-challenge.html`
-- 粵拼 / Jyutping → `jyutping.html`
-- 聲調 / Tones → `tones.html`
-- 複習 / Review → `review.html`
-- 繁 button → toggles between Traditional and Simplified Chinese
-
-## Design Notes
-
-- Tram-green minimal aesthetic
-- Card-based homepage layout
-- Red and gold accent colours
-- Traditional Chinese by default, with a Simplified Chinese toggle
-- Footer: “粵掂 · 為粵語學習者而做” / “YutDim · Made for Cantonese learners”
+Plain HTML, CSS, and vanilla JavaScript — no frameworks, no bundler. Styles
+are driven by CSS custom properties, and the site is responsive and works on
+both desktop and mobile.
 
 ## License
 
-No license is specified in the provided source files. Add a license before distributing or publishing the project.
+This project is released under the MIT License.
+
+MIT License
+
+Copyright (c) 2026 JyutDim contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
