@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>粵掂 JyutDim · 粵語學習樂園</title>
+<meta name="description" content="粵掂 JyutDim——三個粵語學習小遊戲 + 粵拼速成 + 聲調練習。唔使死背，玩吓就識！">
+<meta property="og:title" content="粵掂 JyutDim · 粵語學習樂園">
+<meta property="og:description" content="三個粵語學習小遊戲 + 粵拼速成 + 聲調練習。唔使死背，玩吓就識！">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+<script src="assets/icons.js"></script>
+<script src="assets/analytics.js"></script>
+<style>
+  .site-page{
+    background:
+      radial-gradient(1100px 440px at 50% -140px, rgba(0,105,56,.08) 0%, rgba(0,105,56,0) 62%),
+      var(--paper);
+  }
+
+  /* —— 首页刊头（masthead）——
+     左标题 + 竖线 + 右说明，和下方三列卡片共用同一套横向节奏。
+     不做框：这一页已经有六个带框的卡片，不需要第七个。 */
+  .hero{
+    max-width: 860px;
+    margin: 34px auto 0;
+    padding: 26px 0 28px;
+    display: grid;
+    grid-template-columns: 258px 1fr;
+    gap: 38px;
+    align-items: center;
+    border-top: 1px solid rgba(0,74,39,.30);
+    border-bottom: 1px solid rgba(0,74,39,.30);
+  }
+  .hero__en{
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero__sign{
+    font-family: var(--font-display);
+    font-size: 68px; font-weight: 900;
+    letter-spacing: 4px; line-height: 1.02;
+    color: var(--neon-red); margin: 6px 0 0;
+  }
+  .hero__jyutping{
+    margin: 8px 0 0; font-size: 12px; letter-spacing: 2px; color: var(--muted);
+  }
+  .hero__aside{ position: relative; padding-left: 40px; }
+  .hero__aside::before{
+    content: "";
+    position: absolute; left: 0; top: 50%;
+    width: 1px; height: 96px;
+    transform: translateY(-50%);
+    background: rgba(0,74,39,.16);
+  }
+  .hero__sub{
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px; letter-spacing: 2px; color: var(--ink);
+  }
+  .hero__desc{
+    margin: 10px 0 0;
+    max-width: 420px;
+    font-size: 14px; line-height: 1.75; color: var(--ink-soft);
+  }
+  .hero__tag{
+    display: inline-block; margin-top: 16px; padding: 6px 14px;
+    border: 1px solid var(--neon-red); color: var(--neon-red);
+    font-family: var(--font-display); font-size: 12.5px; font-weight: 900; letter-spacing: 3px;
+    border-radius: 2px;
+  }
+
+  /* —— 区块 —— */
+  .section-title{
+    display:flex; align-items:center; gap:10px;
+    margin: 36px 0 6px;
+    font-family: var(--font-display);
+    font-size: 24px; font-weight:900; letter-spacing:2px;
+    color: var(--ink);
+    text-shadow: 1px 1px 0 rgba(0,74,39,.1);
+  }
+  .section-title .stamp{ width:28px; height:28px; font-size:17px; border-radius:7px; }
+  /* 标题右侧通栏细线：编辑排版里的「栏线」，把留白切成有节奏的段 */
+  .section-title::after{
+    content:"";
+    flex: 1;
+    height: 1px;
+    margin-left: 4px;
+    background: linear-gradient(90deg, var(--line) 0%, rgba(223,216,200,0) 100%);
+  }
+  .section-sub{ margin:0 0 16px; font-size:13px; color:var(--muted); }
+
+  /* —— 入口卡片 —— */
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .card{
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 18px 16px;
+    text-decoration:none;
+    color: var(--ink);
+    /* 纸片厚度：底部实心截面 + 落在地面的柔影，让卡片「有厚度」而不是浮着 */
+    box-shadow:
+      0 3px 0 0 #eae2cf,
+      0 4px 0 0 #dcd3bd,
+      0 12px 18px -8px rgba(35,35,35,.16);
+    overflow:hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:4px;
+    background: var(--card-accent, var(--neon-red));
+  }
+  .card:hover{
+    transform: translateY(-4px);
+    box-shadow:
+      0 7px 0 0 #eae2cf,
+      0 8px 0 0 #dcd3bd,
+      0 22px 26px -10px rgba(35,35,35,.2);
+  }
+  /* 遊戲组大一号：靠尺寸区分主次，不靠颜色 */
+  .cards--lg .card{ padding: 22px 20px 18px; }
+  .cards--lg .card__icon{ width: 56px; height: 56px; }
+  .cards--lg .card__name{ font-size: 22px; }
+  .cards--lg .card__desc{ font-size: 14px; }
+
+  .card--baby{ --card-accent: var(--neon-red); }
+  .card--word{ --card-accent: var(--neon-red); }
+  .card--slang{ --card-accent: var(--neon-red); }
+  .card--jyutping{ --card-accent: var(--neon-red-deep); }
+  .card--tones{ --card-accent: var(--neon-red-deep); }
+  .card--review{ --card-accent: var(--neon-gold); }
+
+  .card__icon{
+    width: 48px; height: 48px;
+    transition: transform .18s ease;
+  }
+  /* 悬停时图标微放大 + 上浮。
+     放在 (hover:hover) 里：触屏设备点按后会「粘住」:hover，这里直接不启用。
+     另附 reduced-motion 降级，给关闭动效的用户留一个静态版本。 */
+  @media (hover: hover){
+    .card:hover .card__icon{ transform: translateY(-3px) scale(1.1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .card__icon{ transition: none; }
+    .card:hover .card__icon{ transform: none; }
+  }
+  .card__name{
+    margin: 10px 0 2px;
+    font-family: var(--font-display);
+    font-size: 20px; font-weight:900; letter-spacing:1px;
+  }
+  .card__en{ margin:0 0 8px; font-size:11.5px; color:var(--muted); letter-spacing:.5px; }
+  .card__desc{ margin:0 0 10px; font-size:13.5px; line-height:1.7; color:var(--ink-soft); }
+  .card__tag{
+    display:inline-block; padding:3px 10px; border-radius:999px;
+    align-self:flex-start; margin-top:auto;
+    background: color-mix(in srgb, var(--card-accent) 12%, #fff);
+    color: var(--card-accent); font-size:12px; font-weight:800;
+  }
+
+  .site-footer{ text-align:center; }
+
+  @media (max-width: 720px){
+    .cards{ grid-template-columns: 1fr; }
+    .hero{
+      margin: 22px 16px 0;
+      padding: 24px 0 26px;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .hero__sign{ font-size: 56px; }
+    .hero__aside{ padding-left: 0; padding-top: 18px; border-top: 1px solid rgba(0,74,39,.16); }
+    .hero__aside::before{ display: none; }
+  }
+</style>
+</head>
+<body class="site-page">
+
+<nav class="site-nav" aria-label="站点导航">
+  <a class="site-nav__brand" href="index.html"><span class="seal" data-sc="粤">粵</span><span data-sc="粤掂">粵掂</span></a>
+  <div class="site-nav__links">
+    <a href="picture-match.html"><span class="nav-ico" data-nav-icon="steamer"></span><span data-sc="入门">入門</span></a>
+    <a href="word-match.html"><span class="nav-ico" data-nav-icon="teapot"></span><span data-sc="词汇">詞彙</span></a>
+    <a href="slang-challenge.html"><span class="nav-ico" data-nav-icon="mahjong"></span><span data-sc="闯掂">闖掂</span></a>
+    <a href="jyutping.html"><span class="nav-ico" data-nav-icon="fan"></span><span data-sc="粤拼">粵拼</span></a>
+    <a href="tones.html"><span class="nav-ico" data-nav-icon="gong"></span><span data-sc="声调">聲調</span></a>
+    <a href="review.html"><span class="nav-ico" data-nav-icon="notebook"></span><span data-sc="复习">複習</span></a>
+    <button class="lang-toggle" type="button" onclick="JyutDim.setCharMode(JyutDim.charMode()==='tc'?'sc':'tc')">繁</button>
+  </div>
+</nav>
+<div class="site-nav-spacer" aria-hidden="true"></div>
+
+<div class="hero">
+  <div class="hero__main">
+    <div class="hero__en">JyutDim · Cantonese</div>
+    <div class="hero__sign" data-sc="粤掂">粵掂</div>
+    <p class="hero__jyutping">jyut6 dim6</p>
+  </div>
+  <div class="hero__aside">
+    <p class="hero__sub" data-sc="唔使死背，玩吓就识">唔使死背，玩吓就識</p>
+    <p class="hero__desc" data-sc="三个小游戏、粤拼速成、声调练习，由浅入深。">三個小遊戲、粵拼速成、聲調練習，由淺入深。</p>
+    <span class="hero__tag" data-sc="粤语学习乐园">粵語學習樂園</span>
+  </div>
+</div>
+
+<main class="page">
+  <section>
+    <h2 class="section-title"><span class="stamp" data-sc="游">遊</span><span data-sc="游戏">遊戲</span></h2>
+    <p class="section-sub" data-sc="三个小游戏，由浅入深，慢慢上手">三個小遊戲，由淺入深，慢慢上手</p>
+    <div class="cards cards--lg">
+      <a class="card card--baby" href="picture-match.html">
+        <div class="card__icon" data-icon="steamer"></div>
+        <div class="card__name" data-sc="粤语看图配配对">粵語看圖配配對</div>
+        <div class="card__en">Cantonese Picture Match</div>
+        <p class="card__desc" data-sc="初学入门，看图选字，认得动物水果就通关">初學入門，睇圖揀字，認得生果動物就搞掂</p>
+        <span class="card__tag" data-sc="初学 · 看图学词">初學 · 看圖學詞</span>
+      </a>
+
+      <a class="card card--word" href="word-match.html">
+        <div class="card__icon" data-icon="teapot"></div>
+        <div class="card__name" data-sc="粤拼词句连连拼">粵拼詞句連連拼</div>
+        <div class="card__en">Cantonese Jyutping Match</div>
+        <p class="card__desc" data-sc="日常问候，连埋粤拼同例句，玩住学仲易上手">日常問候，連埋粵拼同例句，玩住學仲易上手</p>
+        <span class="card__tag" data-sc="进阶 · 词汇">進階 · 詞彙</span>
+      </a>
+
+      <a class="card card--slang" href="slang-challenge.html">
+        <div class="card__icon" data-icon="mahjong"></div>
+        <div class="card__name" data-sc="粤闯粤掂">粵闖粵掂</div>
+        <div class="card__en">Cantonese Slang Challenge</div>
+        <p class="card__desc" data-sc="俗语成语逐个闯，考你识唔识讲">俗語成語逐個闖，睇你識唔識講</p>
+        <span class="card__tag" data-sc="闯关 · 俗语">闖關 · 俗語</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title"><span class="stamp" data-sc="学">學</span><span data-sc="学习工具">學習工具</span></h2>
+    <p class="section-sub" data-sc="由零开始，先学识粤拼同声调">由零開始，先學識粵拼同聲調</p>
+    <div class="cards">
+      <a class="card card--jyutping" href="jyutping.html">
+        <div class="card__icon" data-icon="fan"></div>
+        <div class="card__name" data-sc="粤拼速成">粵拼速成</div>
+        <div class="card__en">Jyutping Crash Course</div>
+        <p class="card__desc" data-sc="声母韵母六声，一页帮你搞掂">聲母韻母六聲，一頁幫你搞掂</p>
+        <span class="card__tag" data-sc="零基础必备">零基礎必備</span>
+      </a>
+
+      <a class="card card--tones" href="tones.html">
+        <div class="card__icon" data-icon="gong"></div>
+        <div class="card__name" data-sc="声调练习">聲調練習</div>
+        <div class="card__en">Tone Trainer</div>
+        <p class="card__desc" data-sc="六声最难？玩几次就识分">六聲最難搞？玩多幾次就識分</p>
+        <span class="card__tag" data-sc="练 · 六声">練 · 六聲</span>
+      </a>
+
+      <a class="card card--review" href="review.html">
+        <div class="card__icon" data-icon="notebook"></div>
+        <div class="card__name" data-sc="错题复习">錯題複習</div>
+        <div class="card__en">Review List</div>
+        <p class="card__desc" data-sc="玩过答错的，喺呢度温返">玩過答錯嘅，喺呢度溫返</p>
+        <span class="card__tag" data-sc="温故知新">溫故知新</span>
+      </a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p data-sc="粤掂 · 为粤语学习者而做">粵掂 · 為粵語學習者而做</p>
+  </footer>
+</main>
+
+</body>
+</html>
