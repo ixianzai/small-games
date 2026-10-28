@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>粵掂 JyutDim · 粵語學習樂園</title>
+<meta name="description" content="粵掂 JyutDim——三個粵語學習小遊戲 + 粵拼速成 + 聲調練習。唔使死背，玩吓就識！">
+<meta property="og:title" content="粵掂 JyutDim · 粵語學習樂園">
+<meta property="og:description" content="三個粵語學習小遊戲 + 粵拼速成 + 聲調練習。唔使死背，玩吓就識！">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+<script src="assets/icons.js"></script>
+<script src="assets/analytics.js"></script>
+<style>
+  .site-page{
+    background:
+      radial-gradient(1100px 440px at 50% -140px, rgba(0,105,56,.08) 0%, rgba(0,105,56,0) 62%),
+      var(--paper);
+  }
+
+  /* —— 首屏远景 ——
+     岭南瓦顶 / 镬耳墙 / 江面 / 小蛮腰 / 灯笼，一层很淡的线稿垫在刊头后面。
+     和 decor.css 一样用 position:absolute + z-index:-1（body 不能有 transform/opacity，
+     否则负 z-index 会被压到画布背景下面）。底部用 mask 淡出，免得收出一条硬边。 */
+  .hero-bg{
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 470px;
+    z-index: -1;
+    pointer-events: none;
+    background: url("assets/hero-scene.svg") center top / cover no-repeat;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 82%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 82%, rgba(0,0,0,0) 100%);
+  }
+
+  /* —— 首页刊头（masthead）——
+     左边一条文案线：眉标 → 标题 → 粤拼 → 一句口号 → 一行说明 → 入口按钮；
+     右边是醒獅仔。参考图就是这么排的——一句话说完，比原来「三栏各说一句」好读。
+     width 用 calc 而不是 max-width：≥940px 时和 .page 的内容区同为 860，
+     窄屏时自动退到两侧各 20px，和卡片对齐。 */
+  .hero{
+    --mascot-w: 244px;
+    width: calc(100% - 40px);
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 0 10px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--mascot-w, 250px);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "head   mascot"
+      "body   mascot";
+    gap: 0 16px;
+    align-items: center;
+  }
+  .hero__head{ grid-area: head; align-self: end; }
+  .hero__body{ grid-area: body; align-self: start; }
+
+  .hero__eyebrow{
+    margin: 0;
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: #8b968a;
+  }
+  .hero__title{
+    margin: 8px 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(54px, 8vw, 84px);
+    font-weight: 900;
+    letter-spacing: 6px; line-height: 1.05;
+    color: var(--neon-red);
+  }
+  .hero__jyutping{
+    margin: 10px 0 0; font-size: 13px; letter-spacing: 2.4px; color: var(--muted);
+  }
+  .hero__sub{
+    margin: 20px 0 0;
+    font-family: var(--font-display);
+    font-size: 23px; font-weight: 700; letter-spacing: 2px; line-height: 1.5;
+    color: var(--neon-red-deep);
+  }
+  .hero__desc{
+    margin: 9px 0 0;
+    max-width: 440px;
+    font-size: 13.5px; line-height: 1.8; color: var(--ink-soft);
+  }
+  /* 入口按钮：描边胶囊，和参考图那颗一致；悬停才实心，平时不抢标题 */
+  .hero__cta{
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 22px; padding: 10px 20px 10px 24px;
+    border: 1px solid rgba(0,74,39,.55);
+    border-radius: 999px;
+    background: rgba(255,255,255,.42);
+    color: var(--neon-red-deep);
+    font-family: var(--font-display);
+    font-size: 14px; font-weight: 900; letter-spacing: 3px;
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .hero__cta-arrow{ display: inline-block; transition: transform .2s ease; }
+  @media (hover: hover){
+    .hero__cta:hover{
+      background: var(--neon-red); border-color: var(--neon-red);
+      color: #fbf8f1; transform: translateY(-1px);
+    }
+    .hero__cta:hover .hero__cta-arrow{ transform: translateX(4px); }
+  }
+  .hero__cta:focus-visible{ outline: 2px solid var(--neon-red); outline-offset: 3px; }
+
+  /* —— 首屏吉祥物：醒獅仔 ——
+     独立一列，浮动用 6px 的小幅、5.6s 的长周期，只当「活着」，不抢注意力。 */
+  .hero__mascot{
+    grid-area: mascot;
+    position: relative;
+    justify-self: end;
+    align-self: end;
+    width: var(--mascot-w);
+  }
+  .hero__mascot-stage{
+    position: relative;
+    width: 100%;
+    /* 和 lion-hero.png 同比例（310 × 433）——整只狮子，右侧不再被裁 */
+    aspect-ratio: 310 / 433;
+  }
+  .hero__mascot-art{
+    position: absolute;
+    inset: 0;
+    /* 整只狮子（310 × 433）。简繁各一张图，卷轴上的「粵 / 粤」跟着换，
+       不再用 HTML 覆盖层——那样永远对不齐纸面 */
+    background: url("assets/mascot/lion-hero.png") center / 100% 100% no-repeat;
+    animation: mascotFloat 5.6s ease-in-out infinite;
+  }
+  html[data-charmode="sc"] .hero__mascot-art{
+    background-image: url("assets/mascot/lion-hero-sc.png");
+  }
+
+  /* 吉祥物左边那三撇（参考图里的强调笔触） */
+  .hero__ticks{
+    position: absolute;
+    left: -14px; top: 34%;
+    width: 22px; height: 40px;
+    color: var(--neon-red);
+    opacity: .9;
+  }
+  @keyframes mascotFloat{
+    0%, 100%{ transform: translateY(0); }
+    50%{ transform: translateY(-6px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero__mascot-art{ animation: none; }
+  }
+
+  /* —— 区块 —— */
+  /* 点「學習樂園」跳到遊戲区时，给固定页头让位 */
+  #games{ scroll-margin-top: calc(var(--site-nav-h, 0px) + 14px); }
+  .section-title{
+    display:flex; align-items:center; gap:10px;
+    margin: 36px 0 6px;
+    font-family: var(--font-display);
+    font-size: 24px; font-weight:900; letter-spacing:2px;
+    color: var(--ink);
+    text-shadow: 1px 1px 0 rgba(0,74,39,.1);
+  }
+  /* 印章用朱红：全页绿到底会闷，参考图里那两方印就是这一点暖色 */
+  .section-title .stamp{ width:29px; height:29px; font-size:17px; border-radius:7px; background:#b03028; }
+  /* 标题右侧通栏细线：编辑排版里的「栏线」，把留白切成有节奏的段 */
+  .section-title::after{
+    content:"";
+    flex: 1;
+    height: 1px;
+    margin-left: 4px;
+    background: linear-gradient(90deg, var(--line) 0%, rgba(223,216,200,0) 100%);
+  }
+  .section-sub{ margin:0 0 16px; font-size:13px; color:var(--muted); }
+
+  /* —— 入口卡片 —— */
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .card{
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    background: var(--paper-card);
+    border: 1px solid rgba(0,74,39,.14);
+    border-radius: 16px;
+    padding: 24px 20px 18px;
+    text-decoration:none;
+    color: var(--ink);
+    /* 纸片厚度：底部实心截面 + 落在地面的柔影，让卡片「有厚度」而不是浮着 */
+    box-shadow:
+      0 2px 0 0 #efe7d6,
+      0 3px 0 0 #ded4bd,
+      0 10px 20px -10px rgba(35,35,35,.18);
+    overflow:hidden;
+    transition:
+      transform .22s cubic-bezier(.22,.61,.36,1),
+      box-shadow .22s cubic-bezier(.22,.61,.36,1),
+      border-color .22s ease;
+  }
+  .card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:4px;
+    background: var(--card-accent, var(--neon-red));
+  }
+  /* 悬停：整张卡片抬 6px、投影加深、描边略实一点。
+     放在 (hover:hover) 里——触屏点按后 :hover 会「粘住」，那里直接不启用。 */
+  @media (hover: hover){
+    .card:hover{
+      transform: translateY(-6px);
+      border-color: rgba(0,74,39,.26);
+      box-shadow:
+        0 5px 0 0 #efe7d6,
+        0 6px 0 0 #ded4bd,
+        0 24px 30px -14px rgba(35,35,35,.26);
+    }
+  }
+  .card:focus-visible{
+    outline: 2px solid var(--neon-red);
+    outline-offset: 3px;
+  }
+  /* 遊戲组大一号：靠尺寸区分主次，不靠颜色 */
+  .cards--lg .card{ padding: 26px 22px 20px; }
+  .cards--lg .card__icon{ width: 72px; height: 72px; }
+  .cards--lg .card__name{ font-size: 22px; }
+  .cards--lg .card__desc{ font-size: 14px; }
+
+  .card--baby{ --card-accent: var(--neon-red); }
+  .card--word{ --card-accent: var(--neon-red); }
+  .card--slang{ --card-accent: var(--neon-red); }
+  .card--jyutping{ --card-accent: var(--neon-red-deep); }
+  .card--tones{ --card-accent: var(--neon-red-deep); }
+  .card--review{ --card-accent: var(--neon-gold); }
+
+  .card__icon{
+    width: 60px; height: 60px;
+    transition: transform .22s cubic-bezier(.22,.61,.36,1);
+  }
+  /* 悬停时图标微放大 + 上浮。 */
+  @media (hover: hover){
+    .card:hover .card__icon{ transform: translateY(-4px) scale(1.08); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .card, .card__icon{ transition: none; }
+    .card:hover{ transform: none; }
+    .card:hover .card__icon{ transform: none; }
+  }
+  .card__name{
+    margin: 12px 0 2px;
+    font-family: var(--font-display);
+    font-size: 20px; font-weight:900; letter-spacing:1px;
+  }
+  .card__en{ margin:0 0 8px; font-size:11.5px; color:var(--muted); letter-spacing:.5px; }
+  .card__desc{ margin:0 0 12px; font-size:13.5px; line-height:1.7; color:var(--ink-soft); }
+  /* 卡片底栏：左边标签、右边箭头圆钮 */
+  .card__foot{
+    margin-top: auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .card__tag{
+    display:inline-block; padding:4px 11px; border-radius:999px;
+    background: color-mix(in srgb, var(--card-accent) 12%, #fff);
+    color: var(--card-accent); font-size:12px; font-weight:800;
+  }
+  /* 箭头圆钮：和参考图一样放在右下角，悬停时跟着卡片一起「推」出去 */
+  .card__go{
+    flex: 0 0 auto;
+    width: 30px; height: 30px;
+    display: grid; place-items: center;
+    border: 1px solid rgba(0,105,56,.34);
+    border-radius: 50%;
+    background: rgba(255,255,255,.6);
+    color: var(--neon-red);
+    transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .card__go svg{ width: 14px; height: 14px; }
+  @media (hover: hover){
+    .card:hover .card__go{
+      background: var(--neon-red); border-color: var(--neon-red);
+      color: #fbf8f1; transform: translateX(3px);
+    }
+  }
+
+  .site-footer{ text-align:center; }
+
+  /* 平板：吉祥物收一档，把宽度让给文案 */
+  @media (max-width: 900px) and (min-width: 721px){
+    .hero{ --mascot-w: 186px; padding-top: 38px; }
+    .hero__title{ letter-spacing: 4px; }
+    .hero__sub{ font-size: 21px; }
+  }
+
+  @media (max-width: 720px){
+    .cards{ grid-template-columns: 1fr; gap: 16px; }
+    .hero{
+      --mascot-w: 112px;
+      width: calc(100% - 32px);
+      padding: 26px 0 6px;
+      /* 吉祥物挪到标题右侧，不占正文的行；口号 / 说明 / 按钮整行铺开 */
+      grid-template-columns: minmax(0, 1fr) var(--mascot-w);
+      grid-template-areas:
+        "head   mascot"
+        "body   body";
+      gap: 0 10px;
+      align-items: start;
+    }
+    .hero-bg{ height: 340px; }
+    .hero__title{ font-size: 50px; letter-spacing: 4px; }
+    .hero__sub{ margin-top: 16px; font-size: 19px; letter-spacing: 1px; }
+    .hero__desc{ font-size: 13px; }
+    .hero__cta{ margin-top: 18px; }
+    .hero__ticks{ display: none; }
+  }
+
+  /* 320 这类窄屏：眉标字距收一点，否则会折成两行 */
+  @media (max-width: 380px){
+    .hero__eyebrow{ letter-spacing: 2.4px; }
+    .hero__title{ font-size: 46px; }
+    .hero__sub{ font-size: 18px; }
+  }
+
+  /* ============================================================
+     开场加载页
+     —— 每天首次进站盖一层，蝦餃仔 + 蒸氣 + 一条扫动的进度线。
+     —— 点一下 / 按 Esc 即入；从进站算起停留约 0.9s 就走，
+        最多 2.2s 兜底放人（网慢也不会卡住）。
+     —— 当天已看过时，<head> 里的小脚本会给 <html> 打上 .intro-done，
+        这里直接 display:none，不会闪一下再消失。
+     ============================================================ */
+  .intro{
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 20000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background:
+      radial-gradient(680px 420px at 50% 34%, rgba(0,105,56,.10) 0%, rgba(0,105,56,0) 68%),
+      var(--paper);
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: opacity .42s ease, visibility .42s ease;
+  }
+  .intro.is-out{ opacity: 0; visibility: hidden; }
+  html.intro-done .intro{ display: none; }
+  html.intro-lock{ overflow: hidden; }
+
+  /* 开场页的醒獅仔：用 <span> + 背景图（和 .mascot-ico 同一套做法），
+     因为简繁是两张图（卷轴烤着「粵掂 / 粤掂」），<img> 换 src 会闪。 */
+  .intro__art{
+    display: block;
+    width: 150px;
+    /* 和 lion-hero.png 同比例（310 × 433），换成 span 后靠它撑高度 */
+    aspect-ratio: 310 / 433;
+    background: url("assets/mascot/lion-hero.png") center / 100% 100% no-repeat;
+    animation: introBob 2.8s ease-in-out infinite;
+  }
+  html[data-charmode="sc"] .intro__art{
+    background-image: url("assets/mascot/lion-hero-sc.png");
+  }
+  @keyframes introBob{
+    0%, 100%{ transform: translateY(0); }
+    50%{ transform: translateY(-7px); }
+  }
+
+  .intro__word{
+    font-family: var(--font-display);
+    font-size: 42px; font-weight: 900;
+    letter-spacing: 10px; line-height: 1;
+    /* 字距会在末字右边多出一截，用等量的负左边距把它摆回正中 */
+    margin: 4px 0 0 -10px;
+    color: var(--neon-red);
+  }
+  .intro__en{
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .intro__welcome{
+    margin: 2px 0 0;
+    max-width: 260px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .intro__line{
+    position: relative;
+    width: 168px; height: 2px;
+    margin-top: 2px;
+    background: rgba(0,74,39,.12);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .intro__line::after{
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 46%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgba(0,105,56,0), var(--neon-red), rgba(0,105,56,0));
+    animation: introSweep 1.15s ease-in-out infinite;
+  }
+  @keyframes introSweep{
+    0%{ left: -46%; }
+    100%{ left: 100%; }
+  }
+  .intro__hint{
+    font-size: 11.5px; letter-spacing: 2px;
+    color: var(--muted); opacity: .85;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .intro__art, .intro__line::after{ animation: none; }
+    .intro__line::after{ left: 27%; }
+  }
+
+  @media (max-width: 720px){
+    .intro__art{ width: 126px; }
+    .intro__word{ font-size: 36px; letter-spacing: 8px; margin-left: -8px; }
+  }
+</style>
+<link rel="stylesheet" href="assets/decor.css">
+<!-- 首页专属：窗花格更疏 + 页边岭南线稿（内页不引） -->
+<link rel="stylesheet" href="assets/home-decor.css">
+<noscript><style>.intro{display:none !important}</style></noscript>
+<script>
+/* 开场加载页只当天首次进站显示：先把判断放在 <head>，
+   避免「先画出来再藏起来」的闪一下。键里存的是日期。 */
+(function () {
+  try {
+    var d = new Date();
+    var k = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    if (localStorage.getItem('jyutdim_intro_v1') === k) {
+      document.documentElement.className += ' intro-done';
+    }
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="assets/site-header.css">
+</head>
+<body class="site-page">
+
+<!-- 全站页头（7 页共用）：markup 由 assets/site-header.js 注入，页面里不用手写 -->
+<script src="assets/site-header.js"></script>
+
+<!-- 首页页边装饰（满洲窗 / 摺扇 / 月洞门 / 木棉）：
+     fixed + z-index:-1 + pointer-events:none，只当画框，不遮内容、不接点击。
+     窄屏（<1300px）由 home-decor.css 直接 display:none。 -->
+<div class="home-deco" aria-hidden="true">
+  <span class="home-deco__item home-deco__item--window"></span>
+  <span class="home-deco__item home-deco__item--fan"></span>
+  <span class="home-deco__item home-deco__item--gate"></span>
+  <span class="home-deco__item home-deco__item--kapok"></span>
+</div>
+
+<!-- ============================================================
+     开场加载页
+     每天首次进站出现一次：蝦餃仔 + 蒸氣 + 扫动的进度线。
+     点一下即入；当天已看过时会被 <head> 的脚本直接藏掉。
+     ============================================================ -->
+<div class="intro" id="intro" aria-hidden="false">
+  <span class="intro__art" aria-hidden="true"></span>
+
+  <div class="intro__word" data-sc="粤掂">粵掂</div>
+  <div class="intro__en">JyutDim · Cantonese</div>
+  <div class="intro__welcome" data-sc="欢迎来到粤掂，一齐玩住学广东话">歡迎嚟到粵掂，一齊玩住學廣東話</div>
+  <div class="intro__line" aria-hidden="true"></div>
+  <div class="intro__hint" data-sc="点一下即入">點一下即入</div>
+</div>
+
+<!-- 首屏远景：岭南线稿（瓦顶 / 镬耳墙 / 江面 / 灯笼），垫在刊头后面，不接事件 -->
+<div class="hero-bg" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="hero__head">
+    <p class="hero__eyebrow">JyutDim · Cantonese</p>
+    <h1 class="hero__title" data-sc="粤掂">粵掂</h1>
+    <p class="hero__jyutping">jyut6 dim6</p>
+  </div>
+  <div class="hero__body">
+    <p class="hero__sub" data-sc="学好广东话，开启更大的世界">學好廣東話，開啟更大的世界</p>
+    <p class="hero__desc" data-sc="有趣 · 实用 · 贴地，三个小游戏同粤拼速成、声调练习，由浅入深。">有趣 · 實用 · 貼地，三個小遊戲同粵拼速成、聲調練習，由淺入深。</p>
+    <a class="hero__cta" href="#games">
+      <span data-sc="粤掂 学习乐园">粵掂 學習樂園</span><span class="hero__cta-arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+  <!-- 学习伙伴：醒獅仔（整只）+ 竖卷轴。卷轴上的「粵/粤」靠两张图跟着简繁换 -->
+  <div class="hero__mascot">
+    <div class="hero__mascot-stage">
+      <div class="hero__mascot-art" role="img" aria-label="粵掂醒獅仔"></div>
+      <svg class="hero__ticks" viewBox="0 0 22 40" fill="none" aria-hidden="true" focusable="false">
+        <path d="M4 5l3.5 8.5M13 13l2.5 8.5M3 25l4 9" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <section id="games">
+    <h2 class="section-title"><span class="stamp" data-sc="游">遊</span><span data-sc="游戏">遊戲</span></h2>
+    <p class="section-sub" data-sc="三个小游戏，由浅入深，慢慢上手">三個小遊戲，由淺入深，慢慢上手</p>
+    <div class="cards cards--lg">
+      <a class="card card--baby" href="picture-match.html">
+        <div class="card__icon" data-icon="steamer"></div>
+        <div class="card__name" data-sc="粤语看图配配对">粵語看圖配配對</div>
+        <div class="card__en">Cantonese Picture Match</div>
+        <p class="card__desc" data-sc="初学入门，看图选字，认得动物水果就通关">初學入門，睇圖揀字，認得生果動物就搞掂</p>
+        <span class="card__foot">
+          <span class="card__tag" data-sc="初学 · 看图学词">初學 · 看圖學詞</span>
+          <span class="card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+
+      <a class="card card--word" href="word-match.html">
+        <div class="card__icon" data-icon="teapot"></div>
+        <div class="card__name" data-sc="粤拼词句连连拼">粵拼詞句連連拼</div>
+        <div class="card__en">Cantonese Jyutping Match</div>
+        <p class="card__desc" data-sc="日常问候，连埋粤拼同例句，玩住学仲易上手">日常問候，連埋粵拼同例句，玩住學仲易上手</p>
+        <span class="card__foot">
+          <span class="card__tag" data-sc="进阶 · 词汇">進階 · 詞彙</span>
+          <span class="card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+
+      <a class="card card--slang" href="slang-challenge.html">
+        <div class="card__icon" data-icon="mahjong"></div>
+        <div class="card__name" data-sc="粤闯粤掂">粵闖粵掂</div>
+        <div class="card__en">Cantonese Slang Challenge</div>
+        <p class="card__desc" data-sc="俗语成语逐个闯，考你识唔识讲">俗語成語逐個闖，睇你識唔識講</p>
+        <span class="card__foot">
+          <span class="card__tag" data-sc="闯关 · 俗语">闖關 · 俗語</span>
+          <span class="card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title"><span class="stamp" data-sc="学">學</span><span data-sc="学习工具">學習工具</span></h2>
+    <p class="section-sub" data-sc="由零开始，先学识粤拼同声调">由零開始，先學識粵拼同聲調</p>
+    <div class="cards">
+      <a class="card card--jyutping" href="jyutping.html">
+        <div class="card__icon" data-icon="fan"></div>
+        <div class="card__name" data-sc="粤拼速成">粵拼速成</div>
+        <div class="card__en">Jyutping Crash Course</div>
+        <p class="card__desc" data-sc="声母韵母六声，一页帮你搞掂">聲母韻母六聲，一頁幫你搞掂</p>
+        <span class="card__foot">
+          <span class="card__tag" data-sc="零基础必备">零基礎必備</span>
+          <span class="card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+
+      <a class="card card--tones" href="tones.html">
+        <div class="card__icon" data-icon="gong"></div>
+        <div class="card__name" data-sc="声调练习">聲調練習</div>
+        <div class="card__en">Tone Trainer</div>
+        <p class="card__desc" data-sc="六声最难？玩几次就识分">六聲最難搞？玩多幾次就識分</p>
+        <span class="card__foot">
+          <span class="card__tag" data-sc="练 · 六声">練 · 六聲</span>
+          <span class="card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+
+      <a class="card card--review" href="review.html">
+        <div class="card__icon" data-icon="notebook"></div>
+        <div class="card__name" data-sc="错题复习">錯題複習</div>
+        <div class="card__en">Review List</div>
+        <p class="card__desc" data-sc="玩过答错的，喺呢度温返">玩過答錯嘅，喺呢度溫返</p>
+        <span class="card__foot">
+          <span class="card__tag" data-sc="温故知新">溫故知新</span>
+          <span class="card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* 开场加载页的收尾：点一下 / 按 Esc·Enter·空格 即入；
+   正常情况从进站算起约 0.9s 自动走，2.2s 兜底放人。
+   当天已看过时，<head> 已经打了 .intro-done，
+   这里直接把节点摘掉，连 overflow 锁都不加。 */
+(function () {
+  var el = document.getElementById('intro');
+  if (!el) return;
+  var root = document.documentElement;
+  var KEY = 'jyutdim_intro_v1';
+
+  if (root.classList.contains('intro-done')) {
+    if (el.parentNode) el.parentNode.removeChild(el);
+    return;
+  }
+
+  var closed = false;
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  }
+  function close() {
+    if (closed) return;
+    closed = true;
+    try { localStorage.setItem(KEY, todayKey()); } catch (e) {}
+    root.classList.remove('intro-lock');
+    el.classList.add('is-out');
+    el.setAttribute('aria-hidden', 'true');
+    window.setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 480);
+  }
+
+  root.classList.add('intro-lock');
+  el.addEventListener('click', close, { once: true });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') close();
+  }, { once: true });
+
+  /* 停留时间从「进站」算起，不是从 load 算起：
+     页面本身很轻，load 之后其实没东西可等，所以只补够总时长 ~0.9s 就走；
+     load 慢的时候最多再等 0.24s（让淡入看得出来），不再无脑多等 0.9s。 */
+  var MIN_TOTAL = 900;
+  var MIN_AFTER_LOAD = 240;
+  function nowMs() {
+    return (window.performance && window.performance.now) ? window.performance.now() : Date.now();
+  }
+  function closeSoon() {
+    window.setTimeout(close, Math.max(MIN_AFTER_LOAD, MIN_TOTAL - nowMs()));
+  }
+  if (document.readyState === 'complete') closeSoon();
+  else window.addEventListener('load', closeSoon, { once: true });
+  window.setTimeout(close, 2200);
+})();
+</script>
+
+</body>
+</html>
