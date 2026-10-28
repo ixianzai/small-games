@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="260" viewBox="0 0 260 260" fill="none">
+  <!-- 嶺南裝飾線稿 · 月洞門（首頁左右頁邊用，透明度烤進圖裡）
+       只描線不填色，壓到 10% 上下，掛在頁邊當「框」，不搶正文。 -->
+  <circle cx="130" cy="130" r="118" stroke="#006938" stroke-opacity="0.13" stroke-width="2.5"/>
+  <circle cx="130" cy="130" r="108" stroke="#006938" stroke-opacity="0.09" stroke-width="1.4"/>
+  <!-- 瓦當：一圈短弧，像門洞的石砌邊 -->
+  <circle cx="130" cy="130" r="101" stroke="#006938" stroke-opacity="0.11" stroke-width="1.2"
+          stroke-dasharray="3 11"/>
+
+  <clipPath id="moonGate"><circle cx="130" cy="130" r="100"/></clipPath>
+  <g clip-path="url(#moonGate)">
+    <!-- 門內的竹 -->
+    <g stroke="#006938" stroke-opacity="0.10" stroke-width="2.2" stroke-linecap="round" fill="none">
+      <path d="M104 236C100 196 107 156 100 108"/>
+      <path d="M131 238C136 200 127 164 133 122"/>
+      <path d="M155 232C160 200 152 176 157 148"/>
+    </g>
+    <g stroke="#006938" stroke-opacity="0.085" stroke-width="1.8" stroke-linecap="round" fill="none">
+      <path d="M101 150q-27-12-37 2 24 14 37-2z"/>
+      <path d="M133 168q26-14 38-2-22 16-38 2z"/>
+      <path d="M100 120q-24-14-36-4 20 16 36 4z"/>
+      <path d="M156 132q24-12 34 0-20 14-34 0z"/>
+      <path d="M131 196q22-10 32 2-20 12-32-2z"/>
+    </g>
+    <!-- 門內的卵石小徑 -->
+    <g stroke="#006938" stroke-opacity="0.075" stroke-width="1.6" fill="none">
+      <path d="M64 214q66-26 132 0"/>
+    </g>
+  </g>
+</svg>

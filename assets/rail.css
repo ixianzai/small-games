@@ -1,0 +1,138 @@
+/* ============================================================
+   粤掂 JyutDim · 左侧主题栏（三个游戏页共用）
+   —— 桌面：sticky 一列看全，不用下拉、不用翻找
+   —— ≤900px：收成顶部横向滚动条
+   —— 配色不写死，由各页覆盖这几个变量：
+        --rail-line        边框 / 分隔线
+        --rail-muted       次要文字
+        --rail-accent      选中主色
+        --rail-active-bg   选中底色
+        --rail-active-ink  选中文字色
+        --rail-hover       悬停底色
+   —— 粘顶位置自动让出全站页头（--site-nav-h，由 site-header.css 提供）
+   ============================================================ */
+
+.layout{
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:200px minmax(0,1fr);
+  gap:20px;
+  align-items:start;
+}
+
+.rail{
+  position:sticky;
+  top:calc(var(--site-nav-h, 0px) + 14px);
+  max-height:calc(100vh - var(--site-nav-h, 0px) - 28px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  background:#fff;
+  border:2px solid var(--rail-line, #e2e8f0);
+  border-radius:18px;
+  padding:10px 8px;
+  box-shadow:0 2px 6px rgba(15,23,42,.06);
+  scrollbar-width:thin;
+}
+.rail::-webkit-scrollbar{ width:6px; }
+.rail::-webkit-scrollbar-thumb{ background:var(--rail-line, #dbe3ec); border-radius:99px; }
+
+.rail__head{
+  padding:2px 10px 8px;
+  font-size:11px; font-weight:900; letter-spacing:2px;
+  color:var(--rail-muted, #64748b);
+}
+.rail__group{
+  padding:9px 10px 4px;
+  font-size:10.5px; font-weight:900; letter-spacing:1.5px;
+  color:var(--rail-muted, #64748b);
+}
+.rail__group:first-child{ padding-top:2px; }
+
+.rail__list{ display:flex; flex-direction:column; gap:3px; }
+
+.rail-item{
+  display:flex; align-items:center; gap:9px;
+  width:100%;
+  padding:8px 10px;
+  border:0;
+  border-left:3px solid transparent;
+  border-radius:10px;
+  background:transparent;
+  color:var(--rail-ink, inherit);
+  font-family:inherit;
+  font-size:13px; font-weight:800;
+  line-height:1.3;
+  text-align:left;
+  cursor:pointer;
+  transition:background .16s ease, border-color .16s ease, color .16s ease;
+}
+.rail-item .ri-icon{ font-size:16px; line-height:1; flex:0 0 auto; }
+.rail-item .ri-label{
+  flex:1; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.rail-item .ri-count{
+  flex:0 0 auto;
+  font-size:10.5px; font-weight:900;
+  color:var(--rail-muted, #64748b);
+}
+.rail-item:hover{ background:var(--rail-hover, #f1f5f9); }
+.rail-item:active{ transform:scale(.985); }
+.rail-item.on{
+  border-left-color:var(--rail-accent, #006938);
+  background:var(--rail-active-bg, rgba(0,105,56,.12));
+  color:var(--rail-active-ink, #004a27);
+}
+.rail-item.on .ri-count{ color:var(--rail-accent, #006938); }
+
+/* 锁住的关卡：仍可点（点了给提示），但视觉上压暗 */
+.rail-item.is-locked{ opacity:.45; }
+.rail-item.is-locked:hover{ background:transparent; }
+
+.stage{ min-width:0; }
+
+/* 桌面端：页面顶部那些「居中」的横条，要往右让出左栏宽度
+   （20 边距 + 200 栏 + 20 间距 = 240），才能跟主内容同一条中线。
+   用 body 提权，压过页面自己的 padding 和 app.js 注入的 .yvd-host。 */
+@media (min-width:901px){
+  body .rail-offset{ padding-left:240px; }
+}
+
+@media (max-width:900px){
+  .layout{
+    grid-template-columns:minmax(0,1fr);
+    gap:10px;
+    margin-top:12px;
+  }
+  .rail{
+    position:static;
+    max-height:none;
+    overflow:visible;
+    padding:8px;
+    border-radius:14px;
+  }
+  .rail__head{ display:none; }
+  .rail__group{ display:none; }
+  .rail__list{
+    flex-direction:row;
+    gap:6px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .rail__list::-webkit-scrollbar{ display:none; }
+  .rail-item{
+    width:auto; flex:0 0 auto;
+    border-left:0;
+    border-bottom:3px solid transparent;
+    padding:7px 12px;
+  }
+  .rail-item.on{
+    border-left-color:transparent;
+    border-bottom-color:var(--rail-accent, #006938);
+    background:var(--rail-active-bg, rgba(0,105,56,.12));
+  }
+  .rail-item .ri-count{ display:none; }
+}

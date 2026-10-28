@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <!-- 窗花格：45° 菱形网格 + 内套小菱形 + 金色节点。
+       单块 80×80，CSS 里 repeat 平铺；线条压在边界上时
+       由左右 / 上下相邻块各自补一半，拼起来正好一整根。
+       整体压到几乎看不见（≈10%），只当纸纹用，不抢内容。 -->
+  <path d="M0 40 L40 0 L80 40 L40 80 Z" fill="none" stroke="#006938" stroke-width="1.2" opacity="0.055"/>
+  <path d="M20 40 L40 20 L60 40 L40 60 Z" fill="none" stroke="#006938" stroke-width="1" opacity="0.032"/>
+  <g fill="#c9a24a" opacity="0.10">
+    <circle cx="40" cy="40" r="1.8"/>
+    <circle cx="0" cy="0" r="1.8"/>
+    <circle cx="80" cy="0" r="1.8"/>
+    <circle cx="0" cy="80" r="1.8"/>
+    <circle cx="80" cy="80" r="1.8"/>
+  </g>
+</svg>

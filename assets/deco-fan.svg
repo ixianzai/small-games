@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="230" viewBox="0 0 240 230" fill="none">
+  <!-- 嶺南裝飾線稿 · 摺扇（首頁頁邊用）
+       扇心在 (120,204)，外弧半徑 100，張角 30°–150°。 -->
+  <path d="M206.6 154A100 100 0 0 0 33.4 154L120 204Z" stroke="#006938" stroke-opacity="0.12" stroke-width="2.4" stroke-linejoin="round"/>
+  <!-- 扇骨 -->
+  <g stroke="#006938" stroke-opacity="0.095" stroke-width="1.6" stroke-linecap="round">
+    <path d="M120 204L184.3 127.4M120 204L154.2 110M120 204L120 104M120 204L85.8 110M120 204L55.7 127.4"/>
+  </g>
+  <!-- 扇面開光：一道虛線弧當裝飾帶 -->
+  <path d="M172.3 147.8A68 68 0 0 0 67.7 147.8" stroke="#006938" stroke-opacity="0.10" stroke-width="1.4" stroke-dasharray="4 7"/>
+  <!-- 扇面裡的一枝小竹 -->
+  <g stroke="#006938" stroke-opacity="0.085" stroke-width="1.6" stroke-linecap="round" fill="none">
+    <path d="M110 182c-1-14 2-26 0-36"/>
+    <path d="M132 180c3-12 0-22 2-30"/>
+    <path d="M110 158c-10-4-15-1-18 2 8 5 14 4 18-2z"/>
+    <path d="M134 154c9-5 14-2 17 1-8 5-13 4-17-1z"/>
+    <path d="M110 172c-8-2-12 0-14 3 7 4 11 2 14-3z"/>
+  </g>
+  <!-- 扇釘 -->
+  <circle cx="120" cy="204" r="4" stroke="#006938" stroke-opacity="0.14" stroke-width="1.8"/>
+</svg>

@@ -1,0 +1,70 @@
+/* ============================================================
+   粤掂 JyutDim · 首页页边装饰
+   —— 只在 index.html 引入（在 decor.css 之后），内页不受影响。
+   —— 页边加一层低透明度的岭南线稿（满洲窗 / 摺扇 / 月洞门 / 木棉），
+      当「画框」用，不遮文字、不接事件。
+   —— 窗花格的整体调淡（80→96px、5.5% 线）在 decor.css / pattern-lattice.svg 里，
+      全站统一，不在这里覆盖。
+   —— 装饰层仍是 position:fixed + z-index:-1 + pointer-events:none，
+      和 decor.css 的窗花格、角花同一层，天然压在正文之下。
+   —— 只在宽屏出现：窄屏没有页边留白，装饰会跟内容打架。
+   ============================================================ */
+
+/* ---------- 页边岭南线稿 ---------- */
+.home-deco{ display: none; }
+
+@media (min-width: 1300px){
+  .home-deco{
+    display: block;
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .home-deco__item{
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    /* 透明度已经烤进 SVG（10% 上下），这里不再叠一层，
+       否则细线会糊成一片灰。 */
+  }
+
+  /* 左上：滿洲窗（整幅可见；右移 34px 让开左上角花的那道竖线） */
+  .home-deco__item--window{
+    left: 34px;
+    top: 112px;
+    width: 168px;
+    height: 168px;
+    background-image: url("deco-manchu-window.svg");
+  }
+  /* 左下：摺扇（整幅可见，避开左下角的蒸笼水印） */
+  .home-deco__item--fan{
+    left: 6px;
+    bottom: 300px;
+    width: 184px;
+    height: 176px;
+    background-image: url("deco-fan.svg");
+  }
+  /* 右上：月洞門（圓形出血，切掉右侧 60px 也不违和） */
+  .home-deco__item--gate{
+    right: -60px;
+    top: 130px;
+    width: 250px;
+    height: 250px;
+    background-image: url("deco-moon-gate.svg");
+  }
+  /* 右下：木棉花（图内已镜像，枝幹从右边伸进来） */
+  .home-deco__item--kapok{
+    right: -40px;
+    top: 420px;
+    width: 230px;
+    height: 230px;
+    background-image: url("deco-kapok.svg");
+  }
+}
+
+/* 打印不印装饰 */
+@media print{
+  .home-deco{ display: none !important; }
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <!-- 右下角角花：与 ornament-corner.svg 同一张图旋转 180°，四角呼应 -->
+  <g transform="rotate(180 120 120)">
+    <path d="M10 240V10h230" stroke="#004a27" stroke-width="1.5" opacity="0.26"/>
+    <path d="M19 240V19h221" stroke="#004a27" stroke-width="1" opacity="0.13"/>
+    <path d="M28 68V28h40v24H44V40h12" stroke="#006938" stroke-width="1.2" opacity="0.34"/>
+    <path d="M120 4l9 9-9 9-9-9z" stroke="#006938" stroke-width="1.2" opacity="0.26"/>
+    <path d="M4 120l9 9-9 9-9-9z" stroke="#006938" stroke-width="1.2" opacity="0.26"/>
+    <circle cx="120" cy="13" r="1.8" fill="#c9a24a" opacity="0.5"/>
+    <circle cx="13" cy="120" r="1.8" fill="#c9a24a" opacity="0.5"/>
+  </g>
+</svg>

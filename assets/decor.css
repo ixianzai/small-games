@@ -1,0 +1,57 @@
+/* ============================================================
+   粤掂 JyutDim · 背景装饰
+   —— 窗花格 + 四角角花 + 广府小插图（蒸笼盖水印），
+      给「太素」的米白背景一点纹理和边角戏。
+   —— 只做背景，不参与布局：两个伪元素都 position:fixed + z-index:-1，
+      压在画布背景之上、正文内容之下，pointer-events 关掉，不影响点击。
+   —— 用 fixed 伪元素而不是 background-attachment:fixed，
+      避开 iOS Safari 对固定背景的裁切问题。
+   —— 在每页最后引入（页面自己的 <style> 之后），保证不被 body 的
+      background 简写覆盖。
+   ============================================================ */
+
+/* 窗花格：96px 平铺，几乎看不见，只当纸纹。
+   2026-10-28：格子从 80px 放大到 96px、线条透明度压到 5.5%（见 pattern-lattice.svg），
+   整页纹理更疏更淡，正文区域更清楚。 */
+body::before{
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("pattern-lattice.svg");
+  background-repeat: repeat;
+  background-position: center top;
+  background-size: 96px 96px;
+}
+
+/* 角花 + 广府小插图：左上、右下各一枚角花，左下角压一个蒸笼盖水印，
+   三张图都挂在 body::after 的多重背景上，位置互不重叠。 */
+body::after{
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("ornament-corner.svg"), url("ornament-corner-br.svg"), url("illus-steamer.svg");
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: left -10px top -10px, right -10px bottom -10px, left -46px bottom -58px;
+  background-size: 240px 240px, 240px 240px, 300px 300px;
+}
+
+/* 小屏：角花和水印都收掉（会和内容打架），窗花缩小一档 */
+@media (max-width: 720px){
+  body::after{ display: none; }
+  body::before{ background-size: 76px 76px; }
+}
+
+/* 打印时不印装饰 */
+@media print{
+  body::before, body::after{ display: none; }
+}

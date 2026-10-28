@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <!-- 嶺南裝飾線稿 · 木棉花（首頁右緣用）
+       廣州市花。枝幹從右下角伸進來、往左上走，花掛在枝的旁枝上，
+       主枝不穿過花心；只勾瓣形，不點色。 -->
+  <g stroke="#006938" stroke-opacity="0.12" stroke-width="2.4" stroke-linecap="round" fill="none">
+    <path d="M236 246C202 214 172 192 146 172c-28-22-58-42-84-60"/>
+    <path d="M62 112c-4-5-9-9-14-14"/>
+    <path d="M122 152c-4-8-8-14-14-24"/>
+    <path d="M152 176c-4 6-9 10-14 16"/>
+  </g>
+
+  <!-- 花 A（左上，最大） -->
+  <g transform="translate(40 88)">
+    <g stroke="#006938" stroke-opacity="0.11" stroke-width="1.8" fill="none">
+      <ellipse cx="0" cy="-17" rx="9" ry="16"/>
+      <ellipse cx="0" cy="-17" rx="9" ry="16" transform="rotate(72)"/>
+      <ellipse cx="0" cy="-17" rx="9" ry="16" transform="rotate(144)"/>
+      <ellipse cx="0" cy="-17" rx="9" ry="16" transform="rotate(216)"/>
+      <ellipse cx="0" cy="-17" rx="9" ry="16" transform="rotate(288)"/>
+      <circle cx="0" cy="0" r="4.8"/>
+    </g>
+    <g stroke="#006938" stroke-opacity="0.085" stroke-width="1.4" stroke-linecap="round">
+      <path d="M0 0l0-10M0 0l9-5M0 0l-9-5M0 0l6 8M0 0l-6 8"/>
+    </g>
+  </g>
+
+  <!-- 花 B（中） -->
+  <g transform="translate(98 98)">
+    <g stroke="#006938" stroke-opacity="0.10" stroke-width="1.7" fill="none">
+      <ellipse cx="0" cy="-15" rx="8" ry="14"/>
+      <ellipse cx="0" cy="-15" rx="8" ry="14" transform="rotate(72)"/>
+      <ellipse cx="0" cy="-15" rx="8" ry="14" transform="rotate(144)"/>
+      <ellipse cx="0" cy="-15" rx="8" ry="14" transform="rotate(216)"/>
+      <ellipse cx="0" cy="-15" rx="8" ry="14" transform="rotate(288)"/>
+      <circle cx="0" cy="0" r="4.2"/>
+    </g>
+  </g>
+
+  <!-- 花 C（右下） -->
+  <g transform="translate(128 204)">
+    <g stroke="#006938" stroke-opacity="0.105" stroke-width="1.8" fill="none">
+      <ellipse cx="0" cy="-16" rx="8.5" ry="15"/>
+      <ellipse cx="0" cy="-16" rx="8.5" ry="15" transform="rotate(72)"/>
+      <ellipse cx="0" cy="-16" rx="8.5" ry="15" transform="rotate(144)"/>
+      <ellipse cx="0" cy="-16" rx="8.5" ry="15" transform="rotate(216)"/>
+      <ellipse cx="0" cy="-16" rx="8.5" ry="15" transform="rotate(288)"/>
+      <circle cx="0" cy="0" r="4.5"/>
+    </g>
+    <g stroke="#006938" stroke-opacity="0.08" stroke-width="1.4" stroke-linecap="round">
+      <path d="M0 0l0-9M0 0l8-4M0 0l-8-4M0 0l5 7M0 0l-5 7"/>
+    </g>
+  </g>
+
+  <!-- 花苞 -->
+  <g stroke="#006938" stroke-opacity="0.09" stroke-width="1.7" fill="none">
+    <path d="M78 152c-6-8-4-16 4-20 8 4 10 12 4 20-2 2-6 2-8 0z"/>
+    <path d="M168 222c-6-8-4-16 4-20 8 4 10 12 4 20-2 2-6 2-8 0z"/>
+  </g>
+</svg>

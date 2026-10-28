@@ -1,0 +1,160 @@
+/* ============================================================
+   粤掂 JyutDim · 全站页头（7 页一套）
+   —— 唯一实现在这里：改一处，全站同步。
+   —— 由 assets/site-header.js 注入，页面里不用手写 markup。
+   —— 颜色与字体自带一套，不依赖各页的变量名，
+      所以挂在米色站点页、蓝色词汇页、红色闯关页上都是同一个样子。
+   ============================================================ */
+
+:root{
+  --site-nav-h: 52px;
+}
+
+.site-nav{
+  /* 页头自有 token：不读各页的 --neon-red / --primary / --red */
+  --sn-green:      #006938;
+  --sn-green-deep: #004a27;
+  --sn-paper:      #fbf8f1;
+  --sn-font-display: "Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --sn-font-body: "PingFang HK","PingFang TC","PingFang SC","Noto Sans CJK TC","Microsoft JhengHei","Microsoft YaHei",sans-serif;
+
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--site-nav-h);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 14px;
+  background: var(--sn-green);
+  border-bottom: 1px solid var(--sn-green-deep);
+  box-shadow: 0 2px 10px rgba(0,74,39,.18);
+  font-family: var(--sn-font-body);
+  box-sizing: border-box;
+}
+
+/* ---------- 站名（回首页） ---------- */
+.site-nav__brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sn-paper);
+  text-decoration: none;
+  font-family: var(--sn-font-display);
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.site-nav__brand:hover{ color: #fff; }
+
+.site-nav__brand .seal{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: var(--sn-paper);
+  color: var(--sn-green);
+  border-radius: 7px;
+  font-family: var(--sn-font-display);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,74,39,.15);
+}
+
+/* ---------- 六个活动入口 ---------- */
+.site-nav__links{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* 必须可收缩：否则窄屏下六个入口会把右边的简繁切换顶出屏幕 */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.site-nav__links::-webkit-scrollbar{ display: none; }
+
+.site-nav__links a{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: rgba(251,248,241,.88);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: .5px;
+  transition: background .18s ease, color .18s ease;
+}
+.site-nav__links a:hover{ background: rgba(255,255,255,.16); color: #fff; }
+.site-nav__links a:focus-visible{ outline: 2px solid var(--sn-paper); outline-offset: 2px; }
+
+/* 顶栏小图标：同一套广府母题的单色线稿，跟随文字颜色 */
+.site-nav .nav-ico{
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  line-height: 1;
+  opacity: .88;
+  transition: opacity .18s ease, transform .18s ease;
+}
+.site-nav .nav-ico svg{ display: block; }
+.site-nav__links a:hover .nav-ico{ opacity: 1; transform: translateY(-1px); }
+
+/* 当前所在页 */
+.site-nav__links a.is-active{
+  background: var(--sn-paper);
+  color: var(--sn-green);
+}
+.site-nav__links a.is-active .nav-ico{ opacity: 1; }
+
+/* ---------- 简繁切换 ---------- */
+.site-nav .lang-toggle{
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 38px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(251,248,241,.6);
+  color: var(--sn-paper);
+  background: transparent;
+  font-family: var(--sn-font-body);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  transition: background .18s ease, color .18s ease;
+}
+.site-nav .lang-toggle:hover{ background: var(--sn-paper); color: var(--sn-green); }
+.site-nav .lang-toggle:focus-visible{ outline: 2px solid var(--sn-paper); outline-offset: 2px; }
+
+/* ---------- 占位：固定条不压住正文 ---------- */
+.site-nav-spacer{ height: var(--site-nav-h); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 720px){
+  .site-nav__brand{ font-size: 17px; letter-spacing: 2px; }
+  .site-nav__brand .seal{ width: 25px; height: 25px; font-size: 16px; }
+  .site-nav .nav-ico{ display: none; }
+  .site-nav__links a{ padding: 7px 10px; font-size: 13px; }
+}
+
+/* 手机竖屏：文字换成图标，六个入口一次看全，不用横滑 */
+@media (max-width: 560px){
+  .site-nav{ gap: 10px; }
+  .site-nav__links{ gap: 2px; }
+  .site-nav__links a{ padding: 8px 9px; }
+  .site-nav .nav-ico{ display: inline-flex; font-size: 18px; }
+  .site-nav .nav-label{ display: none; }
+  .site-nav .lang-toggle{ padding: 6px 10px; min-width: 34px; }
+}
+
+@media (max-width: 400px){
+  /* 太窄时只留印章，把横向空间全让给活动入口 */
+  .site-nav__brand .brand-text{ display: none; }
+  .site-nav{ gap: 8px; padding: 0 10px; }
+}

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
+  <!-- 嶺南裝飾線稿 · 滿洲窗（首頁頁邊用）
+       滿洲窗的特徵是「細木格 + 海棠／菱形開光」，這裡只留線，不填色。 -->
+  <rect x="14" y="14" width="212" height="212" rx="3" stroke="#006938" stroke-opacity="0.13" stroke-width="2.5"/>
+  <rect x="27" y="27" width="186" height="186" rx="2" stroke="#006938" stroke-opacity="0.09" stroke-width="1.4"/>
+
+  <!-- 3×3 細木格 -->
+  <g stroke="#006938" stroke-opacity="0.10" stroke-width="1.6">
+    <path d="M89 27v186M151 27v186"/>
+    <path d="M27 89h186M27 151h186"/>
+  </g>
+
+  <!-- 四角菱形開光 -->
+  <g stroke="#006938" stroke-opacity="0.10" stroke-width="1.5">
+    <path d="M58 45l13 13-13 13-13-13z"/>
+    <path d="M182 45l13 13-13 13-13-13z"/>
+    <path d="M58 182l13 13-13 13-13-13z"/>
+    <path d="M182 182l13 13-13 13-13-13z"/>
+  </g>
+
+  <!-- 中央海棠開光 -->
+  <g stroke="#006938" stroke-opacity="0.11" stroke-width="1.6">
+    <circle cx="120" cy="120" r="26"/>
+    <path d="M120 94a26 26 0 0 1 0 52a26 26 0 0 1 0-52z"/>
+    <path d="M94 120a26 26 0 0 1 52 0a26 26 0 0 1-52 0z"/>
+    <circle cx="120" cy="120" r="9"/>
+  </g>
+
+  <!-- 四邊中央的短豎線（窗櫺收頭），不越出內框 -->
+  <g stroke="#006938" stroke-opacity="0.085" stroke-width="1.5" stroke-linecap="round">
+    <path d="M120 27v14M120 199v14M27 120h14M199 120h14"/>
+  </g>
+</svg>
