@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>聲調練習 · 粵掂 JyutDim</title>
+<meta name="description" content="粵語六聲練習：先睇六聲階梯，再睇六個示範，然後看字辨調，練熟粵語六聲。">
+<meta property="og:title" content="聲調練習 · 粵掂 JyutDim">
+<meta property="og:description" content="先睇六聲階梯同六個示範，再開始練習，六聲一學就識。">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+<script src="assets/icons.js"></script>
+<script src="assets/analytics.js"></script>
+<style>
+  .site-page{ background: var(--paper); }
+  .page-head{ padding: 28px 0 4px; }
+  .page-head h1{ font-size: clamp(28px,6vw,40px); }
+  .page-head .sub{ margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.8; }
+
+  /* —— 三步指示 —— */
+  .flow-steps{
+    display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+    margin: 20px 0 16px;
+  }
+  .fs{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12px; font-weight:800; color:var(--muted);
+    background:var(--paper-card); border:1px solid var(--line);
+    border-radius:999px; padding:5px 14px;
+  }
+  .fs.on{ background:var(--neon-red); border-color:transparent; color:#fbf8f1; }
+  .fs.done{ color:var(--neon-red-deep); border-color:rgba(0,105,56,.35); background:var(--green-soft); }
+
+  .step-title{ font-family:var(--font-display); font-size:22px; letter-spacing:1px; margin:0 0 6px; }
+  .step-sub{ margin:0 0 16px; font-size:13.5px; color:var(--muted); line-height:1.75; }
+  .step-actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px; }
+
+  /* —— 六声阶梯 —— */
+  .ladder{ display:grid; gap:8px; }
+  .lad-row{
+    display:grid; grid-template-columns:28px 60px 1fr; gap:14px; align-items:center;
+    width:100%; text-align:left; font-family:inherit;
+    background:var(--paper-card); border:1px solid var(--line); border-radius:12px;
+    padding:10px 14px; cursor:pointer;
+    transition: background .16s ease, transform .16s ease, border-color .16s ease;
+  }
+  .lad-row:hover{ background:var(--paper-warm); border-color:#cfc6b2; transform:translateX(2px); }
+  .lad-row:active{ transform:translateX(0) scale(.995); }
+  .lad-num{
+    width:26px; height:26px; border-radius:50%;
+    background:var(--green-soft); color:var(--neon-red-deep);
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:900;
+  }
+  .lad-curve{ width:60px; height:30px; display:block; }
+  .lad-body{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; min-width:0; }
+  .lad-char{ font-family:var(--font-display); font-size:24px; font-weight:900; line-height:1.2; }
+  .lad-jy{ font-family:var(--font-mono); font-size:12.5px; color:var(--neon-red-deep); }
+  .lad-desc{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+
+  /* —— 练习 / 示范共用卡片 —— */
+  .quiz-card{
+    background:var(--paper-card); border:1px solid var(--line);
+    border-radius:18px; padding:30px 22px; text-align:center;
+    box-shadow:0 4px 14px rgba(28,20,16,.08);
+  }
+  .quiz-card .bigchar{
+    font-family:var(--font-display); font-size:clamp(64px,18vw,120px);
+    font-weight:900; line-height:1.1; color:var(--ink);
+  }
+  .quiz-card .hint{ color:var(--muted); font-size:14px; margin:6px 0 14px; }
+
+  .tone-btns{ display:grid; grid-template-columns:repeat(6,1fr); gap:10px; max-width:560px; margin:0 auto; }
+  .tone-btns button{
+    padding:16px 0; border-radius:14px; border:1px solid var(--line);
+    background:var(--paper-warm); color:var(--ink); font-family:var(--font-display);
+    font-size:20px; font-weight:900; cursor:pointer; transition:transform .1s ease, background .15s ease;
+  }
+  .tone-btns button:hover{ transform:translateY(-2px); }
+  .tone-btns button.right{ background:var(--tea-green); color:#fff; border-color:transparent; }
+  .tone-btns button.wrongpick{ background:var(--danger); color:#fff; border-color:transparent; }
+
+  .feedback{ min-height:26px; margin-top:16px; font-size:15px; font-weight:800; }
+  .feedback.ok{ color:var(--tea-green); }
+  .feedback.no{ color:var(--danger); }
+
+  .scorebar{
+    display:flex; justify-content:center; gap:26px; margin-top:18px;
+    font-size:14px; font-weight:800; color:var(--ink-soft);
+  }
+  .scorebar b{ font-size:20px; color:var(--neon-red); }
+
+  .next-btn{ display:block; margin:20px auto 0; }
+
+  .summary{ text-align:center; padding:8px 0; }
+  .summary .big{ font-size:44px; font-weight:900; color:var(--neon-red); }
+
+  /* —— 发音按钮 —— */
+  .speak-btn{
+    display:inline-flex; align-items:center; gap:7px;
+    margin:0 auto 16px; padding:9px 20px;
+    border-radius:999px; border:1px solid rgba(201,162,74,.6);
+    background:rgba(201,162,74,.13); color:#7a5c1e;
+    font-family:var(--font-body); font-size:13px; font-weight:800; cursor:pointer;
+    transition: background .16s ease, transform .16s ease;
+  }
+  .speak-btn:hover{ background:rgba(201,162,74,.24); transform:translateY(-1px); }
+  .speak-btn.is-playing{ background:var(--neon-gold); color:#3a2500; border-color:transparent; }
+  .speak-btn svg{ display:block; }
+
+  /* —— 示范 —— */
+  .demo-card .bigchar{ font-size:clamp(56px,15vw,96px); }
+  .demo-badge{
+    display:inline-block; margin-bottom:10px; padding:3px 13px;
+    border-radius:999px; border:1px solid rgba(201,162,74,.55);
+    background:rgba(201,162,74,.12); color:#8a6a1e;
+    font-size:11.5px; font-weight:900; letter-spacing:1.5px;
+  }
+  .demo-jy{ font-family:var(--font-mono); font-size:14px; color:var(--neon-red-deep); margin:-2px 0 18px; }
+  .demo-btns button{ pointer-events:none; opacity:.42; }
+  .demo-btns button.right{
+    opacity:1; background:var(--tea-green); color:#fff; border-color:transparent;
+    box-shadow:0 6px 16px rgba(31,138,84,.28);
+  }
+  .demo-note{
+    max-width:540px; margin:18px auto 0; padding:11px 15px; text-align:left;
+    font-size:13.5px; line-height:1.8; color:var(--ink-soft);
+    background:var(--paper-warm); border-left:3px solid var(--neon-gold);
+    border-radius:0 10px 10px 0;
+  }
+  .demo-tip{
+    max-width:540px; margin:10px auto 0;
+    font-size:12px; line-height:1.7; text-align:center; color:var(--muted);
+  }
+
+  .link-btn{
+    display:inline-block; margin-top:14px; padding:4px 6px;
+    background:none; border:none; cursor:pointer;
+    font-family:var(--font-body); font-size:12.5px; font-weight:800;
+    color:var(--muted); border-bottom:1px dashed var(--line);
+  }
+  .link-btn:hover{ color:var(--neon-red); border-bottom-color:var(--neon-red); }
+
+  .quiz-tools{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:10px; }
+
+  /* —— 听辨对比 —— */
+  .cmp-q{
+    font-family:var(--font-display); font-size:18px; font-weight:900;
+    color:var(--ink); line-height:1.6; margin:4px 0 18px;
+  }
+  .cmp-plays{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .cmp-play{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 20px; border-radius:999px;
+    border:1px solid rgba(201,162,74,.6); background:rgba(201,162,74,.13); color:#7a5c1e;
+    font-family:var(--font-body); font-size:13.5px; font-weight:800; cursor:pointer;
+    transition: background .16s ease, transform .16s ease;
+  }
+  .cmp-play:hover{ background:rgba(201,162,74,.24); transform:translateY(-1px); }
+  .cmp-play.is-playing{ background:var(--neon-gold); color:#3a2500; border-color:transparent; }
+  .cmp-num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px; border-radius:50%;
+    background:rgba(0,0,0,.07); font-size:11.5px; font-weight:900;
+  }
+  .cmp-all{ display:block; margin:12px auto 20px; }
+  /* 还没答题时，空的反馈区 + 空的按钮区别撑出一大块留白 */
+  .cmp-card .feedback{ margin-top:12px; min-height:22px; }
+  .cmp-card .step-actions{ margin-top:0; }
+  .cmp-options{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .cmp-options button{
+    min-width:136px; padding:14px 22px; border-radius:14px;
+    border:1px solid var(--line); background:var(--paper-warm); color:var(--ink);
+    font-family:inherit; font-size:15px; font-weight:900; cursor:pointer;
+    transition: transform .1s ease, background .15s ease;
+  }
+  .cmp-options button:hover{ transform:translateY(-2px); }
+  .cmp-options button:disabled{ cursor:default; }
+  .cmp-options button:disabled:hover{ transform:none; }
+  .cmp-options button.right{ background:var(--tea-green); color:#fff; border-color:transparent; }
+  .cmp-options button.wrongpick{ background:var(--danger); color:#fff; border-color:transparent; }
+  .cmp-score{ margin:16px 0 0; font-size:12.5px; font-weight:800; color:var(--muted); }
+  .cmp-score b{ font-size:15px; color:var(--neon-red); }
+  .cmp-note{ font-weight:600; }
+
+  @media (max-width:600px){
+    .tone-btns{ grid-template-columns:repeat(3,1fr); }
+    .quiz-card{ padding:24px 16px; border-radius:16px; }
+    .lad-row{ grid-template-columns:26px 52px 1fr; gap:10px; padding:10px 12px; }
+    .lad-curve{ width:52px; height:26px; }
+    .lad-char{ font-size:21px; }
+    .lad-desc{ font-size:12px; }
+  }
+</style>
+<link rel="stylesheet" href="assets/decor.css">
+<link rel="stylesheet" href="assets/site-header.css">
+<link rel="stylesheet" href="assets/mascot.css">
+</head>
+<body class="site-page">
+
+<!-- 全站页头（7 页共用）：markup 由 assets/site-header.js 注入，页面里不用手写 -->
+<script src="assets/site-header.js"></script>
+
+<main class="page">
+  <header class="page-head">
+    <h1 class="neon-title"><span class="mascot-ico" aria-hidden="true"></span><a class="home-link" href="index.html" title="返回首页"><span data-sc="声调练习">聲調練習</span><span class="home-mark" aria-hidden="true">⌂</span></a></h1>
+    <p class="sub" data-sc="看字辨调：显示一个汉字，你来选它是第几声。先看六声阶梯，再看六个示范，做几题听辨对比，然后才正式练习。">看字辨調：顯示一個漢字，你嚟揀佢係第幾聲。先睇六聲階梯，再睇六個示範，做幾題聽辨對比，然後先正式練習。</p>
+  </header>
+
+  <!-- 语音包提示：装了粤语语音就不会出现 -->
+  <div class="tts-banner" id="ttsBanner"></div>
+
+  <div class="flow-steps" id="flowSteps">
+    <span class="fs" data-step="intro" data-sc="1 六声">1 六聲</span>
+    <span class="fs" data-step="demo" data-sc="2 示范">2 示範</span>
+    <span class="fs" data-step="compare" data-sc="3 听辨">3 聽辨</span>
+    <span class="fs" data-step="quiz" data-sc="4 练习">4 練習</span>
+  </div>
+
+  <!-- ============ 第一步：六声阶梯 ============ -->
+  <section class="step" id="stepIntro" hidden>
+    <h2 class="step-title" data-sc="先看六声怎么分">先睇六聲點分</h2>
+    <p class="step-sub" data-sc="粤语六个声调，用「诗史试时市事」六个字就记得住。点每一行可以听发音。">粵語六個聲調，用「詩史試時市事」六個字就記得住。點每一行可以聽發音。</p>
+    <div class="ladder" id="ladder"></div>
+    <div class="step-actions">
+      <button class="btn btn--neon" id="btnToDemo" type="button" data-sc="看六个示范 →">睇六個示範 →</button>
+      <button class="btn" id="btnSkipIntro" type="button" data-sc="直接开始练习">直接開始練習</button>
+    </div>
+  </section>
+
+  <!-- ============ 第二步：六个示范（1–6 声各一个） ============ -->
+  <section class="step" id="stepDemo" hidden>
+    <div class="quiz-card demo-card">
+      <div class="demo-badge" id="demoBadge">示範 1 / 3</div>
+      <div class="bigchar" id="demoChar">詩</div>
+      <div class="demo-jy" id="demoJy">si1</div>
+      <div class="tone-btns demo-btns" id="demoBtns"></div>
+      <p class="demo-note" id="demoNote"></p>
+      <p class="demo-tip" data-sc="六个示范都读 si，净系声调唔同——所以你听嘅系调，唔系字。">六個示範都讀 si，淨係聲調唔同——所以你聽嘅係調，唔係字。</p>
+      <div class="step-actions">
+        <button class="btn btn--gold" id="btnDemoListen" type="button" data-sc="听一听">聽一聽</button>
+        <button class="btn btn--neon" id="btnDemoNext" type="button" data-sc="明白，下一个">明白，下一個</button>
+      </div>
+      <button class="link-btn" id="btnSkipDemo" type="button" data-sc="跳过示范，直接练习">跳過示範，直接練習</button>
+    </div>
+  </section>
+
+  <!-- ============ 第三步：听辨对比（不计分，只练耳朵） ============ -->
+  <section class="step" id="stepCompare" hidden>
+    <div class="quiz-card cmp-card">
+      <div class="demo-badge" id="cmpBadge">聽辨 1 / 4</div>
+      <p class="cmp-q" id="cmpQ">呢兩個係唔係同一個聲調？</p>
+
+      <div class="cmp-plays">
+        <button class="cmp-play" id="cmpPlayA" type="button">
+          <span class="cmp-num" aria-hidden="true">1</span><span data-sc="听第一个">聽第一個</span>
+        </button>
+        <button class="cmp-play" id="cmpPlayB" type="button">
+          <span class="cmp-num" aria-hidden="true">2</span><span data-sc="听第二个">聽第二個</span>
+        </button>
+      </div>
+      <button class="btn btn--gold cmp-all" id="cmpPlayBoth" type="button" data-sc="连住听一次">連住聽一次</button>
+
+      <div class="cmp-options" id="cmpOptions"></div>
+      <div class="feedback" id="cmpFeedback"></div>
+
+      <p class="cmp-score">
+        <span data-sc="本轮听辨">本輪聽辨</span> <b id="cmpRight">0</b> / <span id="cmpDone">0</span>
+        <span class="cmp-note" data-sc="（不计分，放心试）">（唔計分，放心試）</span>
+      </p>
+
+      <div class="step-actions">
+        <button class="btn btn--neon" id="cmpNext" type="button" data-sc="下一个" style="display:none;">下一個</button>
+      </div>
+      <button class="link-btn" id="btnSkipCompare" type="button" data-sc="跳过，直接开始练习">跳過，直接開始練習</button>
+    </div>
+  </section>
+
+  <!-- ============ 第三步：正式练习 ============ -->
+  <section class="step" id="stepQuiz" hidden>
+    <div class="quiz-card" id="quiz">
+      <div class="bigchar" id="bigChar">詩</div>
+      <div class="hint" id="hint" data-sc="这个字是第几声？">呢個字係第幾聲？</div>
+      <button class="speak-btn" id="btnSpeak" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M18.5 5.5a8 8 0 0 1 0 13"/></svg>
+        <span data-sc="听发音">聽發音</span>
+      </button>
+      <div class="tone-btns" id="toneBtns"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="scorebar">
+      <span><b id="scoreRight">0</b> <span data-sc="对">對</span></span>
+      <span><b id="scoreDone">0</b> / <span id="scoreTotal">0</span></span>
+    </div>
+
+    <button class="btn btn--neon next-btn" id="nextBtn" type="button" data-sc="下一题" style="display:none;">下一題</button>
+
+    <div class="quiz-tools">
+      <button class="link-btn" id="btnReviewDemo" type="button" data-sc="回看示范">回看示範</button>
+      <button class="link-btn" id="btnRestart" type="button" data-sc="重新开始">重新開始</button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ============================================================
+     六声表：数字 / 字 / 粤拼 / 一句话说明 / 音高曲线
+     曲线按五度标记法画：1=低 5=高
+     ============================================================ */
+  var TONES = [
+    { n:1, ch:'詩', jy:'si1', desc:'高平 · 最高位，拉平唔跌', curve:'M6 6 L54 6' },
+    { n:2, ch:'史', jy:'si2', desc:'中升 · 由中升上最高，似問句尾', curve:'M6 16 Q30 9 54 6' },
+    { n:3, ch:'試', jy:'si3', desc:'中平 · 中間位置，平住去', curve:'M6 16 L54 16' },
+    { n:4, ch:'時', jy:'si4', desc:'低降 · 由低再跌，最沉', curve:'M6 21 Q30 26 54 26' },
+    { n:5, ch:'市', jy:'si5', desc:'低升 · 低處升起，好溫柔', curve:'M6 26 Q30 18 54 16' },
+    { n:6, ch:'事', jy:'si6', desc:'低平 · 最低位，低沉平住', curve:'M6 21 L54 21' }
+  ];
+
+  /* 示范只挑头三声：最容易分辨，也最常用 */
+  var DEMOS = [
+    { ch:'詩', jy:'si1', tone:1, note:'第 1 聲＝高平。聲音停喺最高，拉平唔跌，好似唱歌拖長一個音。' },
+    { ch:'史', jy:'si2', tone:2, note:'第 2 聲＝中升。由中間升上最高，似問句尾嗰種上揚。' },
+    { ch:'試', jy:'si3', tone:3, note:'第 3 聲＝中平。位置比第一聲低少少，一樣係平住去。' },
+    { ch:'時', jy:'si4', tone:4, note:'第 4 聲＝低降。由低再跌落去，係六個聲最沉嘅一個，好似嘆一口氣。' },
+    { ch:'市', jy:'si5', tone:5, note:'第 5 聲＝低升。同第 4 聲一樣由低開始，但方向係升，聽落好溫柔。' },
+    { ch:'事', jy:'si6', tone:6, note:'第 6 聲＝低平。最低位，平住去。同第 5 聲最易撈亂：5 聲升，6 聲唔升。' }
+  ];
+
+  /* 听辨对比：只用 si 一个音节，逼你听「调」不听「字」。
+     每题两次播放，问「一不一样」或「哪个高 / 哪个升」，不计分。 */
+  var COMPARE = [
+    {
+      a:{ ch:'詩', jy:'si1', tone:1 }, b:{ ch:'詩', jy:'si1', tone:1 },
+      q:{ tc:'兩個都係 si，係唔係同一個聲調？', sc:'两个都系 si，系唔系同一个声调？' },
+      opts:[{ tc:'一樣', sc:'一样' }, { tc:'唔一樣', sc:'唔一样' }], ans:0,
+      why:{ tc:'兩個都係第 1 聲（高平），所以一樣。', sc:'两个都系第 1 声（高平），所以一样。' }
+    },
+    {
+      a:{ ch:'史', jy:'si2', tone:2 }, b:{ ch:'試', jy:'si3', tone:3 },
+      q:{ tc:'呢兩個 si 係唔係同一個聲調？', sc:'呢两个 si 系唔系同一个声调？' },
+      opts:[{ tc:'一樣', sc:'一样' }, { tc:'唔一樣', sc:'唔一样' }], ans:1,
+      why:{ tc:'第一個係第 2 聲（中升，會升上去），第二個係第 3 聲（中平，平住去）。',
+            sc:'第一个系第 2 声（中升，会升上去），第二个系第 3 声（中平，平住去）。' }
+    },
+    {
+      a:{ ch:'詩', jy:'si1', tone:1 }, b:{ ch:'事', jy:'si6', tone:6 },
+      q:{ tc:'邊個聽落高啲？', sc:'边个听落高啲？' },
+      opts:[{ tc:'第一個', sc:'第一个' }, { tc:'第二個', sc:'第二个' }], ans:0,
+      why:{ tc:'第 1 聲喺最高位，第 6 聲喺最低位，相差成五度。',
+            sc:'第 1 声喺最高位，第 6 声喺最低位，相差成五度。' }
+    },
+    {
+      a:{ ch:'市', jy:'si5', tone:5 }, b:{ ch:'時', jy:'si4', tone:4 },
+      q:{ tc:'邊個係「升」嘅？', sc:'边个系「升」嘅？' },
+      opts:[{ tc:'第一個', sc:'第一个' }, { tc:'第二個', sc:'第二个' }], ans:0,
+      why:{ tc:'第 5 聲由低升起，第 4 聲由低再跌——兩個都低，但方向相反。',
+            sc:'第 5 声由低升起，第 4 声由低再跌——两个都低，但方向相反。' }
+    }
+  ];
+
+  var ITEMS = [
+    ['詩','si1',1],['史','si2',2],['試','si3',3],['時','si4',4],['市','si5',5],['事','si6',6],
+    ['媽','maa1',1],['打','daa2',2],['怕','paa3',3],['茶','caa4',4],['馬','maa5',5],['面','min6',6],
+    ['天','tin1',1],['好','hou2',2],['愛','oi3',3],['人','jan4',4],['你','nei5',5],['大','daai6',6],
+    ['山','saan1',1],['水','seoi2',2],['去','heoi3',3],['前','cin4',4],['有','jau5',5],['路','lou6',6],
+    ['車','ce1',1],['想','soeng2',2],['見','gin3',3],['年','nin4',4],['老','lou5',5],['六','luk6',6],
+    ['花','faa1',1],['手','sau2',2],['個','go3',3],['明','ming4',4],['買','maai5',5],['食','sik6',6]
+  ];
+
+  /* 题目用繁体字面，公共错题本统一存简体；这里只做本题库需要的最小映射 */
+  var SIMP = { '詩':'诗','試':'试','時':'时','媽':'妈','馬':'马','愛':'爱','車':'车','見':'见','個':'个','買':'买' };
+  function toSimp(c){ return SIMP[c] || c; }
+
+  var SAVE_KEY = 'jyutdim_tones_v1';
+  var SEEN_KEY = 'jyutdim_tones_seen_v1';
+
+  function saveProgress(){
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({
+        order: order, idx: idx, right: right, answered: answered
+      }));
+    } catch(e){}
+  }
+  function loadProgress(){
+    try {
+      var raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return null;
+      var d = JSON.parse(raw);
+      if (!d || !Array.isArray(d.order) || d.order.length !== ITEMS.length) return null;
+      return d;
+    } catch(e){ return null; }
+  }
+  function clearProgress(){
+    try { localStorage.removeItem(SAVE_KEY); } catch(e){}
+  }
+  function seenIntro(){
+    try { return localStorage.getItem(SEEN_KEY) === '1'; } catch(e){ return false; }
+  }
+  function markSeen(){
+    try { localStorage.setItem(SEEN_KEY, '1'); } catch(e){}
+  }
+
+  var saved = loadProgress();
+  var order = saved ? saved.order : shuffle(ITEMS.map(function(_,i){ return i; }));
+  var idx = saved ? saved.idx : 0;
+  var right = saved ? saved.right : 0;
+  var answered = saved ? saved.answered : false;
+  var summaryShown = false;
+
+  /* 上次答完一题但没点「下一题」就关了，直接跳到下一题 */
+  if (idx >= ITEMS.length) { summaryShown = true; }
+  else if (answered) { idx++; answered = false; saveProgress(); }
+
+  /* ---------- DOM ---------- */
+  var stepIntro   = document.getElementById('stepIntro');
+  var stepDemo    = document.getElementById('stepDemo');
+  var stepCompare = document.getElementById('stepCompare');
+  var stepQuiz    = document.getElementById('stepQuiz');
+  var flowSteps = document.getElementById('flowSteps');
+
+  var ladder    = document.getElementById('ladder');
+  var demoBadge = document.getElementById('demoBadge');
+  var demoChar  = document.getElementById('demoChar');
+  var demoJy    = document.getElementById('demoJy');
+  var demoBtns  = document.getElementById('demoBtns');
+  var demoNote  = document.getElementById('demoNote');
+
+  var cmpBadge   = document.getElementById('cmpBadge');
+  var cmpQ       = document.getElementById('cmpQ');
+  var cmpOptions = document.getElementById('cmpOptions');
+  var cmpFeedback= document.getElementById('cmpFeedback');
+  var cmpRightEl = document.getElementById('cmpRight');
+  var cmpDoneEl  = document.getElementById('cmpDone');
+  var cmpNext    = document.getElementById('cmpNext');
+  var cmpPlayA   = document.getElementById('cmpPlayA');
+  var cmpPlayB   = document.getElementById('cmpPlayB');
+  var cmpPlayBoth= document.getElementById('cmpPlayBoth');
+
+  var bigChar   = document.getElementById('bigChar');
+  var hint      = document.getElementById('hint');
+  var toneBtns  = document.getElementById('toneBtns');
+  var feedback  = document.getElementById('feedback');
+  var nextBtn   = document.getElementById('nextBtn');
+  var scoreRight= document.getElementById('scoreRight');
+  var scoreDone = document.getElementById('scoreDone');
+  var scoreTotal= document.getElementById('scoreTotal');
+  var btnSpeak  = document.getElementById('btnSpeak');
+
+  scoreTotal.textContent = ITEMS.length;
+  scoreRight.textContent = right;
+  scoreDone.textContent = idx;
+
+  function zh(tc, sc){ return JyutDim.charMode()==='sc' ? sc : tc; }
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+  /* ---------- 语音 ----------
+     优先播 assets/audio/tones/<粤拼>.m4a（预生成音频，音高已烘进文件里），
+     文件缺失或播放失败才退回系统 TTS。
+     为什么不用 TTS 直接读：macOS 版 Chrome 的语音后端不支持 pitch 参数，
+     而系统音色读单字时「事」si6 是 206Hz、跟「試」si3 的 204Hz 一样高，
+     第六声听不出低沉。音频文件不依赖浏览器实现，换设备也不会变。 */
+  var AUDIO_BASE = 'assets/audio/tones/';
+  var currentAudio = null;
+  var playSeq = 0;
+  /* 只在退回 TTS 时用到：TTS 的 pitch 并非所有浏览器都生效，聊胜于无 */
+  var TONE_PITCH = { 1:1, 2:1, 3:0.98, 4:0.95, 5:0.88, 6:0.8 };
+  function pitchFor(tone){ return TONE_PITCH[tone] || 1; }
+
+  function voiceOn(){
+    try { return !!(window.JyutDim && JyutDim.hasCantoneseVoice()); } catch(e){ return false; }
+  }
+  function markPlaying(btn){
+    if (!btn) return;
+    btn.classList.add('is-playing');
+    setTimeout(function(){ btn.classList.remove('is-playing'); }, 650);
+  }
+  function playChar(ch, jy, tone, btn){
+    /* 连点时上一段会被打断，打断本身会抛 AbortError；
+       用序号把「上一段」的回调挡掉，否则会把上一个字读出来。 */
+    var seq = ++playSeq;
+    if (currentAudio){
+      try { currentAudio.pause(); currentAudio.currentTime = 0; } catch(e){}
+      currentAudio = null;
+    }
+    var settled = false;
+    function useTts(){
+      if (settled || seq !== playSeq) return;
+      settled = true;
+      if (!window.JyutDim || !JyutDim.speak) return;
+      if (!voiceOn()) { JyutDim.voiceHint(); return; }
+      JyutDim.speak(ch, { pitch: pitchFor(tone) });
+      markPlaying(btn);
+    }
+    try {
+      var a = new Audio(AUDIO_BASE + jy + '.m4a');
+      a.preload = 'auto';
+      currentAudio = a;
+      a.addEventListener('error', function(){ if (seq === playSeq) useTts(); }, { once: true });
+      var pr = a.play();
+      if (pr && typeof pr.then === 'function'){
+        pr.then(function(){ if (seq === playSeq){ settled = true; markPlaying(btn); } })
+          ['catch'](function(){ if (seq === playSeq) useTts(); });
+      } else {
+        markPlaying(btn);
+      }
+    } catch (e) {
+      useTts();
+    }
+  }
+
+  /* ---------- 步骤切换 ---------- */
+  function showStep(name){
+    stepIntro.hidden   = name !== 'intro';
+    stepDemo.hidden    = name !== 'demo';
+    stepCompare.hidden = name !== 'compare';
+    stepQuiz.hidden    = name !== 'quiz';
+    /* 离开听辨页时把还没播完的那段掐掉 */
+    if (name !== 'compare') cmpSeq++;
+    var steps = ['intro','demo','compare','quiz'];
+    var cur = steps.indexOf(name);
+    Array.prototype.forEach.call(flowSteps.children, function(el, i){
+      el.className = 'fs' + (i === cur ? ' on' : (i < cur ? ' done' : ''));
+    });
+    if (name === 'quiz'){
+      if (summaryShown) showSummary();
+      else if (!answered) render();
+    }
+    try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch(e){ window.scrollTo(0,0); }
+  }
+
+  /* ---------- 第一步：六声阶梯 ---------- */
+  function buildLadder(){
+    ladder.innerHTML = '';
+    TONES.forEach(function(t){
+      var row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'lad-row';
+      row.setAttribute('aria-label', '第 ' + t.n + ' 聲 ' + t.ch + ' ' + t.jy);
+      row.innerHTML =
+        '<span class="lad-num">' + t.n + '</span>' +
+        '<svg class="lad-curve" viewBox="0 0 60 30" aria-hidden="true">' +
+          '<line x1="6" y1="6" x2="54" y2="6" stroke="#dfd8c8" stroke-width="1" stroke-dasharray="2 3"/>' +
+          '<line x1="6" y1="26" x2="54" y2="26" stroke="#dfd8c8" stroke-width="1" stroke-dasharray="2 3"/>' +
+          '<path d="' + t.curve + '" fill="none" stroke="#006938" stroke-width="2.6" stroke-linecap="round"/>' +
+        '</svg>' +
+        '<span class="lad-body">' +
+          '<span class="lad-char">' + t.ch + '</span>' +
+          '<span class="lad-jy">' + t.jy + '</span>' +
+          '<span class="lad-desc">' + t.desc + '</span>' +
+        '</span>';
+      row.addEventListener('click', function(){ playChar(t.ch, t.jy, t.n, null); });
+      ladder.appendChild(row);
+    });
+    /* 预载六个示范音频，点下去不用等 */
+    TONES.forEach(function(t){
+      try { var a = new Audio(AUDIO_BASE + t.jy + '.m4a'); a.preload = 'auto'; } catch(e){}
+    });
+  }
+
+  /* ---------- 第二步：示范 ---------- */
+  var demoIdx = 0;
+  function renderDemo(){
+    var d = DEMOS[demoIdx];
+    /* 同步写 data-tc / data-sc，用户中途切繁简时文字不会退回上一步 */
+    demoBadge.setAttribute('data-tc', '示範 ' + (demoIdx + 1) + ' / ' + DEMOS.length);
+    demoBadge.setAttribute('data-sc', '示范 ' + (demoIdx + 1) + ' / ' + DEMOS.length);
+    demoBadge.textContent = zh(demoBadge.getAttribute('data-tc'), demoBadge.getAttribute('data-sc'));
+    demoChar.textContent = d.ch;
+    demoJy.textContent = d.jy;
+    demoNote.textContent = d.note;
+    demoBtns.innerHTML = '';
+    for (var t = 1; t <= 6; t++){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = t;
+      if (t === d.tone) b.className = 'right';
+      demoBtns.appendChild(b);
+    }
+    var last = demoIdx >= DEMOS.length - 1;
+    var nextEl = document.getElementById('btnDemoNext');
+    nextEl.setAttribute('data-tc', last ? '明白，開始練習' : '明白，下一個');
+    nextEl.setAttribute('data-sc', last ? '明白，开始练习' : '明白，下一个');
+    nextEl.textContent = zh(nextEl.getAttribute('data-tc'), nextEl.getAttribute('data-sc'));
+  }
+  function nextDemo(){
+    if (demoIdx < DEMOS.length - 1){ demoIdx++; renderDemo(); return; }
+    demoIdx = 0;
+    startCompare();
+  }
+
+  /* ---------- 第三步：听辨对比（不计分） ---------- */
+  var cmpIdx = 0, cmpRight = 0, cmpAnswered = false, cmpSeq = 0;
+
+  /* 播一段，返回 Promise：ended / 出错 / 1.5s 兜底都会 resolve。
+     这样「连住听一次」不会因为某台设备不触发 ended 就卡住。 */
+  function playClip(entry){
+    return new Promise(function(resolve){
+      var done = false;
+      function finish(){ if (done) return; done = true; resolve(); }
+      if (currentAudio){ try { currentAudio.pause(); } catch(e){} currentAudio = null; }
+      function useTts(){
+        if (window.JyutDim && JyutDim.speak && voiceOn()){
+          JyutDim.speak(entry.ch, { pitch: pitchFor(entry.tone) });
+        }
+        setTimeout(finish, 900);
+      }
+      try {
+        var a = new Audio(AUDIO_BASE + entry.jy + '.m4a');
+        a.preload = 'auto';
+        currentAudio = a;
+        a.addEventListener('ended', finish, { once: true });
+        a.addEventListener('error', useTts, { once: true });
+        var pr = a.play();
+        if (pr && typeof pr.then === 'function') pr['catch'](useTts);
+        setTimeout(finish, 1500);
+      } catch (e) { useTts(); }
+    });
+  }
+
+  function playCompare(which){
+    var q = COMPARE[cmpIdx];
+    var my = ++cmpSeq;
+    if (which === 'a'){ markPlaying(cmpPlayA); playClip(q.a); return; }
+    if (which === 'b'){ markPlaying(cmpPlayB); playClip(q.b); return; }
+    markPlaying(cmpPlayBoth);
+    playClip(q.a).then(function(){
+      if (my !== cmpSeq) return;
+      playClip(q.b);
+    });
+  }
+
+  function renderCompare(){
+    var q = COMPARE[cmpIdx];
+    cmpAnswered = false;
+    cmpFeedback.textContent = '';
+    cmpFeedback.className = 'feedback';
+    /* 上一题的解析文字别留到这一题（切繁简时 applyCharMode 会照着它回填） */
+    cmpFeedback.removeAttribute('data-tc');
+    cmpFeedback.removeAttribute('data-sc');
+    cmpNext.style.display = 'none';
+
+    var btc = '聽辨 ' + (cmpIdx + 1) + ' / ' + COMPARE.length;
+    var bsc = '听辨 ' + (cmpIdx + 1) + ' / ' + COMPARE.length;
+    cmpBadge.setAttribute('data-tc', btc);
+    cmpBadge.setAttribute('data-sc', bsc);
+    cmpBadge.textContent = zh(btc, bsc);
+
+    cmpQ.setAttribute('data-tc', q.q.tc);
+    cmpQ.setAttribute('data-sc', q.q.sc);
+    cmpQ.textContent = zh(q.q.tc, q.q.sc);
+
+    cmpOptions.innerHTML = '';
+    q.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('data-tc', o.tc);
+      b.setAttribute('data-sc', o.sc);
+      b.textContent = zh(o.tc, o.sc);
+      b.addEventListener('click', function(){ pickCmp(i); });
+      cmpOptions.appendChild(b);
+    });
+
+    cmpRightEl.textContent = cmpRight;
+    cmpDoneEl.textContent = cmpIdx;
+  }
+
+  function pickCmp(i){
+    if (cmpAnswered) return;
+    cmpAnswered = true;
+    var q = COMPARE[cmpIdx];
+    var btns = cmpOptions.querySelectorAll('button');
+    Array.prototype.forEach.call(btns, function(b){ b.disabled = true; });
+
+    var ok = (i === q.ans);
+    if (ok){
+      cmpRight++;
+      btns[i].classList.add('right');
+      cmpFeedback.className = 'feedback ok';
+    } else {
+      btns[i].classList.add('wrongpick');
+      btns[q.ans].classList.add('right');
+      cmpFeedback.className = 'feedback no';
+    }
+    var prefix = ok ? '✓ '
+      : '✗ ' + zh('正確係','正确系') + '「' + zh(q.opts[q.ans].tc, q.opts[q.ans].sc) + '」。';
+    cmpFeedback.setAttribute('data-tc', prefix + q.why.tc);
+    cmpFeedback.setAttribute('data-sc', prefix + q.why.sc);
+    cmpFeedback.textContent = zh(prefix + q.why.tc, prefix + q.why.sc);
+
+    cmpRightEl.textContent = cmpRight;
+    cmpDoneEl.textContent = cmpIdx + 1;
+    cmpNext.style.display = '';
+
+    var last = cmpIdx >= COMPARE.length - 1;
+    cmpNext.setAttribute('data-tc', last ? '開始正式練習' : '下一個');
+    cmpNext.setAttribute('data-sc', last ? '开始正式练习' : '下一个');
+    cmpNext.textContent = zh(cmpNext.getAttribute('data-tc'), cmpNext.getAttribute('data-sc'));
+  }
+
+  function startCompare(){
+    cmpIdx = 0; cmpRight = 0; cmpAnswered = false;
+    renderCompare();
+    showStep('compare');
+  }
+
+  function finishCompare(){
+    cmpSeq++;
+    markSeen();
+    showStep('quiz');
+  }
+
+  /* ---------- 第四步：正式练习 ---------- */
+  for (var t = 1; t <= 6; t++){
+    (function(n){
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = n; b.dataset.tone = n;
+      b.addEventListener('click', function(){ pick(n); });
+      toneBtns.appendChild(b);
+    })(t);
+  }
+
+  function currentItem(){ return ITEMS[order[idx]]; }
+
+  function render(){
+    if (summaryShown) return;
+    var item = currentItem();
+    bigChar.textContent = item[0];
+    feedback.textContent = ''; feedback.className = 'feedback';
+    answered = false; nextBtn.style.display = 'none';
+    toneBtns.querySelectorAll('button').forEach(function(b){ b.className = ''; b.disabled = false; });
+    scoreDone.textContent = idx;
+  }
+
+  function pick(t){
+    if (answered) return;
+    answered = true;
+    var item = currentItem();
+    var btns = toneBtns.querySelectorAll('button');
+    btns.forEach(function(b){ b.disabled = true; });
+    if (t === item[2]){
+      right++; scoreRight.textContent = right;
+      feedback.textContent = '✓ ' + item[1] + ' · 第 ' + item[2] + ' ' + zh('聲','声');
+      feedback.className = 'feedback ok';
+      btns[t-1].classList.add('right');
+    } else {
+      feedback.textContent = '✗ ' + zh('正確','正确') + '係第 ' + item[2] + ' ' + zh('聲','声') + '（' + item[1] + '）';
+      feedback.className = 'feedback no';
+      btns[t-1].classList.add('wrongpick');
+      btns[item[2]-1].classList.add('right');
+    }
+    /* 答完才读：读的是正确答案，当确认用；答题前不读，免得直接听出答案 */
+    playChar(item[0], item[1], item[2], null);
+    /* 写进站点公共错题本：声调练习答错的字，也会出现在「错题复习」页 */
+    if (window.JyutDim && JyutDim.progress) {
+      JyutDim.progress.record(toSimp(item[0]), t === item[2], item[1]);
+    }
+    saveProgress();
+    nextBtn.style.display = '';
+  }
+
+  function next(){
+    idx++;
+    saveProgress();
+    if (idx >= ITEMS.length){
+      summaryShown = true;
+      showSummary(); return;
+    }
+    render();
+  }
+
+  function showSummary(){
+    clearProgress();
+    var card = document.getElementById('quiz');
+    card.innerHTML = '<div class="summary">' +
+      '<div class="big">' + right + ' / ' + ITEMS.length + '</div>' +
+      '<p data-sc="完成！错题已收进「复习」，去看看或再来一轮">完成！錯題已收進「複習」，去睇睇或者再嚟一輪</p>' +
+      '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">' +
+      '<a class="btn btn--neon" href="review.html"><span data-sc="去错题复习">去錯題複習</span></a>' +
+      '<button class="btn btn--neon" type="button" onclick="location.reload()">' +
+      '<span data-sc="再来一轮">再嚟一輪</span></button></div></div>';
+    JyutDim.applyCharMode();
+    nextBtn.style.display = 'none';
+    var tools = document.querySelector('.quiz-tools');
+    if (tools) tools.style.display = 'none';
+  }
+
+  /* ---------- 事件 ---------- */
+  document.getElementById('btnToDemo').addEventListener('click', function(){ demoIdx = 0; renderDemo(); showStep('demo'); });
+  document.getElementById('btnSkipIntro').addEventListener('click', function(){ markSeen(); showStep('quiz'); });
+  document.getElementById('btnSkipDemo').addEventListener('click', function(){ demoIdx = 0; markSeen(); showStep('quiz'); });
+  document.getElementById('btnDemoNext').addEventListener('click', nextDemo);
+  document.getElementById('btnDemoListen').addEventListener('click', function(){
+    var d = DEMOS[demoIdx];
+    playChar(d.ch, d.jy, d.tone, this);
+  });
+  document.getElementById('btnReviewDemo').addEventListener('click', function(){ demoIdx = 0; renderDemo(); showStep('demo'); });
+  document.getElementById('btnSkipCompare').addEventListener('click', finishCompare);
+  cmpPlayA.addEventListener('click', function(){ playCompare('a'); });
+  cmpPlayB.addEventListener('click', function(){ playCompare('b'); });
+  cmpPlayBoth.addEventListener('click', function(){ playCompare('both'); });
+  cmpNext.addEventListener('click', function(){
+    if (cmpIdx < COMPARE.length - 1){ cmpIdx++; renderCompare(); return; }
+    finishCompare();
+  });
+  document.getElementById('btnRestart').addEventListener('click', function(){
+    if (!window.confirm(zh('重新開始？今次嘅進度會清空。','重新开始？这次的进度会清空。'))) return;
+    clearProgress();
+    location.reload();
+  });
+  btnSpeak.addEventListener('click', function(){
+    if (summaryShown) return;
+    var item = currentItem();
+    playChar(item[0], item[1], item[2], btnSpeak);
+  });
+  nextBtn.addEventListener('click', next);
+
+  /* ---------- 启动 ---------- */
+  buildLadder();
+
+  var startStep = (saved || seenIntro()) ? 'quiz' : 'intro';
+  showStep(startStep);
+})();
+</script>
+
+</body>
+</html>
